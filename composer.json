@@ -1,0 +1,37 @@
+{
+    "name": "contoweb/laravel-pdflib",
+    "description": "Laravel wrapper for PDFLib to make creating PDFs a breeze",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "pdflib",
+        "pdf"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabrice Locher",
+            "email": "fabrice.locher@contoweb.ch"
+        }
+    ],
+    "require": {
+        "ext-pdflib": "*",
+        "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*|^6.0",
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Contoweb\\Pdflib\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Contoweb\\Pdflib\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
