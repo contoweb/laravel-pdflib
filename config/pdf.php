@@ -9,6 +9,8 @@ return [
     | Make sure you have a valid PDFLib license for your PHP version.
     | If you update your PHP version, you have to make a license update!
     |
+    | If no license is provided, the generated PDFs are watermarked.
+    |
     */
     'license' => '',
 

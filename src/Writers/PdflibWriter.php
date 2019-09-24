@@ -4,7 +4,9 @@ namespace Contoweb\Pdflib\Writers;
 
 use Contoweb\Pdflib\Concerns\Writer;
 use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
+use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Exception;
 use PDFlib;
@@ -100,13 +102,15 @@ class PdflibWriter extends PDFlib implements Writer
     public function loadTemplate($name, $path = null, $optlist = null)
     {
         $this->template = $this->open_pdi_document(
-            $path ?: config('pdf.templates.location', storage_path('app')) . '/' . $name,
+            $path ?: FileManager::templatePath($name),
             $optlist ?: ""
         );
 
         if($this->template == 0) {
             throw new Exception("Error: " . $this->get_errmsg());
         }
+
+        return true;
     }
 
     /**
@@ -115,6 +119,8 @@ class PdflibWriter extends PDFlib implements Writer
     public function closeTemplate()
     {
         $this->close_pdi_document($this->template);
+
+        return true;
     }
 
     /**
@@ -138,12 +144,14 @@ class PdflibWriter extends PDFlib implements Writer
     public function useFont($name, $size)
     {
         $this->fontSize = $size;
+
         if(array_key_exists($name, $this->fonts)) {
             $this->setfont($this->fonts[$name], $size);
         } else {
             throw new FontException('Font "' . $name . '" not loaded.');
         }
 
+        return $this;
     }
 
     /**
@@ -185,6 +193,8 @@ class PdflibWriter extends PDFlib implements Writer
     {
         $this->set_text_pos($xPos ?: $this->xPos, $yPos ?: $this->yPos);
         $this->show($text);
+
+        return $this;
     }
 
     /**
@@ -193,6 +203,8 @@ class PdflibWriter extends PDFlib implements Writer
     public function writeTextLine($text, $optlist = null, $xpos = null, $ypos = null)
     {
         $this->fit_textline($text, $xpos ?: $this->xPos, $ypos ?: $this->yPos, $optlist);
+
+        return $this;
     }
 
 
@@ -202,12 +214,31 @@ class PdflibWriter extends PDFlib implements Writer
     public function nextLine()
     {
         $this->setYPosition($this->yPos - $this->fontSize, 'pt', true);
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function circleImage($imagePath, $size)
+    public function drawImage($imagePath, $size, $loadOptions = null, $fitOptions = null)
+    {
+        // Load image
+        $image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
+
+        if ($image == 0) {
+            throw new ImageException($this->get_errmsg());
+        }
+
+        $this->fit_image($image, $this->xPos, $this->yPos, $fitOptions ?: "");
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function circleImage($imagePath, $size, $loadOptions = null)
     {
         $this->save();
 
@@ -232,6 +263,10 @@ class PdflibWriter extends PDFlib implements Writer
         // Load image
         $image = $this->load_image("auto", $imagePath, "");
 
+        if ($image == 0) {
+            throw new ImageException($this->get_errmsg());
+        }
+
         // Fit the image into the circle
         $this->fit_image($image, $this->xPos, $this->yPos, "boxsize {" . $width . " " . $height .
             "} position center fitmethod=meet");
@@ -241,6 +276,8 @@ class PdflibWriter extends PDFlib implements Writer
 
         // Restore the state without rounded corners
         $this->restore();
+
+        return $this;
     }
 
     /**
@@ -250,6 +287,8 @@ class PdflibWriter extends PDFlib implements Writer
     {
         $this->setXPosition($x, $unit);
         $this->setYPosition($y, $unit);
+
+        return $this;
     }
 
     /**
@@ -264,7 +303,8 @@ class PdflibWriter extends PDFlib implements Writer
         }
 
         $this->xPos = $measure;
-        return $measure;
+
+        return $this;
     }
 
     /**
@@ -279,7 +319,8 @@ class PdflibWriter extends PDFlib implements Writer
         }
 
         $this->yPos = $measure;
-        return $measure;
+
+        return $this;
     }
 
     /**
@@ -290,7 +331,7 @@ class PdflibWriter extends PDFlib implements Writer
         $measure = MeasureCalculator::calculateToPt($measure, $unit);
         $this->xOffset = $measure;
 
-        return $measure;
+        return $this;
     }
 
     /**
@@ -301,7 +342,7 @@ class PdflibWriter extends PDFlib implements Writer
         $measure = MeasureCalculator::calculateToPt($measure, $unit);
         $this->yOffset = $measure;
 
-        return $measure;
+        return $this;
     }
 
     /**
@@ -310,6 +351,8 @@ class PdflibWriter extends PDFlib implements Writer
     public function enableOffset()
     {
         $this->useOffset = true;
+
+        return $this;
     }
 
     /**
@@ -318,7 +361,26 @@ class PdflibWriter extends PDFlib implements Writer
     public function disableOffset()
     {
         $this->useOffset = false;
+
+        return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function inOriginal()
+    {
+        return ! $this->useOffset;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function inPreview()
+    {
+        return $this->useOffset;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -328,7 +390,7 @@ class PdflibWriter extends PDFlib implements Writer
         $measure = MeasureCalculator::calculateToPt($measure, $unit);
         $this->lineOffset = $measure;
 
-        return $measure;
+        return $this;
     }
 
     /**
@@ -342,5 +404,7 @@ class PdflibWriter extends PDFlib implements Writer
         }
 
         $this->end_document("");
+
+        return true;
     }
 }

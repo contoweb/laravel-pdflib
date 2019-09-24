@@ -9,10 +9,8 @@ use Contoweb\Pdflib\Concerns\WithFonts;
 
 class DummyClass implements FromTemplate, WithDraw, WithFonts
 {
-    public function template(): array {
-        return [
-            'original' => ''
-        ];
+    public function template(): string {
+        return '';
     }
 
     public function fonts(): array {

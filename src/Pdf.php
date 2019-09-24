@@ -8,18 +8,25 @@ use Contoweb\Pdflib\Concerns\WithDraw;
 use Contoweb\Pdflib\Concerns\WithFonts;
 use Contoweb\Pdflib\Concerns\Writer;
 use Contoweb\Pdflib\Exceptions\MeasureException;
+use Contoweb\Pdflib\Files\FileManager;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
 
 class Pdf
 {
-    protected $writer;
+    /**
+     * @var Writer $writer
+     */
+    private $writer;
 
-    protected $filePath;
-
+    /**
+     * @var WithDraw $document
+     */
     private $document;
 
+    /**
+     * @var string $fileName
+     */
     private $fileName;
 
     public function __construct(Writer $writer)
@@ -55,12 +62,7 @@ class Pdf
      */
     public function download($document, $fileName)
     {
-        $this->document = $document;
-        $this->fileName = $fileName;
-
-        $this->create();
-
-       return $this;
+        // Working on it...
     }
 
     /**
@@ -108,17 +110,26 @@ class Pdf
      */
     private function create()
     {
-        /** Todo: Temporary storage logic */
-        $path = Storage::disk(config('pdf.exports.disk', 'local'))->path(config('pdf.exports.path', ''));
-
-        $fullPath = $path . '/' . $this->fileName;
+        $fullPath = FileManager::exportPath($this->fileName);
 
         if ($this->writer->begin_document($fullPath, "") == 0) {
             throw new Exception("Error: " . $this->writer->get_errmsg());
         }
 
         if($this->document instanceof FromTemplate) {
-            $this->writer->loadTemplate($this->document->template()['preview']);
+            $template = null;
+
+            if($this->writer->inOriginal()) {
+                $template = $this->document->template();
+            }
+
+            if($this->document instanceof HasPreview) {
+                if($this->writer->inPreview()) {
+                    $template = $this->document->previewTemplate();
+                }
+            }
+
+            $this->writer->loadTemplate($template);
         }
 
         if($this->document instanceof WithFonts) {

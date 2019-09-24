@@ -13,14 +13,14 @@ interface Writer
      * @param string $name
      * @param string|null $path
      * @param null $optlist
-     * @return void
+     * @return boolean
      */
     public function loadTemplate($name, $path = null, $optlist = null);
 
     /**
      * Close the template file.
      *
-     * @return void
+     * @return boolean
      */
     public function closeTemplate();
 
@@ -39,6 +39,7 @@ interface Writer
      *
      * @param string $name
      * @param float $size in pt
+     * @return $this
      * @throws FontException
      */
     public function useFont($name, $size);
@@ -68,6 +69,7 @@ interface Writer
      * @param string $text
      * @param null $xPos
      * @param null $yPos
+     * @return $this
      */
     public function writeText($text, $xPos = null, $yPos = null);
 
@@ -78,21 +80,37 @@ interface Writer
      * @param null $optlist
      * @param null $xpos
      * @param null $ypos
+     * @return $this
      */
     public function writeTextLine($text, $optlist = null, $xpos = null, $ypos = null);
 
     /**
      * Go to the next line.
+     *
+     * @return $this
      */
     public function nextLine();
 
     /**
+     * Draw an image.
+     *
+     * @param string $imagePath
+     * @param float $size
+     * @param string|null $loadOptions
+     * @param string|null $fitOptions
+     * @return $this
+     */
+    public function drawImage($imagePath, $size, $loadOptions = null, $fitOptions = null);
+
+    /**
      * Draw a round image.
      *
-     * @param $imagePath
-     * @param $size
+     * @param string $imagePath
+     * @param float $size
+     * @param string|null $loadOptions
+     * @return $this
      */
-    public function circleImage($imagePath, $size);
+    public function circleImage($imagePath, $size, $loadOptions = null);
 
     /**
      * Set the writer's position.
@@ -100,17 +118,18 @@ interface Writer
      * @param $x
      * @param $y
      * @param null $unit
+     * @return $this
      * @throws MeasureException
      */
     public function setPosition($x, $y, $unit = null);
 
     /**
-     * Set Y position of the writer.
+     * Set X position of the writer.
      *
      * @param $measure
      * @param string $unit
      * @param $ignoreOffset
-     * @return float
+     * @return $this
      */
     public function setXPosition($measure, $unit = null, $ignoreOffset = false);
 
@@ -120,7 +139,7 @@ interface Writer
      * @param float $measure
      * @param string $unit
      * @param boolean $ignoreOffset
-     * @return float
+     * @return $this
      */
     public function setYPosition($measure, $unit = null, $ignoreOffset = false);
 
@@ -129,7 +148,7 @@ interface Writer
      *
      * @param $measure
      * @param string $unit
-     * @return float
+     * @return $this
      * @throws MeasureException
      */
     public function setXOffset($measure, $unit = null);
@@ -140,7 +159,7 @@ interface Writer
      *
      * @param $measure
      * @param string $unit
-     * @return float
+     * @return $this
      * @throws MeasureException
      */
     public function setYOffset($measure, $unit = null);
@@ -148,29 +167,44 @@ interface Writer
     /**
      * Use the defined offset.
      *
-     * @return mixed
+     * @return $this
      */
     public function enableOffset();
 
     /**
      * Don't use the defined offset.
      *
-     * @return mixed
+     * @return $this
      */
     public function disableOffset();
 
     /**
-     * Set line offset.
+     * Checks if it writes the original PDF.
+     *
+     * @return mixed
+     */
+    public function inOriginal();
+
+    /**
+     * Checks if it writes the preview PDF.
+     *
+     * @return mixed
+     */
+    public function inPreview();
+
+    /**
+     * Set the line offset.
      *
      * @param $measure
      * @param string $unit
-     * @return float
+     * @return $this
      * @throws MeasureException
      */
     public function setLineOffset($measure, $unit = null);
 
     /**
      * End PDFlib page and document
+     * @return boolean
      */
     public function finishDocument();
 }
