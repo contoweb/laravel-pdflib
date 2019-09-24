@@ -157,7 +157,7 @@ class PdflibWriter extends PDFlib implements Writer
     /**
      * {@inheritdoc}
      */
-    public function newPage($width = 0, $height = 0, $optlist = null)
+    public function newPage($width = 20, $height = 20, $optlist = null)
     {
         if ($this->siteOpen) {
             $this->end_page_ext("");
