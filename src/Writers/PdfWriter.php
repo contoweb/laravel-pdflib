@@ -1,11 +1,11 @@
 <?php
 
-namespace Contoweb\Pdflib\Concerns;
+namespace Contoweb\Pdflib\Writers;
 
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 
-interface Writer
+interface PdfWriter
 {
     /**
      * Load a PDF template.
@@ -28,9 +28,18 @@ interface Writer
      * Load fonts to use it with the writer.
      *
      * @param string $name
+     * @param array $color
+     * @return $this
+     */
+    public function loadColor($name, array $color);
+
+    /**
+     * Load fonts to use it with the writer.
+     *
+     * @param string $name
      * @param string|null $encoding
      * @param string|null $optlist
-     * @return int
+     * @return $this
      */
     public function loadFont($name, $encoding = null, $optlist = null);
 
@@ -39,10 +48,10 @@ interface Writer
      *
      * @param string $name
      * @param float $size in pt
+     * @param string]null $color
      * @return $this
-     * @throws FontException
      */
-    public function useFont($name, $size);
+    public function useFont($name, $size, $color = null);
 
     /**
      * Start a new document page.

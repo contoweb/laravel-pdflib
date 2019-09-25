@@ -27,6 +27,9 @@ class PdfTest extends TestCase
     {
         $document = new MinimalDocument();
 
+        @unlink(__DIR__ . '/Data/Storage/Local/test.pdf');
+        $this->assertFileNotExists(__DIR__ . '/Data/Storage/Local/test.pdf');
+
         $pdf = PdfFacade::store($document, 'test.pdf');
 
         $this->assertInstanceOf(Pdf::class, $pdf);

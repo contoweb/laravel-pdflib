@@ -2,12 +2,14 @@
 
 namespace Contoweb\Pdflib\Concerns;
 
+use Contoweb\Pdflib\Writers\PdfWriter;
+
 interface WithDraw
 {
     /**
      * Draw the document.
      *
-     * @param Writer $writer
+     * @param PdfWriter $writer
      */
-    public function draw(Writer $writer);
+    public function draw(PdfWriter $writer);
 }

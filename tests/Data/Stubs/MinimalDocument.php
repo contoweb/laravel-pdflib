@@ -3,11 +3,11 @@
 namespace Contoweb\Pdflib\Tests\Data\Stubs;
 
 use Contoweb\Pdflib\Concerns\WithDraw;
-use Contoweb\Pdflib\Concerns\Writer;
+use Contoweb\Pdflib\Writers\PdfWriter;
 
 class MinimalDocument implements WithDraw
 {
-    public function draw(Writer $writer)
+    public function draw(PdfWriter $writer)
     {
         $writer->newPage();
     }

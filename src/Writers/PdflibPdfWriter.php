@@ -2,16 +2,15 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use Contoweb\Pdflib\Concerns\Writer;
+use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Exception;
 use PDFlib;
 
-class PdflibWriter extends PDFlib implements Writer
+class PdflibPdfWriter extends PDFlib implements PdfWriter
 {
     /**
      * X position in pt
@@ -44,6 +43,12 @@ class PdflibWriter extends PDFlib implements Writer
     protected $useOffset = false;
 
     /**
+     * Loaded colors
+     * @var array
+     */
+    protected $colors;
+
+    /**
      * Loaded fonts
      * @var array
      */
@@ -74,7 +79,7 @@ class PdflibWriter extends PDFlib implements Writer
     private $fontSize;
 
     /**
-     * PdflibWriter constructor.
+     * PdflibPdfWriter constructor.
      * @param $license
      * @param $creator
      * @param $searchPath
@@ -126,6 +131,40 @@ class PdflibWriter extends PDFlib implements Writer
     /**
      * {@inheritdoc}
      */
+    public function loadColor($name, array $color)
+    {
+        array_unshift($color, 'fill');
+
+        // This allows to define rgb colors with only three parameters.
+        if(! array_key_exists(5, $color)) {
+            $color[5] = 0;
+        }
+
+        $this->colors[$name] = $color;
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @throws ColorException
+     */
+    public function useColor($name)
+    {
+        if (array_key_exists($name, $this->colors)) {
+            try {
+                call_user_func_array(array($this, 'setcolor'), $this->colors[$name]);
+            } catch (Exception $e) {
+                throw new ColorException($e);
+            }
+        } else {
+            throw new ColorException('Color "' . $name . '" not loaded.');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadFont($name, $encoding = null, $optlist = null)
     {
         $this->fonts[$name] = $this->load_font($name, $encoding ?: "unicode", $optlist ?: "embedding");
@@ -134,14 +173,14 @@ class PdflibWriter extends PDFlib implements Writer
             throw new FontException("Error: " . $this->get_errmsg());
         }
 
-        return $this->fonts[$name];
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      *
      */
-    public function useFont($name, $size)
+    public function useFont($name, $size, $color = null)
     {
         $this->fontSize = $size;
 
@@ -149,6 +188,10 @@ class PdflibWriter extends PDFlib implements Writer
             $this->setfont($this->fonts[$name], $size);
         } else {
             throw new FontException('Font "' . $name . '" not loaded.');
+        }
+
+        if($color) {
+            $this->useColor($color);
         }
 
         return $this;

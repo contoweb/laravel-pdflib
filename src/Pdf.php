@@ -3,19 +3,20 @@
 namespace Contoweb\Pdflib;
 
 use Contoweb\Pdflib\Concerns\FromTemplate;
-use Contoweb\Pdflib\Concerns\HasPreview;
+use Contoweb\Pdflib\Concerns\WithPreview;
+use Contoweb\Pdflib\Concerns\WithColors;
 use Contoweb\Pdflib\Concerns\WithDraw;
 use Contoweb\Pdflib\Concerns\WithFonts;
-use Contoweb\Pdflib\Concerns\Writer;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Writers\PdfWriter;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Pdf
 {
     /**
-     * @var Writer $writer
+     * @var PdfWriter $writer
      */
     private $writer;
 
@@ -29,7 +30,7 @@ class Pdf
      */
     private $fileName;
 
-    public function __construct(Writer $writer)
+    public function __construct(PdfWriter $writer)
     {
         $this->writer = $writer;
     }
@@ -80,7 +81,7 @@ class Pdf
             $this->fileName = substr($this->fileName, 0, $extensionPos) . '_preview' . substr($this->fileName, $extensionPos);
         }
 
-        if($this->document instanceof HasPreview) {
+        if($this->document instanceof WithPreview) {
             // Make offset array key insensitive
             $offsetArray = array_change_key_case($this->document->offset());
 
@@ -105,6 +106,8 @@ class Pdf
     }
 
     /**
+     * Creates the pdf document(s).
+     *
      * @return string
      * @throws Exception
      */
@@ -123,7 +126,7 @@ class Pdf
                 $template = $this->document->template();
             }
 
-            if($this->document instanceof HasPreview) {
+            if($this->document instanceof WithPreview) {
                 if($this->writer->inPreview()) {
                     $template = $this->document->previewTemplate();
                 }
@@ -139,6 +142,14 @@ class Pdf
                     array_key_exists('encoding', $font) ? $font['encoding'] : null,
                     array_key_exists('optlist', $font) ? $font['optlist'] : null
                 );
+            }
+        }
+
+        if($this->document instanceof WithColors) {
+            if ($this->document instanceof WithColors) {
+                foreach ($this->document->colors() as $name => $color) {
+                    $this->writer->loadColor($name, $color);
+                }
             }
         }
 

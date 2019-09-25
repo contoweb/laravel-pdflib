@@ -2,7 +2,7 @@
 
 namespace Contoweb\Pdflib\Concerns;
 
-interface HasPreview
+interface WithPreview
 {
     /**
      * Set the the X and Y offset for the preview
