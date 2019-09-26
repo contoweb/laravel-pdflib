@@ -7,6 +7,11 @@ use Contoweb\Pdflib\Writers\PdfWriter;
 
 class MinimalDocument implements WithDraw
 {
+    public function fonts(): array
+    {
+        return ['Arial'];
+    }
+
     public function draw(PdfWriter $writer)
     {
         $writer->newPage();

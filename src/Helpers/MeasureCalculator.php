@@ -27,4 +27,24 @@ class MeasureCalculator
 
         return $measure;
     }
+
+    /**
+     * @param $measure
+     * @param $unit
+     * @return float
+     * @throws MeasureException
+     */
+    public static function calculateToMm($measure, $unit = null) {
+        if($unit == null) {
+            $unit = config('pdf.measurement.unit', 'pt');
+        }
+
+        if($unit == 'pt') {
+            $measure = $measure / self::mm;
+        } else if ($unit != 'mm') {
+            throw new MeasureException();
+        }
+
+        return $measure;
+    }
 }

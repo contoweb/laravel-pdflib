@@ -3,11 +3,29 @@
 namespace Contoweb\Pdflib\Writers;
 
 use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 
 interface PdfWriter
 {
+    /**
+     * Begin a new PDFLib document.
+     *
+     * @param string $path
+     * @param string|null $optlist
+     * @return boolean
+     * @throws DocumentException
+     */
+    public function beginDocument($path, $optlist = null);
+
+    /**
+     * End PDFlib page and document.
+     *
+     * @return boolean
+     */
+    public function finishDocument();
+
     /**
      * Load a PDF template.
      *
@@ -15,6 +33,7 @@ interface PdfWriter
      * @param string|null $path
      * @param null $optlist
      * @return boolean
+     * @throws DocumentException
      */
     public function loadTemplate($name, $path = null, $optlist = null);
 
@@ -96,20 +115,22 @@ interface PdfWriter
     /**
      * Go to the next line.
      *
+     * @param float $spacing
      * @return $this
      */
-    public function nextLine();
+    public function nextLine($spacing = 1.0);
 
     /**
      * Draw an image.
      *
      * @param string $imagePath
-     * @param float $size
+     * @param float $width
+     * @param float $height
      * @param string|null $loadOptions
      * @param string|null $fitOptions
      * @return $this
      */
-    public function drawImage($imagePath, $size, $loadOptions = null, $fitOptions = null);
+    public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null);
 
     /**
      * Draw a round image.
@@ -210,10 +231,4 @@ interface PdfWriter
      * @throws MeasureException
      */
     public function setLineOffset($measure, $unit = null);
-
-    /**
-     * End PDFlib page and document
-     * @return boolean
-     */
-    public function finishDocument();
 }

@@ -56,9 +56,9 @@ php artisan make:document MarketingDocument
 
 The new document file can be found in the app/Exports` directory.
 
-> Todo: Working on some example files...
+> Todo: Working on some example cases...
 
-Later, the document can be generated easily with:
+Ìn a final step, generating a PDF is as easy as:
 
 ```php
 
@@ -187,7 +187,7 @@ The preview PDF will be automatically named to `<<name>>_preview.pdf`.
 You can overriding this by passing the name in `->withPreview('othername.pdf')`.
 
 ### Navigate on the page
-You have to define where your elements should be placed. You have to set the `X` and `Y` position of your "cursor".
+To tell PDFLib where your elements should be placed, you have to set the `X` and `Y` position of your "cursor".
 ```php
 $writer->setPosition(10, 100);
 
@@ -199,14 +199,14 @@ $writer->setYPosition(100);
 
 ```
 
-In the configuration file, you can define in which measure unit you want to set positions. You can choose between `mm` or `pt`.
+In the configuration file, you can define which measure unit is used for positioning. You can choose between `mm` or `pt`.
 
 > **Note**: It may be confusing in the beginning, but PDFLib Y axis are measured from the bottom.
-So position 0 0 is in the left bottom corner, no the left top corner.
+So position 0 0 is in the left bottom corner, not the left top corner.
 
 
 ### Write text
-You can use
+To write text, you can simply use:
 ```php
 $writer->writeTextLine('your text')
 
@@ -216,12 +216,77 @@ $writer->writeText('your text')
 
 ```
 
-to write standard text. 
 Don't forget to firstly set the position and use the right font.
+Since the package extends PDFLib, you also can pass PDFLib options as a second parameter.
 
 > You only have to use `writeText` when placing two text blocks next to each other.
 Behind the scenes, `wirteText()` uses PDFLibs `show()` method, while `wirteTextLine()` uses the mostly used PDFLib method `fit_text_line()`.
 
+If you want to go to the next line, instead of reposition your cursor every time, you can use:
+```php
+$writer->nextLine();
+```
+To use a custom line spacing instead of 1.0, just pass it as a parameter.
 
+#### Fonts
+In the boilerplate, `Arial` is loaded as an example font since it's installed on almost every OS.
+You may want to use custom fonts and want ensure that your server is able to load it. 
+So it's highly recommended to place the font files (currently .ttf and .otf is supported) inside your configured font location (see `pdf.php` configuration).
 
+As a next step, you have to make the fonts available in your document. Just use the file name without the extension to auto-load the font:
+```php
+public function fonts(): array 
+{
+    return ['OpenSans-Regular'];
+}
+```
 
+An underlying font file like `OpenSans-Regular.ttf` has to be available in your fonts location.
+
+Now you can use it in your document:
+
+```php
+public function draw(Writer $writer)
+{
+    $writer->newPage();
+    $writer->useFont('OpenSans-Regular', 12)
+           ->writeText('This text is written with Open Sans font...');
+}
+```
+
+#### Colors
+If you need to colorize your text, you can use the ```WithColor``` concern. This requires you to define custom colors:
+```php
+public function colors(): array
+{
+    return [
+        'orange-rgb' => ['rgb', 255, 165, 0]
+        'blue-cmyk' => ['cmyk', 100, 100, 0, 0]
+    ];
+}
+```
+
+You can use the color with:
+```php
+$writer->useColor('orange-rgb');
+```
+or as a parameter when defining a font:
+```php
+$writer->useFont('OpenSans-Regular', 12, 'blue-cmyk')
+```
+
+### Image
+You can place images with:
+```php
+$writer->drawImage('/path/to/the/image', 150, 100)
+```
+This places an image with and resize it to 150x100.
+
+Since loading rounded images is just a pain in PDFLib, you can use the method:
+```php
+$writer->circleImage('/path/to/the/image', 100)
+```
+
+### PDFLib functions
+Since this package extending PDFLib, you can use the whole PDFLib toolkit.
+The [PDFLib Cookbook](https://www.pdflib.com/pdflib-cookbook/) helps a lot, even to understand this package.

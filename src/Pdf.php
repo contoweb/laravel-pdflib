@@ -46,7 +46,7 @@ class Pdf
         $this->fileName = $fileName;
 
         if($document instanceof ShouldQueue) {
-          // Return queue
+          // Working on it...
         }
 
         $this->create();
@@ -107,17 +107,12 @@ class Pdf
     /**
      * Creates the pdf document(s).
      *
-     * @return string
+     * @return boolean
      * @throws Exception
      */
-    private function create()
+    public function create()
     {
-        $fullPath = FileManager::exportPath($this->fileName);
-
-        /** Todo: Abstract function. */
-        if ($this->writer->begin_document($fullPath, "") == 0) {
-            throw new Exception("Error: " . $this->writer->get_errmsg());
-        }
+        $this->writer->beginDocument(FileManager::exportPath($this->fileName));
 
         if($this->document instanceof FromTemplate) {
             $template = null;
@@ -167,6 +162,6 @@ class Pdf
 
         $this->writer->finishDocument();
 
-        return $fullPath;
+        return true;
     }
 }

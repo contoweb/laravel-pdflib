@@ -3,6 +3,7 @@
 namespace Contoweb\Pdflib\Writers;
 
 use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Files\FileManager;
@@ -104,6 +105,33 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
+    public function beginDocument($path, $optlist = null)
+    {
+        if ($this->begin_document($path, "") == 0) {
+            throw new DocumentException("Error: " . $this->get_errmsg());
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishDocument()
+    {
+        if($this->siteOpen) {
+            $this->end_page_ext("");
+            $this->siteOpen = false;
+        }
+
+        $this->end_document("");
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadTemplate($name, $path = null, $optlist = null)
     {
         $this->template = $this->open_pdi_document(
@@ -112,7 +140,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         );
 
         if($this->template == 0) {
-            throw new Exception("Error: " . $this->get_errmsg());
+            throw new DocumentException("Error: " . $this->get_errmsg());
         }
 
         return true;
@@ -134,6 +162,21 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     public function loadColor($name, array $color)
     {
         array_unshift($color, 'fill');
+
+        // Divide all color definitions to convert it for PDFLib.
+        $color = array_map(function($definition) use($color) {
+            if(is_numeric($definition)) {
+                if($color[1] === 'cmyk') {
+                    return $definition / 100;
+                }
+
+                if($color[1] === 'rgb') {
+                    return $definition / 255;
+                }
+            }
+
+            return $definition;
+        }, $color);
 
         // This allows to define rgb colors with only three parameters.
         if(! array_key_exists(5, $color)) {
@@ -210,8 +253,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         }
 
         $this->begin_page_ext(
-            MeasureCalculator::calculateToPt($width, config('pdf.measurement.unit')),
-            MeasureCalculator::calculateToPt($height, config('pdf.measurement.unit')),
+            MeasureCalculator::calculateToMm($width),
+            MeasureCalculator::calculateToMm($height),
         $optlist ?: "");
 
         return $this;
@@ -254,9 +297,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function nextLine()
+    public function nextLine($spacing = 1.0)
     {
-        $this->setYPosition($this->yPos - $this->fontSize, 'pt', true);
+        $this->setYPosition($this->yPos - ($this->fontSize * $spacing), 'pt', true);
 
         return $this;
     }
@@ -264,7 +307,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function drawImage($imagePath, $size, $loadOptions = null, $fitOptions = null)
+    public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
     {
         // Load image
         $image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
@@ -273,7 +316,11 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
             throw new ImageException($this->get_errmsg());
         }
 
-        $this->fit_image($image, $this->xPos, $this->yPos, $fitOptions ?: "");
+        $this->fit_image($image,
+                        MeasureCalculator::calculateToMm($this->xPos , 'pt'),
+                        MeasureCalculator::calculateToMm($this->yPos, 'pt'),
+                 $fitOptions ?: "boxsize {" .  MeasureCalculator::calculateToMm($width) . " " .  MeasureCalculator::calculateToMm($height) . "} position center fitmethod=meet"
+        );
 
         return $this;
     }
@@ -311,8 +358,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         }
 
         // Fit the image into the circle
-        $this->fit_image($image, $this->xPos, $this->yPos, "boxsize {" . $width . " " . $height .
-            "} position center fitmethod=meet");
+        $this->fit_image($image,
+            MeasureCalculator::calculateToMm($this->xPos, 'pt'),
+            MeasureCalculator::calculateToMm($this->yPos ,'pt'),
+            "boxsize {" .  MeasureCalculator::calculateToMm($width) . " " .  MeasureCalculator::calculateToMm($height) . "} position center fitmethod=meet");
 
         // Close image and restore original clipping (no clipping)
         $this->close_image($image);
@@ -434,20 +483,5 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->lineOffset = $measure;
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function finishDocument()
-    {
-        if($this->siteOpen) {
-            $this->end_page_ext("");
-            $this->siteOpen = false;
-        }
-
-        $this->end_document("");
-
-        return true;
     }
 }
