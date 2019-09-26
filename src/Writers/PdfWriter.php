@@ -2,6 +2,7 @@
 
 namespace Contoweb\Pdflib\Writers;
 
+use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 
@@ -40,6 +41,7 @@ interface PdfWriter
      * @param string|null $encoding
      * @param string|null $optlist
      * @return $this
+     * @throws FontException
      */
     public function loadFont($name, $encoding = null, $optlist = null);
 
@@ -50,6 +52,8 @@ interface PdfWriter
      * @param float $size in pt
      * @param string]null $color
      * @return $this
+     * @throws ColorException
+     * @throws FontException
      */
     public function useFont($name, $size, $color = null);
 

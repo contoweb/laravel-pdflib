@@ -98,7 +98,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->set_option("stringformat=utf8");
 
         $this->set_option("searchpath={" . $searchPath . "}");
-        //$this->writer->set_option("spotcolorlookup=" . $spotcolorlookup);
+        // $this->writer->set_option("spotcolorlookup=" . $spotcolorlookup);
     }
 
     /**
@@ -200,7 +200,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function newPage($width = 20, $height = 20, $optlist = null)
+    public function newPage($width = 50, $height = 50, $optlist = null)
     {
         if ($this->siteOpen) {
             $this->end_page_ext("");

@@ -6,7 +6,6 @@ use Contoweb\Pdflib\Concerns\FromTemplate;
 use Contoweb\Pdflib\Concerns\WithPreview;
 use Contoweb\Pdflib\Concerns\WithColors;
 use Contoweb\Pdflib\Concerns\WithDraw;
-use Contoweb\Pdflib\Concerns\WithFonts;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Writers\PdfWriter;
@@ -115,6 +114,7 @@ class Pdf
     {
         $fullPath = FileManager::exportPath($this->fileName);
 
+        /** Todo: Abstract function. */
         if ($this->writer->begin_document($fullPath, "") == 0) {
             throw new Exception("Error: " . $this->writer->get_errmsg());
         }
@@ -135,16 +135,6 @@ class Pdf
             $this->writer->loadTemplate($template);
         }
 
-        if($this->document instanceof WithFonts) {
-            foreach($this->document->fonts() as $font) {
-                $this->writer->loadFont(
-                    $font['name'],
-                    array_key_exists('encoding', $font) ? $font['encoding'] : null,
-                    array_key_exists('optlist', $font) ? $font['optlist'] : null
-                );
-            }
-        }
-
         if($this->document instanceof WithColors) {
             if ($this->document instanceof WithColors) {
                 foreach ($this->document->colors() as $name => $color) {
@@ -153,7 +143,23 @@ class Pdf
             }
         }
 
-        $this->document->draw($this->writer);
+        if($this->document instanceof WithDraw) {
+            foreach($this->document->fonts() as $name => $settings) {
+
+                if($name === 0) {
+                    $name = $settings;
+                    $settings = [];
+                }
+
+                $this->writer->loadFont(
+                    $name,
+                    array_key_exists('encoding', $settings) ? $settings['encoding'] : null,
+                    array_key_exists('optlist', $settings) ? $settings['optlist'] : null
+                );
+            }
+
+            $this->document->draw($this->writer);
+        }
 
         if($this->document instanceof FromTemplate) {
             $this->writer->closeTemplate();

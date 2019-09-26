@@ -2,25 +2,24 @@
 
 namespace DummyNamespace;
 
-use Contoweb\Pdflib\Concerns\FromTemplate;
 use Contoweb\Pdflib\Concerns\WithDraw;
-use Contoweb\Pdflib\Concerns\WithFonts;
 use Contoweb\Pdflib\Writers\PdfWriter as Writer;
 
-class DummyClass implements FromTemplate, WithDraw, WithFonts
+class DummyClass implements WithDraw
 {
     public function template(): string {
         return '';
     }
 
     public function fonts(): array {
-        return [
-            ['name' => '']
-        ];
+        return ['Arial'];
     }
 
     public function draw(Writer $writer)
     {
-        // Start writing your document...
+        $writer->newPage();
+
+        $writer->useFont('Arial', 10)
+               ->writeText('Start something great');
     }
 }

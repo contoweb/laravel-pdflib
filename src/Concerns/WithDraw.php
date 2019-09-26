@@ -12,4 +12,11 @@ interface WithDraw
      * @param PdfWriter $writer
      */
     public function draw(PdfWriter $writer);
+
+    /**
+     * Define the available fonts.
+     *
+     * @return array
+     */
+    public function fonts(): array;
 }
