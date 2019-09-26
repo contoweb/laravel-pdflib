@@ -232,9 +232,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function writeText($text, $xPos = null, $yPos = null)
+    public function writeText($text)
     {
-        $this->set_text_pos($xPos ?: $this->xPos, $yPos ?: $this->yPos);
+        $this->set_text_pos($this->xPos, $this->yPos);
         $this->show($text);
 
         return $this;
@@ -243,9 +243,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function writeTextLine($text, $optlist = null, $xpos = null, $ypos = null)
+    public function writeTextLine($text, $optlist = null)
     {
-        $this->fit_textline($text, $xpos ?: $this->xPos, $ypos ?: $this->yPos, $optlist);
+        $this->fit_textline($text,  $this->xPos, $this->yPos, $optlist);
 
         return $this;
     }

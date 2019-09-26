@@ -47,12 +47,6 @@ If you want to use the PDF facade, add this to your facades in app.php:
 'Pdf' => Contoweb\Pdflib\Facades\Pdf::class,
 ```
 
-To change the configuration, copy the file to your config folder and enable it:
-
-```php
-$app->configure('debugbar');
-```
-
 ## Usage
 
 To create a new document, you can use the `make:document` command:
@@ -98,24 +92,24 @@ public function draw(Writer $writer)
 
 Here you actually write the document's content. As you can see, a small example is already boilerplated:
 
-1. Make a new page in the document.
-2. Define an available font from the `fonts()` method.
+1. Create a new page in the document.
+2. Use an available font from the `fonts()` method.
 3. Write the text. 
 
 
 ### Create a page
 To create a new page, you can use
 ```php
-$writer->newPage()
+$writer->newPage();
 ```
 
 You optionally can define the width and height of your document by passing the parameters.
 
 ```php
-$writer->newPage(210, 297) // A4 portrait format 
+$writer->newPage(210, 297); // A4 portrait format 
 ```
 
-#### Using templates
+#### Using a template
 In most cases, you want to write dynamic content on a already designed PDF.
 To use a PDF template, use the `WithTemplate` concern:
 
@@ -130,9 +124,8 @@ class MarketingDocument implements WithDraw
     public function template(): array {
         return 'template.pdf';
     }
-    public function fonts(): array {
-        return ['Arial'];
-    }
+    
+    // ...
 
     public function draw(Writer $writer)
     {
@@ -141,4 +134,94 @@ class MarketingDocument implements WithDraw
 }
 ```
 
-Now, your first page is using the page 1 from `template.pdf`. Don't forget to configure your template configuration in the configuration file.
+Now, your first page is using the page 1 from `template.pdf`. Don't forget to configure your templates location in the configuration file.
+
+##### Preview and print PDF
+If you're aware of print-ready PDFs, you know that your print PDF isn't the same as the user finally sees.
+
+![pdf-bleed](https://user-images.githubusercontent.com/13394801/65696401-6e6fdc00-e079-11e9-96fa-86e9d40d6aa1.jpg)
+
+There is a bleed box, crop marks and so on. For this case, you can use `WithPreview` combined with the `FromTemplate` concern.
+
+This requires you to add a `template()`, `previewTemplate()` and `offset()` method.
+
+```php
+namespace App\Documents;
+
+use Contoweb\Pdflib\Concerns\FromTemplate;
+use Contoweb\Pdflib\Concerns\WithDraw;
+use Contoweb\Pdflib\Concerns\WithPreview;
+use Contoweb\Pdflib\Writers\PdfWriter as Writer;
+
+class MarketingDocument implements FromTemplate, WithDraw, WithPreview
+{
+    public function template(): string {
+        return 'print.pdf';
+    }
+
+    public function previewTemplate(): string
+    {
+        return 'preview.pdf';
+    }
+
+    public function offset(): array
+    {
+        return [
+            'x' => 20,
+            'y' => 20
+        ];
+    }
+    
+    //
+}
+```
+
+The `offset()` method defines the offset from the print PDF to the preview PDF (see image above).
+
+Now you can generate the print and preview PDF with:
+```php
+return Pdf::store(new MarketingDocument, 'marketing.pdf')->withPreview();
+```
+
+The preview PDF will be automatically named to `<<name>>_preview.pdf`. 
+You can overriding this by passing the name in `->withPreview('othername.pdf')`.
+
+### Navigate on the page
+You have to define where your elements should be placed. You have to set the `X` and `Y` position of your "cursor".
+```php
+$writer->setPosition(10, 100);
+
+// only X axis
+$writer->setXPosition(10);
+
+//only Y axis
+$writer->setYPosition(100);
+
+```
+
+In the configuration file, you can define in which measure unit you want to set positions. You can choose between `mm` or `pt`.
+
+> **Note**: It may be confusing in the beginning, but PDFLib Y axis are measured from the bottom.
+So position 0 0 is in the left bottom corner, no the left top corner.
+
+
+### Write text
+You can use
+```php
+$writer->writeTextLine('your text')
+
+// or
+
+$writer->writeText('your text')
+
+```
+
+to write standard text. 
+Don't forget to firstly set the position and use the right font.
+
+> You only have to use `writeText` when placing two text blocks next to each other.
+Behind the scenes, `wirteText()` uses PDFLibs `show()` method, while `wirteTextLine()` uses the mostly used PDFLib method `fit_text_line()`.
+
+
+
+

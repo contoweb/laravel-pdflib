@@ -80,22 +80,18 @@ interface PdfWriter
      * Write fluent text.
      *
      * @param string $text
-     * @param null $xPos
-     * @param null $yPos
      * @return $this
      */
-    public function writeText($text, $xPos = null, $yPos = null);
+    public function writeText($text);
 
     /**
      * Write a line of text.
      *
      * @param $text
-     * @param null $optlist
-     * @param null $xpos
-     * @param null $ypos
+     * @param string|null $optlist
      * @return $this
      */
-    public function writeTextLine($text, $optlist = null, $xpos = null, $ypos = null);
+    public function writeTextLine($text, $optlist = null);
 
     /**
      * Go to the next line.
