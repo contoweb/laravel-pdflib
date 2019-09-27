@@ -311,6 +311,12 @@ $writer->circleImage('/path/to/the/image', 100)
 Since this package extending PDFLib, you can use the whole PDFLib toolkit.
 The [PDFLib Cookbook](https://www.pdflib.com/pdflib-cookbook/) helps a lot, even to understand this package.
 
+## Extending
+This package is just a basic beginning of wrapping PDFLib.
+Since PDFLib brings so much more functionality, we have to put the focus on the most used functions in the beginning.
+
+You're welcome to PR your ideas!
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
