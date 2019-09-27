@@ -1,4 +1,6 @@
 *
 !.gitignore
 !fonts/
+!fonts/*
 !templates/
+!templates/*

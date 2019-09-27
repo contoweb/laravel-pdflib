@@ -47,13 +47,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * Loaded colors
      * @var array
      */
-    protected $colors;
+    protected $colors = [];
 
     /**
      * Loaded fonts
      * @var array
      */
-    protected $fonts;
+    protected $fonts = [];
 
     /**
      * Already loaded images.
@@ -229,8 +229,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     }
 
     /**
-     * @param $name
-     * @throws ColorException
+     * {@inheritdoc}
      */
     public function useColor($name)
     {
@@ -243,6 +242,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         } else {
             throw new ColorException('Color "' . $name . '" not defined.');
         }
+
+        return $this;
     }
 
     /**
@@ -402,6 +403,18 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
+    public function getXPosition($unit = null)
+    {
+        return MeasureCalculator::calculateToUnit(
+            $this->xPos,
+            $unit ?: config('pdf.measurement.unit', 'pt'),
+            'pt'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setYPosition($measure, $unit = null, $ignoreOffset = false)
     {
         $measure = MeasureCalculator::calculateToPt($measure, $unit);
@@ -413,6 +426,18 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->yPos = $measure;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getYPosition($unit = null)
+    {
+        return MeasureCalculator::calculateToUnit(
+            $this->yPos,
+            $unit ?: config('pdf.measurement.unit', 'pt'),
+            'pt'
+        );
     }
 
     /**

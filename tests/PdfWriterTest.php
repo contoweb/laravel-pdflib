@@ -2,8 +2,10 @@
 
 namespace Contoweb\Pdflib\Tests;
 
+use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Contoweb\Pdflib\Tests\Files\PathHelper;
 use Contoweb\Pdflib\Writers\PdfWriter;
 
@@ -70,9 +72,6 @@ class PdfWriterTest extends TestCase
      */
     public function able_to_use_template()
     {
-        $this->app['config']->set('pdf.templates.disk', 'local');
-        $this->app['config']->set('pdf.templates.path', 'templates');
-
         $this->assertTrue($this->writer->loadTemplate('template.pdf'));
 
         $this->writer->beginDocument($this->fullPath);
@@ -89,9 +88,6 @@ class PdfWriterTest extends TestCase
      */
     public function throws_an_exception_when_loading_unknown_template()
     {
-        $this->app['config']->set('pdf.templates.disk', 'local');
-        $this->app['config']->set('pdf.templates.path', '');
-
         $this->expectException(DocumentException::class);
         $this->writer->loadTemplate('unknown.pdf');
     }
@@ -99,7 +95,7 @@ class PdfWriterTest extends TestCase
     /**
      * @test
      */
-    public function can_use_fonts_when_loaded()
+    public function can_use_system_fonts_when_loaded()
     {
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
@@ -125,10 +121,130 @@ class PdfWriterTest extends TestCase
 
         $this->expectException(FontException::class);
         $this->writer->loadFont('unknown');
+    }
 
+    /**
+     * @test
+     */
+    public function can_use_font_files()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->writer->loadFont('OpenSans-Regular');
+
+        $this->assertInstanceOf(PdfWriter::class, $this->writer->useFont('OpenSans-Regular', 12));
+
+        /** Todo: Assert if document really uses the font. */
 
         $this->writer->finishDocument();
 
         $this->assertFileExists($this->fullPath);
+    }
+
+    /**
+     * @test
+     */
+    public function can_use_defined_colors()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->writer->loadColor('blue', [
+            'cmyk',
+            100, 100, 0, 0
+        ]);
+
+        $this->assertInstanceOf(PdfWriter::class, $this->writer->useColor('blue'));
+
+        /** Todo: Assert if document really uses the font. */
+
+        $this->writer->finishDocument();
+
+        $this->assertFileExists($this->fullPath);
+    }
+
+    /**
+     * @test
+     */
+    public function can_use_font_with_color()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->writer->loadFont('Arial');
+
+        $this->writer->loadColor('blue', [
+            'cmyk',
+            100, 100, 0, 0
+        ]);
+
+        $this->assertInstanceOf(PdfWriter::class, $this->writer->useFont('Arial', 12, 'blue'));
+
+        /** Todo: Assert if document really uses the font. */
+
+        $this->writer->finishDocument();
+
+        $this->assertFileExists($this->fullPath);
+    }
+
+    /**
+     * @test
+     */
+    public function throws_an_exception_when_use_undefined_color()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->expectException(ColorException::class);
+        $this->writer->useColor('unknown');
+    }
+
+    /**
+     * @test
+     */
+    public function can_go_to_next_line()
+    {
+        $startPosition = 100;
+        $fontSize = 12;
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->writer->loadFont('Arial');
+        $this->writer->useFont('Arial', $fontSize);
+
+        $this->writer->setYPosition($startPosition);
+
+        $this->writer->nextLine();
+
+        $this->assertEquals(
+            round($startPosition - MeasureCalculator::calculateToMm($fontSize, 'pt'), 3),
+            round($this->writer->getYPosition(), 3)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function can_go_to_next_line_with_line_spacing()
+    {
+        $startPosition = 100;
+        $fontSize = 12;
+        $spacing = 2;
+
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->writer->loadFont('Arial');
+        $this->writer->useFont('Arial', $fontSize);
+
+        $this->writer->setYPosition($startPosition);
+
+        $this->writer->nextLine($spacing);
+
+        $this->assertEquals(
+            round($startPosition - (MeasureCalculator::calculateToMm($fontSize, 'pt') * $spacing), 3),
+            round($this->writer->getYPosition(), 3)
+        );
     }
 }

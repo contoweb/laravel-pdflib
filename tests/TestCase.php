@@ -28,5 +28,10 @@ class TestCase extends OrchestraTestCase
             'driver' => 'local',
             'root'   => __DIR__ . '/Data/Storage/Other',
         ]);
+
+        $app['config']->set('pdf.fonts.disk', 'local');
+        $app['config']->set('pdf.fonts.path', 'fonts');
+        $app['config']->set('pdf.templates.disk', 'local');
+        $app['config']->set('pdf.templates.path', 'templates');
     }
 }

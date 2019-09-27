@@ -74,6 +74,15 @@ interface PdfWriter
     public function loadColor($name, array $color);
 
     /**
+     * Use a defined color.
+     *
+     * @param string $name
+     * @return $this
+     * @throws ColorException
+     */
+    public function useColor($name);
+
+    /**
      * Load fonts to use it with the writer.
      *
      * @param string $name
@@ -167,6 +176,15 @@ interface PdfWriter
     public function setXPosition($measure, $unit = null, $ignoreOffset = false);
 
     /**
+     * Get the cursor's X position.
+     *
+     * @param string|null $unit
+     * @return float
+     * @throws MeasureException
+     */
+    public function getXPosition($unit = null);
+
+    /**
      * Set Y position of the writer.
      *
      * @param float $measure
@@ -175,6 +193,15 @@ interface PdfWriter
      * @return $this
      */
     public function setYPosition($measure, $unit = null, $ignoreOffset = false);
+
+    /**
+     * Get the cursor's Y position.
+     *
+     * @param string|null $unit
+     * @return float
+     * @throws MeasureException
+     */
+    public function getYPosition($unit = null);
 
     /**
      * Set X offset for preview.
