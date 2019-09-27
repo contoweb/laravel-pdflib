@@ -71,7 +71,7 @@ class PdfWriterTest extends TestCase
     public function able_to_use_template()
     {
         $this->app['config']->set('pdf.templates.disk', 'local');
-        $this->app['config']->set('pdf.templates.path', '');
+        $this->app['config']->set('pdf.templates.path', 'templates');
 
         $this->assertTrue($this->writer->loadTemplate('template.pdf'));
 
