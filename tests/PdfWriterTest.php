@@ -226,6 +226,44 @@ class PdfWriterTest extends TestCase
     /**
      * @test
      */
+    public function can_position_the_cursor_in_units()
+    {
+        $units = ['mm', 'pt'];
+
+        foreach($units as $fromUnit) {
+            foreach($units as $toUnit) {
+                $this->writer->setXPosition(100, $fromUnit);
+
+                self::assertEquals(
+                    round(MeasureCalculator::calculateToUnit(100, $toUnit, $fromUnit), 3),
+                    round($this->writer->getXPosition($toUnit), 3)
+                );
+
+                $this->writer->setYPosition(200, $fromUnit);
+
+                self::assertEquals(
+                    round(MeasureCalculator::calculateToUnit(200, $toUnit, $fromUnit), 3),
+                    round($this->writer->getYPosition($toUnit), 3)
+                );
+
+                $this->writer->setPosition(50, 60, $fromUnit);
+
+                self::assertEquals(
+                    round(MeasureCalculator::calculateToUnit(50, $toUnit, $fromUnit), 3),
+                    round($this->writer->getXPosition($toUnit), 3)
+                );
+
+                self::assertEquals(
+                    round(MeasureCalculator::calculateToUnit(60, $toUnit, $fromUnit), 3),
+                    round($this->writer->getYPosition($toUnit), 3)
+                );
+            }
+        }
+    }
+
+    /**
+     * @test
+     */
     public function can_go_to_next_line_with_line_spacing()
     {
         $startPosition = 100;

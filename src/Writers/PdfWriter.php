@@ -172,6 +172,7 @@ interface PdfWriter
      * @param string $unit
      * @param $ignoreOffset
      * @return $this
+     * @throws MeasureException
      */
     public function setXPosition($measure, $unit = null, $ignoreOffset = false);
 
@@ -191,6 +192,7 @@ interface PdfWriter
      * @param string $unit
      * @param boolean $ignoreOffset
      * @return $this
+     * @throws MeasureException
      */
     public function setYPosition($measure, $unit = null, $ignoreOffset = false);
 
