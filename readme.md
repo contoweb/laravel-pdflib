@@ -1,8 +1,11 @@
 ## Laravel PDFLib
 
 This package is a Laravel wrapper for [PDFLib](https://www.pdflib.com/products/pdflib-family/overview/).
-It makes generating professional, print-ready PDFs a breeze.
+It makes generating high professional (Print-)PDFs with PDFLib a breeze.
 PDFlib is the leading developer toolbox for generating and manipulating files in the Portable Document Format (PDF).
+
+PDFLib itself is only free to use for demonstration purposes.
+If you want to bring it into production, you need a PDFLib license.
 
 ## Documentation
 
