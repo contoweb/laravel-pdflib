@@ -4,6 +4,23 @@ This package is a Laravel wrapper for [PDFLib](https://www.pdflib.com/products/p
 It makes generating professional, print-ready PDFs a breeze.
 PDFlib is the leading developer toolbox for generating and manipulating files in the Portable Document Format (PDF).
 
+## Documentation
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Usage](#sub-items)
+	- [Quick start](#quick-start)
+	- [Pages](#create-a-page)
+	- [Templates](#using-a-template)
+	    - [Preview & Print](#preview-and-print-pdf)
+	- [Navigation](#navigate-on-the-page)
+	- [Text](#write-text)
+	    - [Fonts](#fonts)
+	    - [Colors](#colors)
+	- [Images](#images)
+	- [PDFLib functions](#pdflib-functions)
+* [License](#license)
+
 ## Requirements
 Since PDFLib is much more powerful than any other PDF generator, it's PHP extension needs to be registered.
 You can download the extension file directly from the [PDFLib download](https://www.pdflib.com/download/pdflib-product-family/) page.
@@ -78,7 +95,7 @@ class MarketingController extends Controller
 You can find then your document in your configured export path!
 But firstly, let us dive into writing a simple PDF.
 
-### Quick startup
+### Quick start
 Within your document file, you have a boilerplated method `draw()`:
 
 ```php
@@ -203,11 +220,6 @@ In the configuration file, you can define which measure unit is used for positio
 
 > **Note**: It may be confusing in the beginning, but PDFLib Y axis are measured from the bottom.
 So position 0 0 is in the left bottom corner, not the left top corner.
-
-You can create new pages by calling
-```php
-$writer->newPage();
-```
 
 ### Write text
 To write text, you can simply use:
