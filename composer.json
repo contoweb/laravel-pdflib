@@ -5,7 +5,9 @@
     "keywords": [
         "laravel",
         "pdflib",
-        "pdf"
+        "pdf",
+        "print",
+        "documents"
     ],
     "license": "MIT",
     "authors": [

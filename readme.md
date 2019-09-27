@@ -204,6 +204,10 @@ In the configuration file, you can define which measure unit is used for positio
 > **Note**: It may be confusing in the beginning, but PDFLib Y axis are measured from the bottom.
 So position 0 0 is in the left bottom corner, not the left top corner.
 
+You can create new pages by calling
+```php
+$writer->newPage();
+```
 
 ### Write text
 To write text, you can simply use:
@@ -267,6 +271,7 @@ public function colors(): array
 ```
 
 You can use the color with:
+
 ```php
 $writer->useColor('orange-rgb');
 ```
@@ -275,7 +280,7 @@ or as a parameter when defining a font:
 $writer->useFont('OpenSans-Regular', 12, 'blue-cmyk')
 ```
 
-### Image
+### Images
 You can place images with:
 ```php
 $writer->drawImage('/path/to/the/image', 150, 100)
@@ -290,3 +295,7 @@ $writer->circleImage('/path/to/the/image', 100)
 ### PDFLib functions
 Since this package extending PDFLib, you can use the whole PDFLib toolkit.
 The [PDFLib Cookbook](https://www.pdflib.com/pdflib-cookbook/) helps a lot, even to understand this package.
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

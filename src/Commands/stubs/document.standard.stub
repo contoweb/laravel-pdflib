@@ -7,11 +7,6 @@ use Contoweb\Pdflib\Writers\PdfWriter as Writer;
 
 class DummyClass implements WithDraw
 {
-    public function template(): string
-    {
-        return '';
-    }
-
     public function fonts(): array
     {
         return ['Arial'];
