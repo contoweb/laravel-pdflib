@@ -5,6 +5,7 @@ namespace Contoweb\Pdflib\Writers;
 use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 
 interface PdfWriter
@@ -27,6 +28,17 @@ interface PdfWriter
     public function finishDocument();
 
     /**
+     * Start a new document page.
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param null $optlist
+     * @return $this
+     * @throws MeasureException
+     */
+    public function newPage($width = 0, $height = 0, $optlist = null);
+
+    /**
      * Load a PDF template.
      *
      * @param string $name
@@ -36,6 +48,14 @@ interface PdfWriter
      * @throws DocumentException
      */
     public function loadTemplate($name, $path = null, $optlist = null);
+
+    /**
+     * Copy a template page into the current document
+     *
+     * @param $pageNumber
+     * @return $this
+     */
+    public function fromTemplatePage($pageNumber);
 
     /**
      * Close the template file.
@@ -77,25 +97,6 @@ interface PdfWriter
     public function useFont($name, $size, $color = null);
 
     /**
-     * Start a new document page.
-     *
-     * @param integer $width
-     * @param integer $height
-     * @param null $optlist
-     * @return $this
-     * @throws MeasureException
-     */
-    public function newPage($width = 0, $height = 0, $optlist = null);
-
-    /**
-     * Copy a template page into the current document
-     *
-     * @param $pageNumber
-     * @return $this
-     */
-    public function fromTemplatePage($pageNumber);
-
-    /**
      * Write fluent text.
      *
      * @param string $text
@@ -129,6 +130,7 @@ interface PdfWriter
      * @param string|null $loadOptions
      * @param string|null $fitOptions
      * @return $this
+     * @throws ImageException
      */
     public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null);
 
@@ -139,6 +141,7 @@ interface PdfWriter
      * @param float $size
      * @param string|null $loadOptions
      * @return $this
+     * @throws ImageException
      */
     public function circleImage($imagePath, $size, $loadOptions = null);
 

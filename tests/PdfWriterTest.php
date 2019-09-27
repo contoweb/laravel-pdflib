@@ -52,6 +52,22 @@ class PdfWriterTest extends TestCase
     /**
      * @test
      */
+    public function can_create_multiple_pages()
+    {
+        $this->writer->beginDocument($this->fullPath);
+
+        for($i  = 0; $i < 10; $i++) {
+            $this->writer->newPage();
+        }
+
+        $this->writer->finishDocument();
+
+        $this->assertFileExists($this->fullPath);
+    }
+
+    /**
+     * @test
+     */
     public function able_to_use_template()
     {
         $this->app['config']->set('pdf.templates.disk', 'local');

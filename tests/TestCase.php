@@ -26,7 +26,7 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('filesystems.disks.local.root', __DIR__ . '/Data/Storage/Local');
         $app['config']->set('filesystems.disks.other', [
             'driver' => 'local',
-            'root'   => __DIR__ . '/Data/Disks/Other',
+            'root'   => __DIR__ . '/Data/Storage/Other',
         ]);
     }
 }

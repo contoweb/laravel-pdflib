@@ -56,6 +56,12 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     protected $fonts;
 
     /**
+     * Already loaded images.
+     * @var array
+     */
+    protected $imageCache = [];
+
+    /**
      * Indicates if a new page is already created and the page should be closed before the next one starts
      * @var boolean
      */
@@ -81,6 +87,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
     /**
      * PdflibPdfWriter constructor.
+     *
      * @param $license
      * @param $creator
      * @param $searchPath
@@ -126,7 +133,28 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         $this->end_document("");
 
+        $this->imageCache = [];
+
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newPage($width = 50, $height = 50, $optlist = null)
+    {
+        if ($this->siteOpen) {
+            $this->end_page_ext("");
+        }
+
+        $this->siteOpen = true;
+
+        $this->begin_page_ext(
+            MeasureCalculator::calculateToMm($width),
+            MeasureCalculator::calculateToMm($height),
+            $optlist ?: "");
+
+        return $this;
     }
 
     /**
@@ -144,6 +172,18 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function fromTemplatePage($pageNumber)
+    {
+        $page = $this->open_pdi_page($this->template, $pageNumber, "cloneboxes");
+        $this->fit_pdi_page($page, 0, 0, "adjustpage cloneboxes");
+        $this->close_pdi_page($page);
+
+        return $this;
     }
 
     /**
@@ -201,7 +241,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
                 throw new ColorException($e);
             }
         } else {
-            throw new ColorException('Color "' . $name . '" not loaded.');
+            throw new ColorException('Color "' . $name . '" not defined.');
         }
     }
 
@@ -243,38 +283,6 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function newPage($width = 50, $height = 50, $optlist = null)
-    {
-        if ($this->siteOpen) {
-            $this->end_page_ext("");
-            $this->siteOpen = false;
-        } else {
-            $this->siteOpen = true;
-        }
-
-        $this->begin_page_ext(
-            MeasureCalculator::calculateToMm($width),
-            MeasureCalculator::calculateToMm($height),
-        $optlist ?: "");
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fromTemplatePage($pageNumber)
-    {
-        $page = $this->open_pdi_page($this->template, $pageNumber, "cloneboxes");
-        $this->fit_pdi_page($page, 0, 0, "adjustpage cloneboxes");
-        $this->close_pdi_page($page);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function writeText($text)
     {
         $this->set_text_pos($this->xPos, $this->yPos);
@@ -309,12 +317,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
     {
-        // Load image
-        $image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
-
-        if ($image == 0) {
-            throw new ImageException($this->get_errmsg());
-        }
+        $image = $this->preloadImage($imagePath, $loadOptions);
+        //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
 
         $this->fit_image($image,
                         MeasureCalculator::calculateToMm($this->xPos , 'pt'),
@@ -351,11 +355,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->clip();
 
         // Load image
-        $image = $this->load_image("auto", $imagePath, "");
-
-        if ($image == 0) {
-            throw new ImageException($this->get_errmsg());
-        }
+        $image = $this->preloadImage($imagePath, $loadOptions);
 
         // Fit the image into the circle
         $this->fit_image($image,
@@ -483,5 +483,30 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->lineOffset = $measure;
 
         return $this;
+    }
+
+    /**
+     * Loads existing or new image.
+     *
+     * @param $imagePath
+     * @param $loadOptions
+     * @return int
+     * @throws ImageException
+     */
+    protected function preloadImage($imagePath, $loadOptions)
+    {
+        // We're using the PDFLib image index so the same image is only embedded one time in the PDF.
+        if(array_key_exists($imagePath, $this->imageCache)) {
+            $image = $this->imageCache[$imagePath];
+        } else {
+            $image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
+            $this->imageCache[$imagePath] = $image;
+        }
+
+        if ($image == - 1) {
+            throw new ImageException($this->get_errmsg());
+        }
+
+        return $image;
     }
 }

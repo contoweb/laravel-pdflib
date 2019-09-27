@@ -51,10 +51,9 @@ php artisan vendor:publish --provider="Contoweb\Pdflib\PdflibServiceProvider"
 
 You can then configure paths, measure unit and so on...
 
-Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
-
 ### Laravel 5.5+:
 
+Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
 If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php
 
 ```php
@@ -74,7 +73,7 @@ To create a new document, you can use the `make:document` command:
 php artisan make:document MarketingDocument
 ```
 
-The new document file can be found in the app/Exports` directory.
+The new document file can be found in the app/Documents` directory.
 
 > Todo: Working on some example cases...
 
@@ -96,7 +95,7 @@ class MarketingController extends Controller
 ```
 
 You can find then your document in your configured export path!
-But firstly, let us dive into writing a simple PDF.
+But first, let us dive into writing a simple PDF.
 
 ### Quick start
 Within your document file, you have a boilerplated method `draw()`:
@@ -131,15 +130,16 @@ $writer->newPage(210, 297); // A4 portrait format
 
 #### Using a template
 In most cases, you want to write dynamic content on a already designed PDF.
-To use a PDF template, use the `WithTemplate` concern:
+To use a PDF template, use the `FromTemplate` concern and define the template PDF in a new `template()` function:
 
 ```php
 namespace App\Documents;
 
+use Contoweb\Pdflib\Concerns\FromTemplate;
 use Contoweb\Pdflib\Concerns\WithDraw;
 use Contoweb\Pdflib\Writers\PdfWriter as Writer;
 
-class MarketingDocument implements WithDraw
+class MarketingDocument implements FromTemplate, WithDraw
 {
     public function template(): array {
         return 'template.pdf';
@@ -157,13 +157,14 @@ class MarketingDocument implements WithDraw
 Now, your first page is using the page 1 from `template.pdf`. Don't forget to configure your templates location in the configuration file.
 
 ##### Preview and print PDF
-If you're aware of print-ready PDFs, you know that your print PDF isn't the same as the user finally sees.
+If you're aware of (professional) print-ready PDFs, you know that your print PDF isn't the same as the user finally sees.
 
 ![pdf-bleed](https://user-images.githubusercontent.com/13394801/65696401-6e6fdc00-e079-11e9-96fa-86e9d40d6aa1.jpg)
 
 There is a bleed box, crop marks and so on. For this case, you can use `WithPreview` combined with the `FromTemplate` concern.
+While your original template includes all the boxes and marks, your preview PDF just 
 
-This requires you to add a `template()`, `previewTemplate()` and `offset()` method.
+This requires you to add a `previewTemplate()` and `offset()` method.
 
 ```php
 namespace App\Documents;
@@ -207,7 +208,9 @@ The preview PDF will be automatically named to `<<name>>_preview.pdf`.
 You can overriding this by passing the name in `->withPreview('othername.pdf')`.
 
 ### Navigate on the page
+
 To tell PDFLib where your elements should be placed, you have to set the `X` and `Y` position of your "cursor".
+
 ```php
 $writer->setPosition(10, 100);
 
@@ -225,7 +228,9 @@ In the configuration file, you can define which measure unit is used for positio
 So position 0 0 is in the left bottom corner, not the left top corner.
 
 ### Write text
+
 To write text, you can simply use:
+
 ```php
 $writer->writeTextLine('your text')
 
