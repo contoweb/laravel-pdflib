@@ -253,14 +253,4 @@ interface PdfWriter
      * @return mixed
      */
     public function inPreview();
-
-    /**
-     * Set the line offset.
-     *
-     * @param $measure
-     * @param string $unit
-     * @return $this
-     * @throws MeasureException
-     */
-    public function setLineOffset($measure, $unit = null);
 }

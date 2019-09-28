@@ -498,18 +498,6 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         return $this->useOffset;
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLineOffset($measure, $unit = null)
-    {
-        $measure = MeasureCalculator::calculateToPt($measure, $unit);
-        $this->lineOffset = $measure;
-
-        return $this;
-    }
-
     /**
      * Loads existing or new image.
      *
@@ -528,7 +516,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
             $this->imageCache[$imagePath] = $image;
         }
 
-        if ($image == - 1) {
+        if ($image <= 0) {
             throw new ImageException($this->get_errmsg());
         }
 

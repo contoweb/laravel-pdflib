@@ -49,14 +49,12 @@ class LaravelPdflibServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        /** Todo: Lumen setup */
+
         if ($this->app->runningInConsole()) {
-            if ($this->app instanceof LumenApplication) {
-                $this->app->configure('pdf');
-            } else {
-                $this->publishes([
-                    $this->getConfigFile() => config_path('pdf.php'),
-                ], 'config');
-            }
+            $this->publishes([
+                $this->getConfigFile() => config_path('pdf.php'),
+            ], 'config');
         }
     }
 

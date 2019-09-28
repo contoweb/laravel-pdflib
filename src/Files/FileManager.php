@@ -20,19 +20,6 @@ class FileManager
     }
 
     /**
-     * Return the temporary pdf path.
-     *
-     * @param string $fileName
-     * @return string
-     */
-    public static function temporaryPath($fileName)
-    {
-        $path = sys_get_temp_dir();
-
-        return $path . DIRECTORY_SEPARATOR . fileName;
-    }
-
-    /**
      * Return the template path.
      *
      * @param string $fileName

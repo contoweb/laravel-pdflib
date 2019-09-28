@@ -3,9 +3,6 @@
 namespace Contoweb\Pdflib\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
-use InvalidArgumentException;
-use Symfony\Component\Console\Input\InputOption;
 
 class DocumentMakeCommand extends GeneratorCommand
 {

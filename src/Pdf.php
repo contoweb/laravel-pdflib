@@ -54,16 +54,16 @@ class Pdf
         return $this;
     }
 
-    /**
-     * @param $document
-     * @param $fileName
-     * @return Pdf
-     * @throws Exception
-     */
-    public function download($document, $fileName)
-    {
-        // Working on it...
-    }
+//    /**
+//     * @param $document
+//     * @param $fileName
+//     * @return Pdf
+//     * @throws Exception
+//     */
+//    public function download($document, $fileName)
+//    {
+//        // Working on it...
+//    }
 
     /**
      * @param string|null $fileName
