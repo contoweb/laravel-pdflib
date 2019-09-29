@@ -1,3 +1,11 @@
 preset: laravel
 
 risky: false
+
+enabled:
+  - align_double_arrow
+  - align_equals
+  - concat_with_spaces
+
+disabled:
+  - concat_without_spaces
