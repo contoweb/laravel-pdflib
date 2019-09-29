@@ -44,6 +44,7 @@ matrix:
       env: LARAVEL=6.0.* PHPUNIT=~8.0
 
 before_install:
+  - pecl install pdflib
   - phpenv config-rm xdebug.ini
   - composer self-update --stable --no-interaction
 
