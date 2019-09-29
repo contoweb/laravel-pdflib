@@ -2,12 +2,11 @@
 
 namespace Contoweb\Pdflib;
 
-use Contoweb\Pdflib\Commands\DocumentMakeCommand;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Writers\PdfWriter;
-use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Lumen\Application as LumenApplication;
+use Contoweb\Pdflib\Writers\PdflibPdfWriter;
+use Contoweb\Pdflib\Commands\DocumentMakeCommand;
 
 class LaravelPdflibServiceProvider extends ServiceProvider
 {
@@ -36,7 +35,7 @@ class LaravelPdflibServiceProvider extends ServiceProvider
                 $this->app->make(PdfWriter::class)
             );
         });
-        
+
         $this->app->alias('pdf', Pdf::class);
 
         $this->commands([DocumentMakeCommand::class]);
@@ -49,7 +48,7 @@ class LaravelPdflibServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /** Todo: Lumen setup */
+        /* Todo: Lumen setup */
 
         if ($this->app->runningInConsole()) {
             $this->publishes([

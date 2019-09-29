@@ -13,6 +13,7 @@ class PdflibServiceProviderTest extends TestCase
     {
         $this->assertTrue($this->app->bound('pdf'));
     }
+
     /**
      * @test
      */

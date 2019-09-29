@@ -2,10 +2,10 @@
 
 namespace Contoweb\Pdflib\Tests\Data\Stubs;
 
-use Contoweb\Pdflib\Concerns\FromTemplate;
 use Contoweb\Pdflib\Concerns\WithDraw;
-use Contoweb\Pdflib\Concerns\WithPreview;
 use Contoweb\Pdflib\Writers\PdfWriter;
+use Contoweb\Pdflib\Concerns\WithPreview;
+use Contoweb\Pdflib\Concerns\FromTemplate;
 
 class InvalidTemplatePreviewDocument implements FromTemplate, WithDraw, WithPreview
 {
@@ -44,7 +44,7 @@ class InvalidTemplatePreviewDocument implements FromTemplate, WithDraw, WithPrev
     {
         return [
             $this->xOffsetKey => 20,
-            $this->yOffsetKey => 20
+            $this->yOffsetKey => 20,
         ];
     }
 

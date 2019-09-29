@@ -2,11 +2,11 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
+use Contoweb\Pdflib\Exceptions\DocumentException;
 
 interface PdfWriter
 {
@@ -15,7 +15,7 @@ interface PdfWriter
      *
      * @param string $path
      * @param string|null $optlist
-     * @return boolean
+     * @return bool
      * @throws DocumentException
      */
     public function beginDocument($path, $optlist = null);
@@ -23,15 +23,15 @@ interface PdfWriter
     /**
      * End PDFlib page and document.
      *
-     * @return boolean
+     * @return bool
      */
     public function finishDocument();
 
     /**
      * Start a new document page.
      *
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param null $optlist
      * @return $this
      * @throws MeasureException
@@ -44,13 +44,13 @@ interface PdfWriter
      * @param string $name
      * @param string|null $path
      * @param null $optlist
-     * @return boolean
+     * @return bool
      * @throws DocumentException
      */
     public function loadTemplate($name, $path = null, $optlist = null);
 
     /**
-     * Copy a template page into the current document
+     * Copy a template page into the current document.
      *
      * @param $pageNumber
      * @return $this
@@ -60,7 +60,7 @@ interface PdfWriter
     /**
      * Close the template file.
      *
-     * @return boolean
+     * @return bool
      */
     public function closeTemplate();
 
@@ -190,7 +190,7 @@ interface PdfWriter
      *
      * @param float $measure
      * @param string $unit
-     * @param boolean $ignoreOffset
+     * @param bool $ignoreOffset
      * @return $this
      * @throws MeasureException
      */
@@ -216,7 +216,6 @@ interface PdfWriter
     public function setXOffset($measure, $unit = null);
 
     /**
-     *
      * Set Y offset for preview.
      *
      * @param $measure

@@ -15,7 +15,8 @@ class MeasureCalculator
      * @return float
      * @throws MeasureException
      */
-    public static function calculateToPt($measure, $unit = null) {
+    public static function calculateToPt($measure, $unit = null)
+    {
         return self::calculateToUnit($measure, 'pt', $unit);
     }
 
@@ -25,7 +26,8 @@ class MeasureCalculator
      * @return float
      * @throws MeasureException
      */
-    public static function calculateToMm($measure, $unit = null) {
+    public static function calculateToMm($measure, $unit = null)
+    {
         return self::calculateToUnit($measure, 'mm', $unit);
     }
 
@@ -38,26 +40,26 @@ class MeasureCalculator
      */
     public static function calculateToUnit($measure, $toUnit, $fromUnit = null)
     {
-        if($fromUnit == null) {
+        if ($fromUnit == null) {
             $fromUnit = config('pdf.measurement.unit', 'pt');
         }
 
-        if($toUnit == 'mm') {
-            if($fromUnit == 'pt') {
+        if ($toUnit == 'mm') {
+            if ($fromUnit == 'pt') {
                 return $measure * self::ptToMm;
             }
 
-            if($fromUnit == 'mm') {
+            if ($fromUnit == 'mm') {
                 return $measure;
             }
         }
 
-        if($toUnit == 'pt') {
-            if($fromUnit == 'mm') {
+        if ($toUnit == 'pt') {
+            if ($fromUnit == 'mm') {
                 return $measure * self::mmToPt;
             }
 
-            if($fromUnit == 'pt') {
+            if ($fromUnit == 'pt') {
                 return $measure;
             }
         }

@@ -8,7 +8,7 @@ class PathHelper
     {
         $fullPath = config('filesystems.disks.' . $diskName . '.root') . DIRECTORY_SEPARATOR . ($path ? $path . DIRECTORY_SEPARATOR : '') . $fileName;
 
-        if($cleanup === true) {
+        if ($cleanup === true) {
             @unlink($fullPath);
         }
 

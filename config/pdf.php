@@ -24,7 +24,7 @@ return [
     |
     */
     'measurement' => [
-        'unit' => 'mm'
+        'unit' => 'mm',
     ],
 
     /*
@@ -38,7 +38,7 @@ return [
     */
     'fonts' => [
         'disk' => 'local',
-        'path' => ''
+        'path' => '',
     ],
 
     /*
@@ -51,7 +51,7 @@ return [
     */
     'templates' => [
         'disk' => 'local',
-        'path' => ''
+        'path' => '',
     ],
 
     /*
@@ -64,6 +64,6 @@ return [
     */
     'exports' => [
         'disk' => 'local',
-        'path' => ''
+        'path' => '',
     ],
 ];

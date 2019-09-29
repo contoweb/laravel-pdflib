@@ -2,55 +2,55 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\DocumentException;
-use Contoweb\Pdflib\Exceptions\FontException;
-use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Files\FileManager;
-use Contoweb\Pdflib\Helpers\MeasureCalculator;
-use Exception;
 use PDFlib;
+use Exception;
+use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Contoweb\Pdflib\Exceptions\DocumentException;
 
 class PdflibPdfWriter extends PDFlib implements PdfWriter
 {
     /**
-     * X position in pt
+     * X position in pt.
      * @var float
      */
     public $xPos = 0;
 
     /**
-     * Y position in pt
+     * Y position in pt.
      * @var float
      */
     public $yPos = 0;
 
     /**
-     * Y offset for preview
+     * Y offset for preview.
      * @var float
      */
     protected $xOffset;
 
     /**
-     * X offset for preview
+     * X offset for preview.
      * @var float
      */
     protected $yOffset;
 
     /**
-     * Use offsets
+     * Use offsets.
      * @var float
      */
     protected $useOffset = false;
 
     /**
-     * Loaded colors
+     * Loaded colors.
      * @var array
      */
     protected $colors = [];
 
     /**
-     * Loaded fonts
+     * Loaded fonts.
      * @var array
      */
     protected $fonts = [];
@@ -62,19 +62,19 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     protected $imageCache = [];
 
     /**
-     * Indicates if a new page is already created and the page should be closed before the next one starts
-     * @var boolean
+     * Indicates if a new page is already created and the page should be closed before the next one starts.
+     * @var bool
      */
     protected $siteOpen = false;
 
     /**
-     * Path to the template
+     * Path to the template.
      * @var string
      */
     protected $template;
 
     /**
-     * Line offset in pt
+     * Line offset in pt.
      * @var float
      */
     protected $lineOffset = 0;
@@ -96,16 +96,16 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     {
         parent::__construct();
 
-        $this->set_info("Creator", $creator);
+        $this->set_info('Creator', $creator);
 
-        if($license) {
-            $this->set_option("license=" . $license);
+        if ($license) {
+            $this->set_option('license=' . $license);
         }
 
-        $this->set_option("errorpolicy=return");
-        $this->set_option("stringformat=utf8");
+        $this->set_option('errorpolicy=return');
+        $this->set_option('stringformat=utf8');
 
-        $this->set_option("searchpath={" . $searchPath . "}");
+        $this->set_option('searchpath={' . $searchPath . '}');
         // $this->writer->set_option("spotcolorlookup=" . $spotcolorlookup);
     }
 
@@ -114,8 +114,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function beginDocument($path, $optlist = null)
     {
-        if ($this->begin_document($path, "") == 0) {
-            throw new DocumentException("Error: " . $this->get_errmsg());
+        if ($this->begin_document($path, '') == 0) {
+            throw new DocumentException('Error: ' . $this->get_errmsg());
         }
 
         return true;
@@ -126,12 +126,12 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function finishDocument()
     {
-        if($this->siteOpen) {
-            $this->end_page_ext("");
+        if ($this->siteOpen) {
+            $this->end_page_ext('');
             $this->siteOpen = false;
         }
 
-        $this->end_document("");
+        $this->end_document('');
 
         $this->imageCache = [];
 
@@ -144,7 +144,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     public function newPage($width = 50, $height = 50, $optlist = null)
     {
         if ($this->siteOpen) {
-            $this->end_page_ext("");
+            $this->end_page_ext('');
         }
 
         $this->siteOpen = true;
@@ -152,7 +152,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->begin_page_ext(
             MeasureCalculator::calculateToMm($width),
             MeasureCalculator::calculateToMm($height),
-            $optlist ?: "");
+            $optlist ?: '');
 
         return $this;
     }
@@ -164,11 +164,11 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     {
         $this->template = $this->open_pdi_document(
             $path ?: FileManager::templatePath($name),
-            $optlist ?: ""
+            $optlist ?: ''
         );
 
-        if($this->template == 0) {
-            throw new DocumentException("Error: " . $this->get_errmsg());
+        if ($this->template == 0) {
+            throw new DocumentException('Error: ' . $this->get_errmsg());
         }
 
         return true;
@@ -179,8 +179,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function fromTemplatePage($pageNumber)
     {
-        $page = $this->open_pdi_page($this->template, $pageNumber, "cloneboxes");
-        $this->fit_pdi_page($page, 0, 0, "adjustpage cloneboxes");
+        $page = $this->open_pdi_page($this->template, $pageNumber, 'cloneboxes');
+        $this->fit_pdi_page($page, 0, 0, 'adjustpage cloneboxes');
         $this->close_pdi_page($page);
 
         return $this;
@@ -204,13 +204,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         array_unshift($color, 'fill');
 
         // Divide all color definitions to convert it for PDFLib.
-        $color = array_map(function($definition) use($color) {
-            if(is_numeric($definition)) {
-                if($color[1] === 'cmyk') {
+        $color = array_map(function ($definition) use ($color) {
+            if (is_numeric($definition)) {
+                if ($color[1] === 'cmyk') {
                     return $definition / 100;
                 }
 
-                if($color[1] === 'rgb') {
+                if ($color[1] === 'rgb') {
                     return $definition / 255;
                 }
             }
@@ -219,7 +219,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         }, $color);
 
         // This allows to define rgb colors with only three parameters.
-        if(! array_key_exists(5, $color)) {
+        if (! array_key_exists(5, $color)) {
             $color[5] = 0;
         }
 
@@ -235,7 +235,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     {
         if (array_key_exists($name, $this->colors)) {
             try {
-                call_user_func_array(array($this, 'setcolor'), $this->colors[$name]);
+                call_user_func_array([$this, 'setcolor'], $this->colors[$name]);
             } catch (Exception $e) {
                 throw new ColorException($e);
             }
@@ -251,10 +251,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function loadFont($name, $encoding = null, $optlist = null)
     {
-        $this->fonts[$name] = $this->load_font($name, $encoding ?: "unicode", $optlist ?: "embedding");
+        $this->fonts[$name] = $this->load_font($name, $encoding ?: 'unicode', $optlist ?: 'embedding');
 
-        if($this->fonts[$name] == 0) {
-            throw new FontException("Error: " . $this->get_errmsg());
+        if ($this->fonts[$name] == 0) {
+            throw new FontException('Error: ' . $this->get_errmsg());
         }
 
         return $this;
@@ -262,19 +262,18 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
     /**
      * {@inheritdoc}
-     *
      */
     public function useFont($name, $size, $color = null)
     {
         $this->fontSize = $size;
 
-        if(array_key_exists($name, $this->fonts)) {
+        if (array_key_exists($name, $this->fonts)) {
             $this->setfont($this->fonts[$name], $size);
         } else {
             throw new FontException('Font "' . $name . '" not loaded.');
         }
 
-        if($color) {
+        if ($color) {
             $this->useColor($color);
         }
 
@@ -297,11 +296,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function writeTextLine($text, $optlist = null)
     {
-        $this->fit_textline($text,  $this->xPos, $this->yPos, $optlist);
+        $this->fit_textline($text, $this->xPos, $this->yPos, $optlist);
 
         return $this;
     }
-
 
     /**
      * {@inheritdoc}
@@ -322,9 +320,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
 
         $this->fit_image($image,
-                        MeasureCalculator::calculateToMm($this->xPos , 'pt'),
+                        MeasureCalculator::calculateToMm($this->xPos, 'pt'),
                         MeasureCalculator::calculateToMm($this->yPos, 'pt'),
-                 $fitOptions ?: "boxsize {" .  MeasureCalculator::calculateToMm($width) . " " .  MeasureCalculator::calculateToMm($height) . "} position center fitmethod=meet"
+                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position center fitmethod=meet'
         );
 
         return $this;
@@ -337,7 +335,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     {
         $this->save();
 
-        $width = $size;
+        $width  = $size;
         $height = $size;
         $radius = $size / 2;
 
@@ -361,8 +359,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         // Fit the image into the circle
         $this->fit_image($image,
             MeasureCalculator::calculateToMm($this->xPos, 'pt'),
-            MeasureCalculator::calculateToMm($this->yPos ,'pt'),
-            "boxsize {" .  MeasureCalculator::calculateToMm($width) . " " .  MeasureCalculator::calculateToMm($height) . "} position center fitmethod=meet");
+            MeasureCalculator::calculateToMm($this->yPos, 'pt'),
+            'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position center fitmethod=meet');
 
         // Close image and restore original clipping (no clipping)
         $this->close_image($image);
@@ -391,7 +389,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     {
         $measure = MeasureCalculator::calculateToPt($measure, $unit);
 
-        if($this->useOffset && $ignoreOffset === false) {
+        if ($this->useOffset && $ignoreOffset === false) {
             $measure += $this->xOffset;
         }
 
@@ -419,7 +417,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     {
         $measure = MeasureCalculator::calculateToPt($measure, $unit);
 
-        if($this->useOffset && $ignoreOffset === false) {
+        if ($this->useOffset && $ignoreOffset === false) {
             $measure += $this->yOffset;
         }
 
@@ -445,7 +443,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setXOffset($measure, $unit = null)
     {
-        $measure = MeasureCalculator::calculateToPt($measure, $unit);
+        $measure       = MeasureCalculator::calculateToPt($measure, $unit);
         $this->xOffset = $measure;
 
         return $this;
@@ -456,7 +454,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setYOffset($measure, $unit = null)
     {
-        $measure = MeasureCalculator::calculateToPt($measure, $unit);
+        $measure       = MeasureCalculator::calculateToPt($measure, $unit);
         $this->yOffset = $measure;
 
         return $this;
@@ -509,10 +507,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     protected function preloadImage($imagePath, $loadOptions)
     {
         // We're using the PDFLib image index so the same image is only embedded one time in the PDF.
-        if(array_key_exists($imagePath, $this->imageCache)) {
+        if (array_key_exists($imagePath, $this->imageCache)) {
             $image = $this->imageCache[$imagePath];
         } else {
-            $image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
+            $image                        = $this->load_image('auto', $imagePath, $loadOptions ?: '');
             $this->imageCache[$imagePath] = $image;
         }
 

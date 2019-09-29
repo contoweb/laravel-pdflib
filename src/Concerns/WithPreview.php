@@ -5,7 +5,7 @@ namespace Contoweb\Pdflib\Concerns;
 interface WithPreview
 {
     /**
-     * Set the the X and Y offset for the preview
+     * Set the the X and Y offset for the preview.
      *
      * @param null $measureUnit
      * @return array

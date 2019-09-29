@@ -2,9 +2,6 @@
 
 namespace Contoweb\Pdflib\Tests;
 
-use Contoweb\Pdflib\Commands\DocumentMakeCommand;
-use Symfony\Component\HttpKernel\Tests\TestKernel;
-
 class MakeDocumentCommandTest extends TestCase
 {
     /**

@@ -2,14 +2,14 @@
 
 namespace Contoweb\Pdflib\Tests;
 
-use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\DocumentException;
-use Contoweb\Pdflib\Exceptions\FontException;
-use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Exceptions\MeasureException;
-use Contoweb\Pdflib\Helpers\MeasureCalculator;
-use Contoweb\Pdflib\Tests\Files\PathHelper;
 use Contoweb\Pdflib\Writers\PdfWriter;
+use Contoweb\Pdflib\Tests\Files\PathHelper;
+use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Contoweb\Pdflib\Exceptions\MeasureException;
+use Contoweb\Pdflib\Exceptions\DocumentException;
 
 class PdfWriterTest extends TestCase
 {
@@ -27,7 +27,7 @@ class PdfWriterTest extends TestCase
     {
         parent::setUp();
 
-        $this->writer = $this->app->make(PdfWriter::class);
+        $this->writer   = $this->app->make(PdfWriter::class);
         $this->fullPath = PathHelper::absolutePath('test.pdf', 'local');
     }
 
@@ -84,7 +84,7 @@ class PdfWriterTest extends TestCase
     {
         $this->writer->beginDocument($this->fullPath);
 
-        for($i  = 0; $i < 10; $i++) {
+        for ($i  = 0; $i < 10; $i++) {
             $this->writer->newPage();
         }
 
@@ -104,7 +104,7 @@ class PdfWriterTest extends TestCase
         $this->writer->newPage()->fromTemplatePage(1);
         $this->writer->finishDocument();
 
-        /** Todo: Assert if document really uses template. */
+        /* Todo: Assert if document really uses template. */
 
         $this->assertFileExists($this->fullPath);
     }
@@ -130,7 +130,7 @@ class PdfWriterTest extends TestCase
 
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useFont('Arial', 12));
 
-        /** Todo: Assert if document really uses Arial font. */
+        /* Todo: Assert if document really uses Arial font. */
 
         $this->writer->finishDocument();
 
@@ -161,7 +161,7 @@ class PdfWriterTest extends TestCase
 
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useFont('OpenSans-Regular', 12));
 
-        /** Todo: Assert if document really uses the font. */
+        /* Todo: Assert if document really uses the font. */
 
         $this->writer->finishDocument();
 
@@ -193,19 +193,19 @@ class PdfWriterTest extends TestCase
         $this->writer->loadColor(
             'blue', [
             'cmyk',
-            100, 100, 0, 0
+            100, 100, 0, 0,
         ]);
 
         $this->writer->loadColor(
             'orange', [
             'rgb',
-            255, 165, 0
+            255, 165, 0,
         ]);
 
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useColor('blue'));
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useColor('orange'));
 
-        /** Todo: Assert if document really uses the font. */
+        /* Todo: Assert if document really uses the font. */
 
         $this->writer->finishDocument();
 
@@ -224,12 +224,12 @@ class PdfWriterTest extends TestCase
 
         $this->writer->loadColor('blue', [
             'cmyk',
-            100, 100, 0, 0
+            100, 100, 0, 0,
         ]);
 
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useFont('Arial', 12, 'blue'));
 
-        /** Todo: Assert if document really uses the font. */
+        /* Todo: Assert if document really uses the font. */
 
         $this->writer->finishDocument();
 
@@ -269,8 +269,8 @@ class PdfWriterTest extends TestCase
     {
         $units = ['mm', 'pt'];
 
-        foreach($units as $fromUnit) {
-            foreach($units as $toUnit) {
+        foreach ($units as $fromUnit) {
+            foreach ($units as $toUnit) {
                 $this->writer->setXPosition(100, $fromUnit);
 
                 self::assertEquals(
@@ -306,7 +306,7 @@ class PdfWriterTest extends TestCase
     public function can_go_to_next_line()
     {
         $startPosition = 100;
-        $fontSize = 12;
+        $fontSize      = 12;
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
@@ -329,8 +329,8 @@ class PdfWriterTest extends TestCase
     public function can_go_to_next_line_with_line_spacing()
     {
         $startPosition = 100;
-        $fontSize = 12;
-        $spacing = 2;
+        $fontSize      = 12;
+        $spacing       = 2;
 
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
@@ -370,7 +370,6 @@ class PdfWriterTest extends TestCase
 
         $this->assertEquals(100, round($this->writer->getXPosition(), 3));
         $this->assertEquals(200, round($this->writer->getYPosition(), 3));
-
     }
 
     /**
@@ -379,7 +378,7 @@ class PdfWriterTest extends TestCase
     public function throws_exception_when_invalid_unit_is_used()
     {
         $this->expectException(MeasureException::class);
-        $this->writer->setPosition(10,10, 'invalid');
+        $this->writer->setPosition(10, 10, 'invalid');
     }
 
     /**
@@ -397,7 +396,7 @@ class PdfWriterTest extends TestCase
             $this->writer->writeText('Test')
         );
 
-        /** Todo: Assert that the text is really placed in the document */
+        /* Todo: Assert that the text is really placed in the document */
     }
 
     /**
@@ -415,7 +414,7 @@ class PdfWriterTest extends TestCase
             $this->writer->writeTextLine('Test')
         );
 
-        /** Todo: Assert that the text is really placed in the document */
+        /* Todo: Assert that the text is really placed in the document */
     }
 
     /**
@@ -431,7 +430,7 @@ class PdfWriterTest extends TestCase
             $this->writer->drawImage(PathHelper::absolutePath('example.jpeg', 'local', 'images', false), 100, 100)
         );
 
-        /** Todo: Assert that the image is really placed in the document */
+        /* Todo: Assert that the image is really placed in the document */
     }
 
     /**
@@ -447,7 +446,7 @@ class PdfWriterTest extends TestCase
             $this->writer->circleImage(PathHelper::absolutePath('example.jpeg', 'local', 'images', false), 100)
         );
 
-        /** Todo: Assert that the image is really placed in the document */
+        /* Todo: Assert that the image is really placed in the document */
     }
 
     /**
@@ -488,7 +487,7 @@ class PdfWriterTest extends TestCase
 
         $this->writer->beginDocument($file2);
 
-        for($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $this->writer->newPage();
 
             $this->writer->drawImage(
