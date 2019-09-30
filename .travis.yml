@@ -50,7 +50,6 @@ before_install:
   - cp PDFlib-9.2.0-Linux-x86_64-php/bind/php/${PDFLIB_INSTALLER}/php_pdflib.so $PHPEXTDIR
   - echo "extension=php_pdflib.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - phpenv config-rm xdebug.ini
-  - chmod -R 777 /home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/
   - composer self-update --stable --no-interaction
   - composer require orchestra/testbench:$TESTBENCH phpunit/phpunit:$PHPUNIT --no-update --no-interaction --dev
 

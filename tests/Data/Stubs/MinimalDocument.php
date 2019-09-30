@@ -9,9 +9,7 @@ class MinimalDocument implements WithDraw
 {
     public function fonts(): array
     {
-        return ['Montserrat-Regular' => [
-            'type' => 'otf',
-        ]];
+        return ['OpenSans-Regular'];
     }
 
     public function draw(PdfWriter $writer)

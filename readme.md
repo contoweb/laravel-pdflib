@@ -1,13 +1,13 @@
-## Laravel PDFLib
-[![TravisCI](https://travis-ci.org/fabricecw/laravel-pdflib.svg?branch=master)](https://travis-ci.org/fabricecw/laravel-pdflib.svg?branch=master)
+## Laravel PDFlib
+[![TravisCI](https://travis-ci.org/contoweb/laravel-pdflib.svg?branch=master)](https://travis-ci.org/contoweb/laravel-pdflib.svg?branch=master)
 [![StyleCI](https://github.styleci.io/repos/210450435/shield?branch=master)](https://github.styleci.io/repos/210450435)
 
-This package is a Laravel wrapper for [PDFLib](https://www.pdflib.com/products/pdflib-family/overview/).
-It makes generating high professional (Print-)PDFs with PDFLib a breeze.
+This package is a Laravel wrapper for [PDFlib](https://www.pdflib.com/products/pdflib-family/overview/).
+It makes generating high professional (Print-)PDFs with PDFlib a breeze.
 PDFlib is the leading developer toolbox for generating and manipulating files in the Portable Document Format (PDF).
 
-PDFLib itself is only free to use for demonstration purposes.
-If you want to bring it into production, you need a PDFLib license.
+PDFlib itself is only free to use for demonstration purposes.
+If you want to bring it into production, you need a PDFlib license.
 
 ## Documentation
 
@@ -23,14 +23,14 @@ If you want to bring it into production, you need a PDFLib license.
 	    - [Fonts](#fonts)
 	    - [Colors](#colors)
 	- [Images](#images)
-	- [PDFLib functions](#pdflib-functions)
+	- [PDFlib functions](#pdflib-functions)
 * [License](#license)
 
 ## Requirements
-Since PDFLib is much more powerful than any other PDF generator, it's PHP extension needs to be registered.
-You can download the extension file directly from the [PDFLib download](https://www.pdflib.com/download/pdflib-product-family/) page.
+Since PDFlib is much more powerful than any other PDF generator, it's PHP extension needs to be registered.
+You can download the extension file directly from the [PDFlib download](https://www.pdflib.com/download/pdflib-product-family/) page.
 
-If you need further assistance installing PDFLib, check out the [installation guide](https://www.pdflib.com/fileadmin/pdflib/pdf/support/PDFlib-in-PHP-HowTo.pdf).
+If you need further assistance installing PDFlib, check out the [installation guide](https://www.pdflib.com/fileadmin/pdflib/pdf/support/PDFlib-in-PHP-HowTo.pdf).
 
 You also need:
 * PHP: `^7.0`
@@ -211,7 +211,7 @@ You can overriding this by passing the name in `->withPreview('othername.pdf')`.
 
 ### Navigate on the page
 
-To tell PDFLib where your elements should be placed, you have to set the `X` and `Y` position of your "cursor".
+To tell PDFlib where your elements should be placed, you have to set the `X` and `Y` position of your "cursor".
 
 ```php
 $writer->setPosition(10, 100);
@@ -226,7 +226,7 @@ $writer->setYPosition(100);
 
 In the configuration file, you can define which measure unit is used for positioning. You can choose between `mm` or `pt`.
 
-> **Note**: It may be confusing in the beginning, but PDFLib Y axis are measured from the bottom.
+> **Note**: It may be confusing in the beginning, but PDFlib Y axis are measured from the bottom.
 So position 0 0 is in the left bottom corner, not the left top corner.
 
 ### Write text
@@ -243,10 +243,10 @@ $writer->writeText('your text')
 ```
 
 Don't forget to firstly set the position and use the right font.
-Since the package extends PDFLib, you also can pass PDFLib options as a second parameter.
+Since the package extends PDFlib, you also can pass PDFlib options as a second parameter.
 
 > You only have to use `writeText` when placing two text blocks next to each other.
-Behind the scenes, `wirteText()` uses PDFLibs `show()` method, while `wirteTextLine()` uses the mostly used PDFLib method `fit_text_line()`.
+Behind the scenes, `wirteText()` uses PDFlibs `show()` method, while `wirteTextLine()` uses the mostly used PDFlib method `fit_text_line()`.
 
 If you want to go to the next line, instead of reposition your cursor every time, you can use:
 ```php
@@ -309,18 +309,18 @@ $writer->drawImage('/path/to/the/image', 150, 100)
 ```
 This places an image with and resize it to 150x100.
 
-Since loading rounded images is just a pain in PDFLib, you can use the method:
+Since loading rounded images is just a pain in PDFlib, you can use the method:
 ```php
 $writer->circleImage('/path/to/the/image', 100)
 ```
 
-### PDFLib functions
-Since this package extending PDFLib, you can use the whole PDFLib toolkit.
-The [PDFLib Cookbook](https://www.pdflib.com/pdflib-cookbook/) helps a lot, even to understand this package.
+### PDFlib functions
+Since this package extending PDFlib, you can use the whole PDFlib toolkit.
+The [PDFlib Cookbook](https://www.pdflib.com/pdflib-cookbook/) helps a lot, even to understand this package.
 
 ## Extending
-This package is just a basic beginning of wrapping PDFLib.
-Since PDFLib brings so much more functionality, we have to put the focus on the most used functions in the beginning.
+This package is just a basic beginning of wrapping PDFlib.
+Since PDFlib brings so much more functionality, we have to put the focus on the most used functions in the beginning.
 
 You're welcome to PR your ideas!
 
