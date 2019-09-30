@@ -1,0 +1,162 @@
+[------------------------------------------------------------------------------]
+[ PDFlib 9.2.0  PHP7 binding on Linux-x86_64 (le) 2019-09-30 21:31:18          ]
+[ Classes: api=1 filesearch=3 font=3 warning=1                                 ]
+[------------------------------------------------------------------------------]
+PDF_set_info2(p_0x7ff42edc2c00, "Creator", "Laravel", /*c*/7)
+PDF_set_option(p_0x7ff42edc2c00, "errorpolicy=return")
+PDF_set_option(p_0x7ff42edc2c00, "stringformat=utf8")
+PDF_begin_document(p_0x7ff42edc2c00, "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local//test.pdf", /*c*/0, "")
+		filename "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local//test.pdf" will be converted from "iso8859-1" to "utf8"
+		filename "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local//test.pdf": try to convert to "iso8859-1"
+		filename "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local//test.pdf": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local//test.pdf":
+		[21:31:18] 0x55da41efee90 opened, fileno=5, errno=0
+[Begin document #1]
+[1]
+PDF_set_option(p_0x7ff42edc2c00, "FontOutline={Montserrat-Regular=/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf}")
+	Environment variable "HOME=/home/travis"
+		filename "/usr/local/PDFlib" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib"]
+		filename "/usr/local/PDFlib/PDFlib" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib"]
+		filename "/usr/local/PDFlib/PDFlib/9.2" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib/9.2"]
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/cmap" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib/9.2/resource/cmap"]
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/codelist" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib/9.2/resource/codelist"]
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/fonts" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib/9.2/resource/fonts"]
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/glyphlst" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib/9.2/resource/glyphlst"]
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/icc" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/usr/local/PDFlib/PDFlib/9.2/resource/icc"]
+	Environment variable "HOME=/home/travis"
+		filename "/home/travis/PDFlib" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib"]
+		filename "/home/travis/PDFlib/PDFlib" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib"]
+		filename "/home/travis/PDFlib/PDFlib/9.2" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib/9.2"]
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/cmap" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib/9.2/resource/cmap"]
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/codelist" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib/9.2/resource/codelist"]
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/fonts" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib/9.2/resource/fonts"]
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/glyphlst" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib/9.2/resource/glyphlst"]
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/icc" will be converted from "iso8859-1" to "utf8"
+[New category:resource "SearchPath:/home/travis/PDFlib/PDFlib/9.2/resource/icc"]
+	Searching for file "pdflib.upr":
+	as disk file
+		filename "pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	Searching for file "pdflib.upr" in paths of SearchPath:
+	as disk file "/home/travis/PDFlib/PDFlib/9.2/resource/icc/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib/9.2/resource/icc"
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/icc/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/9.2/resource/icc/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/PDFlib/9.2/resource/glyphlst/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib/9.2/resource/glyphlst"
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/glyphlst/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/9.2/resource/glyphlst/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/PDFlib/9.2/resource/fonts/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib/9.2/resource/fonts"
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/fonts/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/9.2/resource/fonts/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/PDFlib/9.2/resource/codelist/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib/9.2/resource/codelist"
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/codelist/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/9.2/resource/codelist/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/PDFlib/9.2/resource/cmap/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib/9.2/resource/cmap"
+		filename "/home/travis/PDFlib/PDFlib/9.2/resource/cmap/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/9.2/resource/cmap/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/PDFlib/9.2/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib/9.2"
+		filename "/home/travis/PDFlib/PDFlib/9.2/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/9.2/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/PDFlib/pdflib.upr" in directory "/home/travis/PDFlib/PDFlib"
+		filename "/home/travis/PDFlib/PDFlib/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/PDFlib/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/home/travis/PDFlib/pdflib.upr" in directory "/home/travis/PDFlib"
+		filename "/home/travis/PDFlib/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/PDFlib/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/9.2/resource/icc/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib/9.2/resource/icc"
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/icc/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/9.2/resource/icc/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/9.2/resource/glyphlst/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib/9.2/resource/glyphlst"
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/glyphlst/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/9.2/resource/glyphlst/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/9.2/resource/fonts/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib/9.2/resource/fonts"
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/fonts/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/9.2/resource/fonts/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/9.2/resource/codelist/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib/9.2/resource/codelist"
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/codelist/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/9.2/resource/codelist/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/9.2/resource/cmap/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib/9.2/resource/cmap"
+		filename "/usr/local/PDFlib/PDFlib/9.2/resource/cmap/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/9.2/resource/cmap/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/9.2/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib/9.2"
+		filename "/usr/local/PDFlib/PDFlib/9.2/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/9.2/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/PDFlib/pdflib.upr" in directory "/usr/local/PDFlib/PDFlib"
+		filename "/usr/local/PDFlib/PDFlib/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/PDFlib/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	as disk file "/usr/local/PDFlib/pdflib.upr" in directory "/usr/local/PDFlib"
+		filename "/usr/local/PDFlib/pdflib.upr": try to convert to "iso8859-1"
+		[21:31:18] open file "/usr/local/PDFlib/pdflib.upr":
+		[21:31:18] 0x(nil) opened, fileno=-1, errno=2
+	File "pdflib.upr" not found
+		filename "﻿/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf" will be converted from "iso8859-1" to "utf8"
+[New category:resource "FontOutline:Montserrat-Regular = /home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf"]
+PDF_load_font(p_0x7ff42edc2c00, "Montserrat-Regular", /*c*/0, "unicode", "embedding")
+	Font apiname: "Montserrat-Regular"
+	Font name: "Montserrat-Regular"
+	PDFlib font name: "Montserrat-Regular"
+	Input encoding: "unicode", codepage=0, enc=-3
+	Font will be searched in the PDFlib font cache (0 fonts)
+	Font not found in the PDFlib font cache
+	Searching for file "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf":
+	as disk file
+		filename "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf":
+		[21:31:18] 0x55da41eff0c0 opened, fileno=7, errno=0
+		[21:31:18] 0x55da41eff0c0 closed, fileno=7, errno=0
+		filename "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf": try to convert to "iso8859-1"
+		[21:31:18] open file "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf":
+		[21:31:18] 0x55da41eff0c0 opened, fileno=7, errno=0
+	File "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf" found (disk file, size=228601 Byte, 223 kB)
+	Loading TrueType fontfile "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf":
+	Attempting to read whole file "/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf"
+		[21:31:18] 0x55da41eff0c0 closed, fileno=7, errno=0
+	228601 bytes read from disk file, contents=0x7ff42eaf2000
+		table  1: "CFF ", offset: 0x0033AC, length: 119923
+		table  2: "GDEF", offset: 0x020820, length: 656
+		table  3: "GPOS", offset: 0x020AB0, length: 79132
+		table  4: "GSUB", offset: 0x033FCC, length: 15680
+		table  5: "OS/2", offset: 0x001F98, length: 96
+		table  6: "cmap", offset: 0x002664, length: 3368
+		table  7: "head", offset: 0x0000D4, length: 54
+		table  8: "hhea", offset: 0x001F74, length: 36
+		table  9: "hmtx", offset: 0x00010C, length: 7784
+		table 10: "maxp", offset: 0x0000CC, length: 6
+		table 11: "name", offset: 0x001FF8, length: 1644
+		table 12: "post", offset: 0x00338C, length: 32
+		table check: CFF  GDEF GPOS GSUB[0]
+PDF_get_errmsg(p_0x7ff42edc2c00)
+["Font 'Montserrat-Regular' with encoding 'unicode': Corrupt TrueType font file '/home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/Montserrat-Regular.otf'"]
+PDF_delete(p_0x7ff42edc2c00)
+		[21:31:18] 0x55da41efee90 closed, fileno=5, errno=0
+[2019-09-30 21:31:18]

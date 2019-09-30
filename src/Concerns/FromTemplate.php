@@ -5,10 +5,9 @@ namespace Contoweb\Pdflib\Concerns;
 interface FromTemplate
 {
     /**
-     * Set the the X and Y offset for the preview
+     * Return the original template.
      *
-     * @param null $measureUnit
-     * @return array
+     * @return string
      */
-    public function template(): array;
+    public function template(): string;
 }

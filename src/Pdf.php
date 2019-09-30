@@ -2,27 +2,34 @@
 
 namespace Contoweb\Pdflib;
 
-use Contoweb\Pdflib\Concerns\FromTemplate;
-use Contoweb\Pdflib\Concerns\HasPreview;
-use Contoweb\Pdflib\Concerns\WithDraw;
-use Contoweb\Pdflib\Concerns\WithFonts;
-use Contoweb\Pdflib\Concerns\Writer;
-use Contoweb\Pdflib\Exceptions\MeasureException;
 use Exception;
+use Contoweb\Pdflib\Concerns\WithDraw;
+use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Writers\PdfWriter;
+use Contoweb\Pdflib\Concerns\WithColors;
+use Contoweb\Pdflib\Concerns\WithPreview;
+use Contoweb\Pdflib\Concerns\FromTemplate;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
+use Contoweb\Pdflib\Exceptions\MeasureException;
 
 class Pdf
 {
-    protected $writer;
+    /**
+     * @var PdfWriter
+     */
+    private $writer;
 
-    protected $filePath;
-
+    /**
+     * @var WithDraw
+     */
     private $document;
 
+    /**
+     * @var string
+     */
     private $fileName;
 
-    public function __construct(Writer $writer)
+    public function __construct(PdfWriter $writer)
     {
         $this->writer = $writer;
     }
@@ -38,8 +45,8 @@ class Pdf
         $this->document = $document;
         $this->fileName = $fileName;
 
-        if($document instanceof ShouldQueue) {
-          // Return queue
+        if ($document instanceof ShouldQueue) {
+            // Working on it...
         }
 
         $this->create();
@@ -47,21 +54,16 @@ class Pdf
         return $this;
     }
 
-    /**
-     * @param $document
-     * @param $fileName
-     * @return Pdf
-     * @throws Exception
-     */
-    public function download($document, $fileName)
-    {
-        $this->document = $document;
-        $this->fileName = $fileName;
-
-        $this->create();
-
-       return $this;
-    }
+//    /**
+//     * @param $document
+//     * @param $fileName
+//     * @return Pdf
+//     * @throws Exception
+//     */
+//    public function download($document, $fileName)
+//    {
+//        // Working on it...
+//    }
 
     /**
      * @param string|null $fileName
@@ -70,25 +72,25 @@ class Pdf
      */
     public function withPreview($fileName = null)
     {
-        if($fileName && $fileName !== $this->fileName) {
+        if ($fileName && $fileName !== $this->fileName) {
             $this->fileName = $fileName;
         } else {
             // Extend file name before extension
-            $extensionPos = strrpos($this->fileName, '.');
+            $extensionPos   = strrpos($this->fileName, '.');
             $this->fileName = substr($this->fileName, 0, $extensionPos) . '_preview' . substr($this->fileName, $extensionPos);
         }
 
-        if($this->document instanceof HasPreview) {
+        if ($this->document instanceof WithPreview) {
             // Make offset array key insensitive
             $offsetArray = array_change_key_case($this->document->offset());
 
-            if(array_key_exists('x', $offsetArray)) {
+            if (array_key_exists('x', $offsetArray)) {
                 $this->writer->setXOffset($offsetArray['x'], config('pdf.measurement.unit', 'pt'));
             } else {
                 throw new MeasureException('No X offset defined.');
             }
 
-            if(array_key_exists('y', $offsetArray)) {
+            if (array_key_exists('y', $offsetArray)) {
                 $this->writer->setYOffset($offsetArray['y'], config('pdf.measurement.unit', 'pt'));
             } else {
                 throw new MeasureException('No Y offset defined.');
@@ -103,42 +105,63 @@ class Pdf
     }
 
     /**
-     * @return string
+     * Creates the pdf document(s).
+     *
+     * @return bool
      * @throws Exception
      */
-    private function create()
+    public function create()
     {
-        /** Todo: Temporary storage logic */
-        $path = Storage::disk(config('pdf.exports.disk', 'local'))->path(config('pdf.exports.path', ''));
+        $this->writer->beginDocument(FileManager::exportPath($this->fileName));
 
-        $fullPath = $path . '/' . $this->fileName;
+        if ($this->document instanceof FromTemplate) {
+            $template = null;
 
-        if ($this->writer->begin_document($fullPath, "") == 0) {
-            throw new Exception("Error: " . $this->writer->get_errmsg());
+            if ($this->writer->inOriginal()) {
+                $template = $this->document->template();
+            }
+
+            if ($this->document instanceof WithPreview) {
+                if ($this->writer->inPreview()) {
+                    $template = $this->document->previewTemplate();
+                }
+            }
+
+            $this->writer->loadTemplate($template);
         }
 
-        if($this->document instanceof FromTemplate) {
-            $this->writer->loadTemplate($this->document->template()['preview']);
-        }
-
-        if($this->document instanceof WithFonts) {
-            foreach($this->document->fonts() as $font) {
-                $this->writer->loadFont(
-                    $font['name'],
-                    array_key_exists('encoding', $font) ? $font['encoding'] : null,
-                    array_key_exists('optlist', $font) ? $font['optlist'] : null
-                );
+        if ($this->document instanceof WithColors) {
+            if ($this->document instanceof WithColors) {
+                foreach ($this->document->colors() as $name => $color) {
+                    $this->writer->loadColor($name, $color);
+                }
             }
         }
 
-        $this->document->draw($this->writer);
+        if ($this->document instanceof WithDraw) {
+            foreach ($this->document->fonts() as $name => $settings) {
+                if ($name === 0) {
+                    $name     = $settings;
+                    $settings = [];
+                }
 
-        if($this->document instanceof FromTemplate) {
+                $this->writer->loadFont(
+                    $name,
+                    array_key_exists('type', $settings) ? $settings['type'] : null,
+                    array_key_exists('encoding', $settings) ? $settings['encoding'] : null,
+                    array_key_exists('optlist', $settings) ? $settings['optlist'] : null
+                );
+            }
+
+            $this->document->draw($this->writer);
+        }
+
+        if ($this->document instanceof FromTemplate) {
             $this->writer->closeTemplate();
         }
 
         $this->writer->finishDocument();
 
-        return $fullPath;
+        return true;
     }
 }

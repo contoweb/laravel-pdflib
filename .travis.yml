@@ -1,0 +1,61 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+  include:
+    # Laravel 5.5
+    - php: 7.1
+      env: LARAVEL=5.5.* TESTBENCH=3.5.* PHPUNIT=~6.0 PDFLIB_INSTALLER=php-710
+    - php: 7.2
+      env: LARAVEL=5.5.* TESTBENCH=3.5.* PHPUNIT=~6.0 PDFLIB_INSTALLER=php-720
+
+    # Laravel 5.6
+    - php: 7.1
+      env: LARAVEL=5.6.* TESTBENCH=3.6.* PHPUNIT=~7.0 PDFLIB_INSTALLER=php-710
+    - php: 7.2
+      env: LARAVEL=5.6.* TESTBENCH=3.6.* PHPUNIT=~7.0 PDFLIB_INSTALLER=php-720
+
+    # Laravel 5.7
+    - php: 7.1
+      env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-710
+    - php: 7.2
+      env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-720
+    - php: 7.3
+      env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-730
+
+    # Laravel 5.8
+    - php: 7.1
+      env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-710
+    - php: 7.2
+      env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
+    - php: 7.3
+      env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
+
+    # Laravel 6.0
+    - php: 7.2
+      env: LARAVEL=6.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
+    - php: 7.3
+      env: LARAVEL=6.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
+
+before_install:
+  - PHPEXTDIR="$(php-config --extension-dir)"
+  - wget -q https://www.pdflib.com/binaries/PDFlib/920/PDFlib-9.2.0-Linux-x86_64-php.tar.gz
+  - tar zxf PDFlib-9.2.0-Linux-x86_64-php.tar.gz
+  - cp PDFlib-9.2.0-Linux-x86_64-php/bind/php/${PDFLIB_INSTALLER}/php_pdflib.so $PHPEXTDIR
+  - echo "extension=php_pdflib.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - phpenv config-rm xdebug.ini
+  - chmod -R 777 /home/travis/build/fabricecw/laravel-pdflib/tests/Data/Storage/Local/fonts/
+  - composer self-update --stable --no-interaction
+  - composer require orchestra/testbench:$TESTBENCH phpunit/phpunit:$PHPUNIT --no-update --no-interaction --dev
+
+install:
+  - travis_retry composer install --no-suggest --no-interaction
+
+script:
+  - vendor/bin/phpunit --verbose --configuration phpunit.xml.dist

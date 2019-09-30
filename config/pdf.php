@@ -9,6 +9,8 @@ return [
     | Make sure you have a valid PDFLib license for your PHP version.
     | If you update your PHP version, you have to make a license update!
     |
+    | If no license is provided, the generated PDFs are watermarked.
+    |
     */
     'license' => '',
 
@@ -22,7 +24,7 @@ return [
     |
     */
     'measurement' => [
-        'unit' => 'mm'
+        'unit' => 'mm',
     ],
 
     /*
@@ -36,7 +38,7 @@ return [
     */
     'fonts' => [
         'disk' => 'local',
-        'path' => ''
+        'path' => '',
     ],
 
     /*
@@ -49,7 +51,7 @@ return [
     */
     'templates' => [
         'disk' => 'local',
-        'path' => ''
+        'path' => '',
     ],
 
     /*
@@ -62,6 +64,6 @@ return [
     */
     'exports' => [
         'disk' => 'local',
-        'path' => ''
+        'path' => '',
     ],
 ];
