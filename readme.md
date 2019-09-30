@@ -75,7 +75,7 @@ To create a new document, you can use the `make:document` command:
 php artisan make:document MarketingDocument
 ```
 
-The new document file can be found in the app/Documents` directory.
+The new document file can be found in the `app/Documents` directory.
 
 > Todo: Working on some example cases...
 
@@ -96,7 +96,7 @@ class MarketingController extends Controller
 }
 ```
 
-You can find then your document in your configured export path!
+You can find your document in your configured export path then!
 But first, let us dive into writing a simple PDF.
 
 ### Quick start
