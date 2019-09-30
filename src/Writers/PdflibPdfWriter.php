@@ -251,9 +251,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function loadFont($name, $type = null, $encoding = null, $optlist = null)
     {
-        $this->set_option("FontOutline={" . $name . "=" . FileManager::fontPath($name, $type) . "}");
+        $this->set_option('FontOutline={' . $name . '=' . FileManager::fontPath($name, $type) . '}');
 
-        $this->fonts[$name] = $this->load_font($name, $encoding ?: "unicode", $optlist ?: "embedding");
+        $this->fonts[$name] = $this->load_font($name, $encoding ?: 'unicode', $optlist ?: 'embedding');
 
         if ($this->fonts[$name] == 0) {
             throw new FontException('Error: ' . $this->get_errmsg());

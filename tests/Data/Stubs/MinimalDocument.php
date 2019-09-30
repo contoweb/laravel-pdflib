@@ -10,7 +10,7 @@ class MinimalDocument implements WithDraw
     public function fonts(): array
     {
         return ['Montserrat-Regular' => [
-            'type' => 'otf'
+            'type' => 'otf',
         ]];
     }
 

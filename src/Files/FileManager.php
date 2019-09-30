@@ -41,7 +41,7 @@ class FileManager
      */
     public static function fontPath($name, $type = null)
     {
-       $path = Storage::disk(config('pdf.fonts.disk', 'local'))->path(config('pdf.fonts.path', ''));
+        $path = Storage::disk(config('pdf.fonts.disk', 'local'))->path(config('pdf.fonts.path', ''));
 
         return $path . DIRECTORY_SEPARATOR . $name . '.' . ($type ?: 'ttf');
     }
