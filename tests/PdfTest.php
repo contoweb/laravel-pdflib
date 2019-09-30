@@ -143,7 +143,7 @@ class PdfTest extends TestCase
         $document = new InvalidTemplatePreviewDocument('invalid', 'y');
 
         $this->expectException(MeasureException::class);
-        $this->expectErrorMessage('No X offset defined');
+        $this->expectExceptionMessage('No X offset defined');
 
         $this->pdf->store($document, $fileName)->withPreview($fileNamePreview);
     }
@@ -159,7 +159,7 @@ class PdfTest extends TestCase
         $document = new InvalidTemplatePreviewDocument('x', 'invalid');
 
         $this->expectException(MeasureException::class);
-        $this->expectErrorMessage('No Y offset defined');
+        $this->expectExceptionMessage('No Y offset defined');
 
         $this->pdf->store($document, $fileName)->withPreview($fileNamePreview);
     }

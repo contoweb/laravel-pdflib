@@ -38,7 +38,7 @@ class PdfWriterTest extends TestCase
     {
         $this->app['config']->set('pdf.license', 'invalid-license');
 
-        $this->expectErrorMessage('Invalid license key');
+        $this->expectExceptionMessage('Invalid license key');
 
         $this->app->make(PdfWriter::class);
     }
@@ -158,7 +158,7 @@ class PdfWriterTest extends TestCase
         $this->writer->newPage();
 
         $this->expectException(FontException::class);
-        $this->expectErrorMessage('Font "not loaded" not loaded.');
+        $this->expectExceptionMessage('Font "not loaded" not loaded.');
 
         $this->writer->useFont('not loaded', 12);
     }
