@@ -1,0 +1,10 @@
+*
+!.gitignore
+!fonts/
+!fonts/*
+!templates/
+!templates/*
+!images/
+!images/*
+!subdirectory/
+!subdirectory/*

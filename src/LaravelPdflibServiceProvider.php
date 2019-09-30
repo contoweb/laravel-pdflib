@@ -2,10 +2,11 @@
 
 namespace Contoweb\Pdflib;
 
-use Contoweb\Pdflib\Commands\DocumentMakeCommand;
-use Contoweb\Pdflib\Concerns\Writer;
-use Contoweb\Pdflib\Writers\PdflibWriter;
+use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Writers\PdfWriter;
 use Illuminate\Support\ServiceProvider;
+use Contoweb\Pdflib\Writers\PdflibPdfWriter;
+use Contoweb\Pdflib\Commands\DocumentMakeCommand;
 
 class LaravelPdflibServiceProvider extends ServiceProvider
 {
@@ -16,20 +17,25 @@ class LaravelPdflibServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(Writer::class, function () {
-            return new PdflibWriter(
+        $this->mergeConfigFrom(
+            $this->getConfigFile(),
+            'pdf'
+        );
+
+        $this->app->bind(PdfWriter::class, function () {
+            return new PdflibPdfWriter(
                 config('pdf.license'),
                 config('pdf.creator', 'Laravel'),
-                config('pdf.fonts.location', storage_path('app'))
+                FileManager::fontsDirectory()
             );
         });
 
         $this->app->bind('pdf', function () {
             return new Pdf(
-                $this->app->make(Writer::class)
+                $this->app->make(PdfWriter::class)
             );
         });
-        
+
         $this->app->alias('pdf', Pdf::class);
 
         $this->commands([DocumentMakeCommand::class]);
@@ -42,7 +48,13 @@ class LaravelPdflibServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        /* Todo: Lumen setup */
+
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                $this->getConfigFile() => config_path('pdf.php'),
+            ], 'config');
+        }
     }
 
     /**
@@ -50,6 +62,6 @@ class LaravelPdflibServiceProvider extends ServiceProvider
      */
     protected function getConfigFile(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'pdflib.php';
+        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'pdf.php';
     }
 }

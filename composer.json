@@ -5,7 +5,9 @@
     "keywords": [
         "laravel",
         "pdflib",
-        "pdf"
+        "pdf",
+        "print",
+        "documents"
     ],
     "license": "MIT",
     "authors": [
@@ -20,7 +22,8 @@
         "php": "^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.4"
+        "phpunit/phpunit": "^8.4",
+        "orchestra/testbench": "^4.0"
     },
     "autoload": {
         "psr-4": {
