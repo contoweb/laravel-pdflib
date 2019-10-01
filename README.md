@@ -144,7 +144,7 @@ use Contoweb\Pdflib\Writers\PdfWriter as Writer;
 
 class MarketingDocument implements FromTemplate, WithDraw
 {
-    public function template(): array {
+    public function template(): string {
         return 'template.pdf';
     }
     
@@ -194,7 +194,7 @@ class MarketingDocument implements FromTemplate, WithDraw, WithPreview
     {
         return [
             'x' => 20,
-            'y' => 20
+            'y' => 20,
         ];
     }
     
@@ -237,11 +237,11 @@ So position 0 0 is in the left bottom corner, not the left top corner.
 To write text, you can simply use:
 
 ```php
-$writer->writeTextLine('your text')
+$writer->writeTextLine('your text');
 
 // or
 
-$writer->writeText('your text')
+$writer->writeText('your text');
 
 ```
 
@@ -290,8 +290,8 @@ If you need to colorize your text, you can use the ```WithColor``` concern. This
 public function colors(): array
 {
     return [
-        'orange-rgb' => ['rgb', 255, 165, 0]
-        'blue-cmyk' => ['cmyk', 100, 100, 0, 0]
+        'orange-rgb' => ['rgb', 255, 165, 0],
+        'blue-cmyk' => ['cmyk', 100, 100, 0, 0],
     ];
 }
 ```
@@ -303,19 +303,19 @@ $writer->useColor('orange-rgb');
 ```
 or as a parameter when using a font:
 ```php
-$writer->useFont('OpenSans-Regular', 12, 'blue-cmyk')
+$writer->useFont('OpenSans-Regular', 12, 'blue-cmyk');
 ```
 
 ### Images
 You can place images with:
 ```php
-$writer->drawImage('/path/to/the/image.jpeg', 150, 100)
+$writer->drawImage('/path/to/the/image.jpeg', 150, 100);
 ```
 This places an image with and resize it to 150x100.
 
 Since loading rounded images is just a pain in PDFlib, you can use the method:
 ```php
-$writer->circleImage('/path/to/the/image.jpeg', 100)
+$writer->circleImage('/path/to/the/image.jpeg', 100);
 ```
 
 ### PDFlib functions
