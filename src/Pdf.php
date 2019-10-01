@@ -140,7 +140,7 @@ class Pdf
 
         if ($this->document instanceof WithDraw) {
             foreach ($this->document->fonts() as $name => $settings) {
-                if ($name === 0) {
+                if (is_int($name)) {
                     $name     = $settings;
                     $settings = [];
                 }

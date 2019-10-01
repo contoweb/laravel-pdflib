@@ -17,12 +17,20 @@ class CustomColoredFontDocument implements WithDraw, WithColors
 
     public function fonts(): array
     {
-        return ['OpenSans-Regular'];
+        return [
+            'OpenSans-Regular',
+            'Montserrat-Regular' => [
+                'type' => 'otf',
+            ],
+        ];
     }
 
     public function draw(PdfWriter $writer)
     {
         $writer->newPage();
-        $writer->useFont('OpenSans-Regular', 12, 'custom')->writeTextLine('Text in OpenSans-Regular with custom color.');
+
+        $writer->useFont('OpenSans-Regular', 12, 'custom')->writeTextLine('Text in OpenSans-Regular TTF with custom color.');
+
+        $writer->useFont('Montserrat-Regular', 12, 'custom')->writeTextLine('Text in Montserrat-Regular OTF with custom color.');
     }
 }

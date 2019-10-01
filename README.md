@@ -41,7 +41,7 @@ You also need:
 Require this package with composer.
 
 ```shell
-composer contoweb/laravel-pdflib
+composer require contoweb/laravel-pdflib
 ```
 
 All basic configuration is done in the `pdf.php` configuration file.
@@ -97,7 +97,7 @@ class MarketingController extends Controller
 ```
 
 You can find your document in your configured export path then!
-But first, let us dive into writing a simple PDF.
+But first, let us take a look how to write a simple PDF.
 
 ### Quick start
 Within your document file, you have a boilerplated method `draw()`:
@@ -117,14 +117,13 @@ Here you actually write the document's content. As you can see, a small example 
 2. Use an available font from the `fonts()` method.
 3. Write the text. 
 
-
 ### Create a page
 To create a new page, you can use
 ```php
 $writer->newPage();
 ```
 
-You optionally can define the width and height of your document by passing the parameters.
+You can optionally define the width and height of your document by passing the parameters.
 
 ```php
 $writer->newPage(210, 297); // A4 portrait format 
@@ -156,15 +155,17 @@ class MarketingDocument implements FromTemplate, WithDraw
 }
 ```
 
-Now, your first page is using the page 1 from `template.pdf`. Don't forget to configure your templates location in the configuration file.
+Now, your first page is using the page 1 from `template.pdf`. 
+As you can see, you don't need to define a page size since it's using the template's size.
+Don't forget to configure your templates location in the configuration file.
 
 ##### Preview and print PDF
-If you're aware of (professional) print-ready PDFs, you know that your print PDF isn't the same as the user finally sees.
+If you're aware of (professional) print-ready PDFs, you may know that your print PDF isn't the same as the user finally sees.
 
 ![pdf-bleed](https://user-images.githubusercontent.com/13394801/65696401-6e6fdc00-e079-11e9-96fa-86e9d40d6aa1.jpg)
 
 There is a bleed box, crop marks and so on. For this case, you can use `WithPreview` combined with the `FromTemplate` concern.
-While your original template includes all the boxes and marks, your preview PDF just 
+While your original template includes all the boxes and marks, your preview PDF is a preview of the final document.
 
 This requires you to add a `previewTemplate()` and `offset()` method.
 
@@ -207,7 +208,7 @@ return Pdf::store(new MarketingDocument, 'marketing.pdf')->withPreview();
 ```
 
 The preview PDF will be automatically named to `<<name>>_preview.pdf`. 
-You can overriding this by passing the name in `->withPreview('othername.pdf')`.
+You can override this by passing the name in `->withPreview('othername.pdf')`.
 
 ### Navigate on the page
 
@@ -242,7 +243,7 @@ $writer->writeText('your text')
 
 ```
 
-Don't forget to firstly set the position and use the right font.
+Don't forget to set the cursor position and use the right font before writing text.
 Since the package extends PDFlib, you also can pass PDFlib options as a second parameter.
 
 > You only have to use `writeText` when placing two text blocks next to each other.
@@ -255,11 +256,12 @@ $writer->nextLine();
 To use a custom line spacing instead of 1.0, just pass it as a parameter.
 
 #### Fonts
-In the boilerplate, `Arial` is loaded as an example font since it's installed on almost every OS.
+The boilerplate document loads `Arial` as an example font, but we don't provide a font file in the fonts folder.
+In this case, PDFlib tries to load it from your host fonts.
 You may want to use custom fonts and want ensure that your server is able to load it. 
 So it's highly recommended to place the font files (currently .ttf and .otf is supported) inside your configured font location (see `pdf.php` configuration).
 
-As a next step, you have to make the fonts available in your document. Just use the file name without the extension to auto-load the font:
+As a next step, you have to make the fonts available in your document. For TrueType fonts, just use the file name without the extension to auto-load the font:
 ```php
 public function fonts(): array 
 {
@@ -268,8 +270,24 @@ public function fonts(): array
 ```
 
 An underlying font file like `OpenSans-Regular.ttf` has to be available in your fonts location.
+If you want to use an OpenType font, you need to pass the type as a parameter:
 
-Now you can use it in your document:
+```php
+public function fonts(): array
+{
+    return [
+        'OpenSans-Regular',
+        'Montserrat-Regular' => [
+            'type' => 'otf'
+            // 'encoding' => 'unicode',
+            // 'optlist' => 'PDFlib options...'
+        ]
+    ];
+}
+```
+As you can see in the example above, you are also able to pass a custom font encoding or options if needed. 
+
+Now you can use the font in your document by it's name:
 
 ```php
 public function draw(Writer $writer)
@@ -297,7 +315,7 @@ You can use the color with:
 ```php
 $writer->useColor('orange-rgb');
 ```
-or as a parameter when defining a font:
+or as a parameter when using a font:
 ```php
 $writer->useFont('OpenSans-Regular', 12, 'blue-cmyk')
 ```
@@ -305,13 +323,13 @@ $writer->useFont('OpenSans-Regular', 12, 'blue-cmyk')
 ### Images
 You can place images with:
 ```php
-$writer->drawImage('/path/to/the/image', 150, 100)
+$writer->drawImage('/path/to/the/image.jpeg', 150, 100)
 ```
 This places an image with and resize it to 150x100.
 
 Since loading rounded images is just a pain in PDFlib, you can use the method:
 ```php
-$writer->circleImage('/path/to/the/image', 100)
+$writer->circleImage('/path/to/the/image.jpeg', 100)
 ```
 
 ### PDFlib functions
