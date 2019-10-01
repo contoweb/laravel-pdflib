@@ -1,6 +1,8 @@
 ## Laravel PDFlib
 [![TravisCI](https://travis-ci.org/contoweb/laravel-pdflib.svg?branch=master)](https://travis-ci.org/contoweb/laravel-pdflib.svg?branch=master)
 [![StyleCI](https://github.styleci.io/repos/210450435/shield?branch=master)](https://github.styleci.io/repos/210450435)
+[![Latest Stable Version](https://poser.pugx.org/contoweb/laravel-pdflib/v/stable)](https://packagist.org/packages/contoweb/laravel-pdflib)
+[![License](https://poser.pugx.org/contoweb/laravel-pdflib/license)](https://packagist.org/packages/contoweb/laravel-pdflib)
 
 This package is a Laravel wrapper for [PDFlib](https://www.pdflib.com/products/pdflib-family/overview/).
 It makes generating high professional (Print-)PDFs with PDFlib a breeze.
