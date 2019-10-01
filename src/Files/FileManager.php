@@ -14,9 +14,11 @@ class FileManager
      */
     public static function exportPath($fileName)
     {
-        $path = Storage::disk(config('pdf.exports.disk', 'local'))->path(config('pdf.exports.path', ''));
-
-        return $path . DIRECTORY_SEPARATOR . $fileName;
+        return self::absolutePath(
+            config('pdf.exports.disk', 'local'),
+            config('pdf.exports.path', ''),
+            $fileName
+        );
     }
 
     /**
@@ -27,9 +29,11 @@ class FileManager
      */
     public static function templatePath($fileName)
     {
-        $path = Storage::disk(config('pdf.templates.disk', 'local'))->path(config('pdf.templates.path', ''));
-
-        return $path . DIRECTORY_SEPARATOR . $fileName;
+        return self::absolutePath(
+            config('pdf.templates.disk', 'local'),
+            config('pdf.templates.path', ''),
+            $fileName
+        );
     }
 
     /**
@@ -41,9 +45,11 @@ class FileManager
      */
     public static function fontPath($name, $type = null)
     {
-        $path = Storage::disk(config('pdf.fonts.disk', 'local'))->path(config('pdf.fonts.path', ''));
-
-        return $path . DIRECTORY_SEPARATOR . $name . '.' . ($type ?: 'ttf');
+        return self::absolutePath(
+            config('pdf.fonts.disk', 'local'),
+            config('pdf.fonts.path', ''),
+            $name . '.' . ($type ?: 'ttf')
+        );
     }
 
     /**
@@ -53,6 +59,28 @@ class FileManager
      */
     public static function fontsDirectory()
     {
-        return Storage::disk(config('pdf.fonts.disk', 'local'))->path(config('pdf.fonts.path', ''));
+        return self::absolutePath(
+            config('pdf.fonts.disk', 'local'),
+            config('pdf.fonts.path', '')
+        );
+    }
+
+    /**
+     * Absolute path to the file.
+     *
+     * @param string $disk
+     * @param string $prefix
+     * @param string|null $fileName
+     * @return string
+     */
+    protected static function absolutePath($disk, $prefix, $fileName = null)
+    {
+        $path = Storage::disk($disk)->path($prefix);
+
+        if ($prefix !== '') {
+            $path .= DIRECTORY_SEPARATOR;
+        }
+
+        return $path . $fileName;
     }
 }

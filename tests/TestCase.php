@@ -2,7 +2,7 @@
 
 namespace Contoweb\Pdflib\Tests;
 
-use Contoweb\Pdflib\LaravelPdflibServiceProvider;
+use Contoweb\Pdflib\PdflibServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
@@ -15,7 +15,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         return [
-            LaravelPdflibServiceProvider::class,
+            PdflibServiceProvider::class,
         ];
     }
 

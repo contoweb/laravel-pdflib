@@ -272,22 +272,6 @@ public function fonts(): array
 ```
 
 An underlying font file like `OpenSans-Regular.ttf` has to be available in your fonts location.
-If you want to use an OpenType font, you need to pass the type as a parameter:
-
-```php
-public function fonts(): array
-{
-    return [
-        'OpenSans-Regular',
-        'Montserrat-Regular' => [
-            'type' => 'otf'
-            // 'encoding' => 'unicode',
-            // 'optlist' => 'PDFlib options...'
-        ]
-    ];
-}
-```
-As you can see in the example above, you are also able to pass a custom font encoding or options if needed. 
 
 Now you can use the font in your document by it's name:
 

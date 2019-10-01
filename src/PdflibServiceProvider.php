@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Contoweb\Pdflib\Commands\DocumentMakeCommand;
 
-class LaravelPdflibServiceProvider extends ServiceProvider
+class PdflibServiceProvider extends ServiceProvider
 {
     /**
      * Register services.

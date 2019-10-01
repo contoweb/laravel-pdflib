@@ -105,7 +105,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->set_option('errorpolicy=return');
         $this->set_option('stringformat=utf8');
 
-        // $this->set_option('searchpath={' . $searchPath . '}');
+        $this->set_option('searchpath={' . $searchPath . '}');
         // $this->writer->set_option("spotcolorlookup=" . $spotcolorlookup);
     }
 
@@ -249,10 +249,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function loadFont($name, $type = null, $encoding = null, $optlist = null)
+    public function loadFont($name, $encoding = null, $optlist = null)
     {
-        $this->set_option('FontOutline={' . $name . '=' . FileManager::fontPath($name, $type) . '}');
-
         $this->fonts[$name] = $this->load_font($name, $encoding ?: 'unicode', $optlist ?: 'embedding');
 
         if ($this->fonts[$name] == 0) {

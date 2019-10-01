@@ -35,6 +35,16 @@
             "Contoweb\\Pdflib\\Tests\\": "tests/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Contoweb\\Pdflib\\PdflibServiceProvider"
+            ],
+            "aliases": {
+                "Pdf": "Contoweb\\Pdflib\\Facades\\Pdf"
+            }
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }

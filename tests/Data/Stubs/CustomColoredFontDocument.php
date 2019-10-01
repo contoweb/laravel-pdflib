@@ -19,9 +19,7 @@ class CustomColoredFontDocument implements WithDraw, WithColors
     {
         return [
             'OpenSans-Regular',
-            'Montserrat-Regular' => [
-                'type' => 'otf',
-            ],
+            'Montserrat-Regular',
         ];
     }
 
