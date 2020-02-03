@@ -2,14 +2,14 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use PDFlib;
-use Exception;
-use Contoweb\Pdflib\Files\FileManager;
-use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Contoweb\Pdflib\Exceptions\DocumentException;
+use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Exception;
+use PDFlib;
 
 class PdflibPdfWriter extends PDFlib implements PdfWriter
 {
@@ -320,9 +320,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
 
         $this->fit_image($image,
-                        MeasureCalculator::calculateToMm($this->xPos, 'pt'),
-                        MeasureCalculator::calculateToMm($this->yPos, 'pt'),
-                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position center fitmethod=meet'
+                        MeasureCalculator::calculateToMm($this->xPos, 'mm'),
+                        MeasureCalculator::calculateToMm($this->yPos, 'mm'),
+                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position left fitmethod=meet'
         );
 
         return $this;
