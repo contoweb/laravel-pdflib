@@ -150,8 +150,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->siteOpen = true;
 
         $this->begin_page_ext(
-            MeasureCalculator::calculateToMm($width),
-            MeasureCalculator::calculateToMm($height),
+            MeasureCalculator::calculateToPt($width),
+            MeasureCalculator::calculateToPt($height),
             $optlist ?: '');
 
         return $this;
