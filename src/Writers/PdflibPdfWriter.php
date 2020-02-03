@@ -2,14 +2,14 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use PDFlib;
-use Exception;
-use Contoweb\Pdflib\Files\FileManager;
-use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Contoweb\Pdflib\Exceptions\DocumentException;
+use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Exception;
+use PDFlib;
 
 class PdflibPdfWriter extends PDFlib implements PdfWriter
 {
