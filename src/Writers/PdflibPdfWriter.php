@@ -2,14 +2,14 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use PDFlib;
-use Exception;
-use Contoweb\Pdflib\Files\FileManager;
-use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Contoweb\Pdflib\Exceptions\DocumentException;
+use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Exception;
+use PDFlib;
 
 class PdflibPdfWriter extends PDFlib implements PdfWriter
 {
@@ -150,8 +150,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->siteOpen = true;
 
         $this->begin_page_ext(
-            MeasureCalculator::calculateToMm($width),
-            MeasureCalculator::calculateToMm($height),
+            MeasureCalculator::calculateToPt($width),
+            MeasureCalculator::calculateToPt($height),
             $optlist ?: '');
 
         return $this;
@@ -320,9 +320,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
 
         $this->fit_image($image,
-                        MeasureCalculator::calculateToMm($this->xPos, 'pt'),
-                        MeasureCalculator::calculateToMm($this->yPos, 'pt'),
-                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position center fitmethod=meet'
+                        MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+                        MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
         );
 
         return $this;
@@ -358,9 +358,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         // Fit the image into the circle
         $this->fit_image($image,
-            MeasureCalculator::calculateToMm($this->xPos, 'pt'),
-            MeasureCalculator::calculateToMm($this->yPos, 'pt'),
-            'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position center fitmethod=meet');
+            MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+            MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+            'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position center fitmethod=meet');
 
         // Close image and restore original clipping (no clipping)
         $this->close_image($image);
