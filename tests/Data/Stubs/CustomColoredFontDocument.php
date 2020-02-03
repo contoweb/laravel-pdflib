@@ -2,9 +2,9 @@
 
 namespace Contoweb\Pdflib\Tests\Data\Stubs;
 
+use Contoweb\Pdflib\Concerns\WithColors;
 use Contoweb\Pdflib\Concerns\WithDraw;
 use Contoweb\Pdflib\Writers\PdfWriter;
-use Contoweb\Pdflib\Concerns\WithColors;
 
 class CustomColoredFontDocument implements WithDraw, WithColors
 {

@@ -2,15 +2,15 @@
 
 namespace Contoweb\Pdflib;
 
-use Exception;
+use Contoweb\Pdflib\Concerns\FromTemplate;
+use Contoweb\Pdflib\Concerns\WithColors;
 use Contoweb\Pdflib\Concerns\WithDraw;
+use Contoweb\Pdflib\Concerns\WithPreview;
+use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Writers\PdfWriter;
-use Contoweb\Pdflib\Concerns\WithColors;
-use Contoweb\Pdflib\Concerns\WithPreview;
-use Contoweb\Pdflib\Concerns\FromTemplate;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Contoweb\Pdflib\Exceptions\MeasureException;
 
 class Pdf
 {

@@ -2,11 +2,11 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\DocumentException;
+use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
-use Contoweb\Pdflib\Exceptions\DocumentException;
 
 interface PdfWriter
 {

@@ -2,10 +2,10 @@
 
 namespace Contoweb\Pdflib\Tests\Data\Stubs;
 
-use Contoweb\Pdflib\Concerns\WithDraw;
-use Contoweb\Pdflib\Writers\PdfWriter;
-use Contoweb\Pdflib\Concerns\WithPreview;
 use Contoweb\Pdflib\Concerns\FromTemplate;
+use Contoweb\Pdflib\Concerns\WithDraw;
+use Contoweb\Pdflib\Concerns\WithPreview;
+use Contoweb\Pdflib\Writers\PdfWriter;
 
 class InvalidTemplatePreviewDocument implements FromTemplate, WithDraw, WithPreview
 {

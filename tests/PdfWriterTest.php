@@ -2,14 +2,14 @@
 
 namespace Contoweb\Pdflib\Tests;
 
-use Contoweb\Pdflib\Writers\PdfWriter;
-use Contoweb\Pdflib\Tests\Files\PathHelper;
-use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ColorException;
-use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Helpers\MeasureCalculator;
-use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
+use Contoweb\Pdflib\Exceptions\FontException;
+use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Exceptions\MeasureException;
+use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Contoweb\Pdflib\Tests\Files\PathHelper;
+use Contoweb\Pdflib\Writers\PdfWriter;
 
 class PdfWriterTest extends TestCase
 {
@@ -173,15 +173,15 @@ class PdfWriterTest extends TestCase
 
         $this->writer->loadColor(
             'blue', [
-            'cmyk',
-            100, 100, 0, 0,
-        ]);
+                'cmyk',
+                100, 100, 0, 0,
+            ]);
 
         $this->writer->loadColor(
             'orange', [
-            'rgb',
-            255, 165, 0,
-        ]);
+                'rgb',
+                255, 165, 0,
+            ]);
 
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useColor('blue'));
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useColor('orange'));

@@ -2,14 +2,14 @@
 
 namespace Contoweb\Pdflib\Tests;
 
-use Contoweb\Pdflib\Pdf;
-use Contoweb\Pdflib\Tests\Files\PathHelper;
-use Contoweb\Pdflib\Facades\Pdf as PdfFacade;
 use Contoweb\Pdflib\Exceptions\MeasureException;
-use Contoweb\Pdflib\Tests\Data\Stubs\MinimalDocument;
-use Contoweb\Pdflib\Tests\Data\Stubs\TemplatePreviewDocument;
+use Contoweb\Pdflib\Facades\Pdf as PdfFacade;
+use Contoweb\Pdflib\Pdf;
 use Contoweb\Pdflib\Tests\Data\Stubs\CustomColoredFontDocument;
 use Contoweb\Pdflib\Tests\Data\Stubs\InvalidTemplatePreviewDocument;
+use Contoweb\Pdflib\Tests\Data\Stubs\MinimalDocument;
+use Contoweb\Pdflib\Tests\Data\Stubs\TemplatePreviewDocument;
+use Contoweb\Pdflib\Tests\Files\PathHelper;
 
 class PdfTest extends TestCase
 {

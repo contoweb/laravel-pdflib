@@ -2,11 +2,11 @@
 
 namespace Contoweb\Pdflib;
 
+use Contoweb\Pdflib\Commands\DocumentMakeCommand;
 use Contoweb\Pdflib\Files\FileManager;
+use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Contoweb\Pdflib\Writers\PdfWriter;
 use Illuminate\Support\ServiceProvider;
-use Contoweb\Pdflib\Writers\PdflibPdfWriter;
-use Contoweb\Pdflib\Commands\DocumentMakeCommand;
 
 class PdflibServiceProvider extends ServiceProvider
 {
