@@ -320,9 +320,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
 
         $this->fit_image($image,
-                        MeasureCalculator::calculateToMm($this->xPos, 'mm'),
-                        MeasureCalculator::calculateToMm($this->yPos, 'mm'),
-                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position left fitmethod=meet'
+                        MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+                        MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
         );
 
         return $this;
@@ -358,9 +358,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         // Fit the image into the circle
         $this->fit_image($image,
-            MeasureCalculator::calculateToMm($this->xPos, 'pt'),
-            MeasureCalculator::calculateToMm($this->yPos, 'pt'),
-            'boxsize {' . MeasureCalculator::calculateToMm($width) . ' ' . MeasureCalculator::calculateToMm($height) . '} position center fitmethod=meet');
+            MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+            MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+            'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position center fitmethod=meet');
 
         // Close image and restore original clipping (no clipping)
         $this->close_image($image);
