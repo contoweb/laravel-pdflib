@@ -284,6 +284,20 @@ public function draw(Writer $writer)
 }
 ```
 
+You can also overwrite default font encoding and option list:
+
+```php
+public function fonts(): array
+    {
+        return [
+            'OpenSans-Regular' => [
+                'encoding' => 'ansi',
+                'optlist' => ''
+            ],
+        ];
+    }
+```
+
 #### Colors
 If you need to colorize your text, you can use the ```WithColor``` concern. This requires you to define custom colors:
 ```php

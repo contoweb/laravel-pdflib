@@ -18,7 +18,10 @@ class CustomColoredFontDocument implements WithDraw, WithColors
     public function fonts(): array
     {
         return [
-            'OpenSans-Regular',
+            'OpenSans-Regular' => [
+                'encoding' => 'unicode',
+                'optlist'  => '',
+            ],
             'Montserrat-Regular',
         ];
     }

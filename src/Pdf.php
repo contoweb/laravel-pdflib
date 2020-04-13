@@ -147,7 +147,6 @@ class Pdf
 
                 $this->writer->loadFont(
                     $name,
-                    array_key_exists('type', $settings) ? $settings['type'] : null,
                     array_key_exists('encoding', $settings) ? $settings['encoding'] : null,
                     array_key_exists('optlist', $settings) ? $settings['optlist'] : null
                 );
