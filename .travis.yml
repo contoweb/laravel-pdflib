@@ -15,28 +15,6 @@ matrix:
     - php: 7.2
       env: LARAVEL=5.5.* TESTBENCH=3.5.* PHPUNIT=~6.0 PDFLIB_INSTALLER=php-720
 
-    # Laravel 5.6
-    - php: 7.1
-      env: LARAVEL=5.6.* TESTBENCH=3.6.* PHPUNIT=~7.0 PDFLIB_INSTALLER=php-710
-    - php: 7.2
-      env: LARAVEL=5.6.* TESTBENCH=3.6.* PHPUNIT=~7.0 PDFLIB_INSTALLER=php-720
-
-    # Laravel 5.7
-    - php: 7.1
-      env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-710
-    - php: 7.2
-      env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-720
-    - php: 7.3
-      env: LARAVEL=5.7.* TESTBENCH=3.7.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-730
-
-    # Laravel 5.8
-    - php: 7.1
-      env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~7.5 PDFLIB_INSTALLER=php-710
-    - php: 7.2
-      env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
-    - php: 7.3
-      env: LARAVEL=5.8.* TESTBENCH=3.8.* PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
-
     # Laravel 6.0
     - php: 7.2
       env: LARAVEL=6.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
@@ -48,6 +26,12 @@ matrix:
       env: LARAVEL=7.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
     - php: 7.3
       env: LARAVEL=7.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
+
+    # Laravel 8.0
+    - php: 7.2
+      env: LARAVEL=8.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
+    - php: 7.3
+      env: LARAVEL=8.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
 
 before_install:
   - PHPEXTDIR="$(php-config --extension-dir)"
