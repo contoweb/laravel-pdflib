@@ -43,6 +43,12 @@ matrix:
     - php: 7.3
       env: LARAVEL=6.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
 
+    # Laravel 7.0
+    - php: 7.2
+      env: LARAVEL=7.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-720
+    - php: 7.3
+      env: LARAVEL=7.0.* TESTBENCH=^4.0 PHPUNIT=~8.0 PDFLIB_INSTALLER=php-730
+
 before_install:
   - PHPEXTDIR="$(php-config --extension-dir)"
   - wget -q https://www.pdflib.com/binaries/PDFlib/920/PDFlib-9.2.0-Linux-x86_64-php.tar.gz
