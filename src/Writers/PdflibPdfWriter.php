@@ -53,7 +53,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * Loaded fonts.
      * @var array
      */
-    protected $fonts = [];
+    public $fonts = [];
 
     /**
      * Already loaded images.
@@ -311,22 +311,31 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
-    {
-        $image = $this->preloadImage($imagePath, $loadOptions);
-        //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
-
-        $this->fit_image($image,
-                        MeasureCalculator::calculateToPt($this->xPos, 'pt'),
-                        MeasureCalculator::calculateToPt($this->yPos, 'pt'),
-                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
-        );
-
-        return $this;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
+	{
+		$image = $this->preloadImage($imagePath, $loadOptions);
+		if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
+			// vector images
+			$this->fit_graphics(
+				$image,
+				MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+				MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+				$fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
+			);
+		} else {
+			// pixel images
+			$this->fit_image(
+				$image,
+				MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+				MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+				$fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
+			);
+		}
+		return $this;
+	}
 
     /**
      * {@inheritdoc}
@@ -504,20 +513,145 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * @return int
      * @throws ImageException
      */
-    protected function preloadImage($imagePath, $loadOptions)
-    {
-        // We're using the PDFLib image index so the same image is only embedded one time in the PDF.
-        if (array_key_exists($imagePath, $this->imageCache)) {
-            $image = $this->imageCache[$imagePath];
-        } else {
-            $image                        = $this->load_image('auto', $imagePath, $loadOptions ?: '');
-            $this->imageCache[$imagePath] = $image;
-        }
+	protected function preloadImage($imagePath, $loadOptions)
+	{
+		// We're using the PDFLib image index so the same image is only embedded one time in the PDF.
+		if (array_key_exists($imagePath, $this->imageCache)) {
+			$image = $this->imageCache[$imagePath];
+		} else {
+			if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
+				// vector images
+				$image = $this->load_graphics('auto', $imagePath, $loadOptions ?: '');
+			} else {
+				// pixel images
+				$image = $this->load_image('auto', $imagePath, $loadOptions ?: '');
+			}
+			$this->imageCache[$imagePath] = $image;
+		}
 
-        if ($image <= 0) {
-            throw new ImageException($this->get_errmsg());
-        }
+		if ($image <= 0) {
+			throw new ImageException($this->get_errmsg());
+		}
 
-        return $image;
-    }
+		return $image;
+	}
+
+	/**
+	 * Add a cell in a table
+	 * @param $table
+	 * @param $col
+	 * @param $row
+	 * @param $name
+	 * @param string $optings
+	 * @return int
+	 */
+	public function addTableCell($table, $col, $row, $name, $optings = '')
+	{
+		return $table = $this->add_table_cell($table, $col, $row, $name, $optings);
+
+		if ($table == 0) {
+			throw new \RuntimeException('Error adding cell: '.$writer->get_errmsg());
+		}
+	}
+
+	/**
+	 * Add e textflow, to place it for e.g. in a table
+	 * @param $textflow
+	 * @param $title
+	 * @param string $optings
+	 * @return int
+	 */
+	public function addTextflow($textflow, $title, $optings = '')
+	{
+		return $textflow = $this->add_textflow($textflow, $title, $optings);
+		
+		if ($textflow == 0) {
+			throw new \RuntimeException('Error: '.$writer->get_errmsg());
+		}
+	}
+
+	/**
+	 * Create and place e table with given data and coordiation
+	 * @param $table
+	 * @param $lowerLeftX
+	 * @param $lowerLeftY
+	 * @param $upperRightX
+	 * @param $upperRightY
+	 * @param string $optings
+	 * @return string
+	 */
+	public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optings = 'header=1 footer=1 stroke={ {line=horother linewidth=0.3}}')
+	{
+		return $result = $this->fit_table($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optings);
+		if ($result == '_error') {
+			throw new \RuntimeException("Couldn't place table : ".$writer->get_errmsg());
+		}
+	}
+
+	/**
+	 * Get the position of an existing element
+	 * @param $infobox
+	 * @param $corner
+	 * @return float
+	 */
+	public function getInfoboxPosition($infobox, $corner)
+	{
+		if ($this->info_matchbox($infobox, 1, 'exists') == 1) {
+			return $this->info_matchbox($infobox, 1, $corner);
+		} else {
+			throw new \RuntimeException('Error: '.$this->get_errmsg());
+		}
+	}
+
+	/**
+	 * Draw a rectangled shape with optional color-filled background. 
+	 * @param $width
+	 * @param $height
+	 * @param int $cyan
+	 * @param int $magenta
+	 * @param int $yellow
+	 * @param int $black
+	 */
+	public function drawRectangle($width, $height, $cyan = 0, $magenta = 0, $yellow = 0, $black = 1)
+	{
+		$this->setcolor("fill", "cmyk", $cyan, $magenta, $yellow, $black);
+		$this->rect($this->xPos, $this->yPos, $width, $height);
+		$this->fill();
+	}
+
+	/**
+	 * Draw a line from point to point
+	 * @param $xFrom
+	 * @param $xTo
+	 * @param $yfrom
+	 * @param $yTo
+	 * @param float $lineWidth
+	 * @param int[] $colors
+	 */
+	public function drawLine($xFrom, $xTo, $yfrom, $yTo, $lineWidth = 0.3, $colors = [1,1,1])
+	{
+		if(count($colors) === 3) {
+			$this->setcolor('stroke','rgb', $colors[0], $colors[1], $colors[2], 1);
+		} elseif (count($colors) === 4) {
+			$this->setcolor('stroke','cmyk', $colors[0], $colors[1], $colors[2], $colors[3]);
+		} else {
+			throw new \RuntimeException('Error: No known colorspace defined');
+		}
+
+		$this->setlinewidth($lineWidth);
+		$this->moveto($xFrom, $yfrom);
+		$this->lineto($xTo, $yTo);
+		$this->stroke();
+	}
+
+	/**
+	 * Get the size of an existing element.
+	 * @param $element
+	 * @param $dimension
+	 * @return float
+	 */
+	public function getSize($element, $dimension = 'width')
+	{
+		return $this->info_table($element, $dimension);
+	}
 }
