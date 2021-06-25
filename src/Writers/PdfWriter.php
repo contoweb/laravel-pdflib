@@ -20,236 +20,368 @@ interface PdfWriter
      */
     public function beginDocument($path, $optlist = null);
 
-    /**
-     * End PDFlib page and document.
-     *
-     * @return bool
-     */
-    public function finishDocument();
+	/**
+	 * End PDFlib page and document.
+	 *
+	 * @return bool
+	 */
+	public function finishDocument();
 
-    /**
-     * Start a new document page.
-     *
-     * @param int $width
-     * @param int $height
-     * @param null $optlist
-     * @return $this
-     * @throws MeasureException
-     */
-    public function newPage($width = 0, $height = 0, $optlist = null);
+	/**
+	 * Start a new document page.
+	 *
+	 * @param int $width
+	 * @param int $height
+	 * @param null $optlist
+	 * @return $this
+	 * @throws MeasureException
+	 */
+	public function newPage($width = 0, $height = 0, $optlist = null);
 
-    /**
-     * Load a PDF template.
-     *
-     * @param string $name
-     * @param string|null $path
-     * @param null $optlist
-     * @return bool
-     * @throws DocumentException
-     */
-    public function loadTemplate($name, $path = null, $optlist = null);
+	/**
+	 * Get the document size of the choosen side.
+	 * 'width' or 'height' are available as parameter.
+	 *
+	 * @param string $side
+	 * @return $this
+	 */
+	public function getPageSize($side);
 
-    /**
-     * Copy a template page into the current document.
-     *
-     * @param $pageNumber
-     * @return $this
-     */
-    public function fromTemplatePage($pageNumber);
+	/**
+	 * Load a PDF template.
+	 *
+	 * @param string $name
+	 * @param string|null $path
+	 * @param null $optlist
+	 * @return bool
+	 * @throws DocumentException
+	 */
+	public function loadTemplate($name, $path = null, $optlist = null);
 
-    /**
-     * Close the template file.
-     *
-     * @return bool
-     */
-    public function closeTemplate();
+	/**
+	 * Copy a template page into the current document.
+	 *
+	 * @param $pageNumber
+	 * @return $this
+	 */
+	public function fromTemplatePage($pageNumber);
 
-    /**
-     * Load fonts to use it with the writer.
-     *
-     * @param string $name
-     * @param array $color
-     * @return $this
-     */
-    public function loadColor($name, array $color);
+	/**
+	 * Close the template file.
+	 *
+	 * @return bool
+	 */
+	public function closeTemplate();
 
-    /**
-     * Use a defined color.
-     *
-     * @param string $name
-     * @return $this
-     * @throws ColorException
-     */
-    public function useColor($name);
+	/**
+	 * Load fonts to use it with the writer.
+	 *
+	 * @param string $name
+	 * @param array $color
+	 * @return $this
+	 */
+	public function loadColor($name, array $color);
 
-    /**
-     * Load fonts to use it with the writer.
-     *
-     * @param string $name
-     * @param string|null $encoding
-     * @param string|null $optlist
-     * @return $this
-     * @throws FontException
-     */
-    public function loadFont($name, $encoding = null, $optlist = null);
+	/**
+	 * Use a defined color.
+	 *
+	 * @param string $name
+	 * @return $this
+	 * @throws ColorException
+	 */
+	public function useColor($name);
 
-    /**
-     * Use a font for writing.
-     *
-     * @param string $name
-     * @param float $size in pt
-     * @param string]null $color
-     * @return $this
-     * @throws ColorException
-     * @throws FontException
-     */
-    public function useFont($name, $size, $color = null);
+	/**
+	 * Add a table.
+	 *
+	 * @param array $items
+	 * @return $this
+	 */
+	public function addTable($items);
 
-    /**
-     * Write fluent text.
-     *
-     * @param string $text
-     * @return $this
-     */
-    public function writeText($text);
+	/**
+	 * Add a column for the given table.
+	 *
+	 * @param int $columnWidth
+	 * @param string|null $unit
+	 * @param string|null $font
+	 * @param int|null $fontSize
+	 * @param int|string $position
+	 * @return $this
+	 */
+	public function addColumn($columnWidth, $unit = null, $font = null, $fontSize = null, $position = null);
 
-    /**
-     * Write a line of text.
-     *
-     * @param $text
-     * @param string|null $optlist
-     * @return $this
-     */
-    public function writeTextLine($text, $optlist = null);
+	/**
+	 * Add e textflow, to place it for e.g. in a table.
+	 *
+	 * @param string $textflow
+	 * @param string $title
+	 * @param string|null $optlist
+	 * @return $this
+	 */
+	public function addTextflow($textflow, $title, $optlist = null);
 
-    /**
-     * Go to the next line.
-     *
-     * @param float $spacing
-     * @return $this
-     */
-    public function nextLine($spacing = 1.0);
+	/**
+	 * Add e header to the given table.
+	 *
+	 * @param array $names
+	 * @param string|null $font
+	 * @param int|null $fontSize
+	 * @param string|null $position
+	 * @return $this
+	 */
+	public function withHeader($names, $font = null, $fontSize = null, $position = null);
 
-    /**
-     * Draw an image.
-     *
-     * @param string $imagePath
-     * @param float $width
-     * @param float $height
-     * @param string|null $loadOptions
-     * @param string|null $fitOptions
-     * @return $this
-     * @throws ImageException
-     */
-    public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null);
+	/**
+	 * Add a cell to the given table.
+	 *
+	 * @param object $table
+	 * @param int|null $column
+	 * @param int|null $row
+	 * @param string|null $name
+	 * @param string|null $optlist
+	 * @return $this
+	 */
+	public function addTableCell($table, $column, $row, $name, $optlist = null);
 
-    /**
-     * Draw a round image.
-     *
-     * @param string $imagePath
-     * @param float $size
-     * @param string|null $loadOptions
-     * @return $this
-     * @throws ImageException
-     */
-    public function circleImage($imagePath, $size, $loadOptions = null);
+	/**
+	 * Place the given table.
+	 *
+	 * @param object $table
+	 * @param int $lowerLeftX
+	 * @param int $lowerLeftY
+	 * @param int $upperRightX
+	 * @param int $upperRightY
+	 * @param string $optlist
+	 * @return $this
+	 */
+	public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist);
 
-    /**
-     * Set the writer's position.
-     *
-     * @param $x
-     * @param $y
-     * @param null $unit
-     * @return $this
-     * @throws MeasureException
-     */
-    public function setPosition($x, $y, $unit = null);
+	/**
+	 * Place the given table.
+	 *
+	 * @param string|null $optlist
+	 * @return $this
+	 */
+	public function draw($optlist = null);
 
-    /**
-     * Set X position of the writer.
-     *
-     * @param $measure
-     * @param string $unit
-     * @param $ignoreOffset
-     * @return $this
-     * @throws MeasureException
-     */
-    public function setXPosition($measure, $unit = null, $ignoreOffset = false);
+	/**
+	 * Load fonts to use it with the writer.
+	 *
+	 * @param string $name
+	 * @param string|null $encoding
+	 * @param string|null $optlist
+	 * @return $this
+	 * @throws FontException
+	 */
+	public function loadFont($name, $encoding = null, $optlist = null);
 
-    /**
-     * Get the cursor's X position.
-     *
-     * @param string|null $unit
-     * @return float
-     * @throws MeasureException
-     */
-    public function getXPosition($unit = null);
+	/**
+	 * Use a font for writing.
+	 *
+	 * @param string $name
+	 * @param float $size in pt
+	 * @param string]null $color
+	 * @return $this
+	 * @throws ColorException
+	 * @throws FontException
+	 */
+	public function useFont($name, $size, $color = null);
 
-    /**
-     * Set Y position of the writer.
-     *
-     * @param float $measure
-     * @param string $unit
-     * @param bool $ignoreOffset
-     * @return $this
-     * @throws MeasureException
-     */
-    public function setYPosition($measure, $unit = null, $ignoreOffset = false);
+	/**
+	 * Write fluent text.
+	 *
+	 * @param string $text
+	 * @return $this
+	 */
+	public function writeText($text);
 
-    /**
-     * Get the cursor's Y position.
-     *
-     * @param string|null $unit
-     * @return float
-     * @throws MeasureException
-     */
-    public function getYPosition($unit = null);
+	/**
+	 * Write a line of text.
+	 *
+	 * @param $text
+	 * @param string|null $optlist
+	 * @return $this
+	 */
+	public function writeTextLine($text, $optlist = null);
 
-    /**
-     * Set X offset for preview.
-     *
-     * @param $measure
-     * @param string $unit
-     * @return $this
-     * @throws MeasureException
-     */
-    public function setXOffset($measure, $unit = null);
+	/**
+	 * Go to the next line.
+	 *
+	 * @param float $spacing
+	 * @return $this
+	 */
+	public function nextLine($spacing = 1.0);
 
-    /**
-     * Set Y offset for preview.
-     *
-     * @param $measure
-     * @param string $unit
-     * @return $this
-     * @throws MeasureException
-     */
-    public function setYOffset($measure, $unit = null);
+	/**
+	 * Get the text width.
+	 *
+	 * @param float $spacing
+	 * @return $this
+	 */
+	public function getTextWidth($text, $font, $fontSize, $unit = null);
 
-    /**
-     * Use the defined offset.
-     *
-     * @return $this
-     */
-    public function enableOffset();
+	/**
+	 * Draw an image.
+	 *
+	 * @param string $imagePath
+	 * @param float $width
+	 * @param float $height
+	 * @param string|null $loadOptions
+	 * @param string|null $fitOptions
+	 * @param bool|false $isVector
+	 * @return $this
+	 * @throws ImageException
+	 */
+	public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null);
 
-    /**
-     * Don't use the defined offset.
-     *
-     * @return $this
-     */
-    public function disableOffset();
+	/**
+	 * Draw a round image.
+	 *
+	 * @param string $imagePath
+	 * @param float $size
+	 * @param string|null $loadOptions
+	 * @return $this
+	 * @throws ImageException
+	 */
+	public function circleImage($imagePath, $size, $loadOptions = null);
 
-    /**
-     * Checks if it writes the original PDF.
-     *
-     * @return mixed
-     */
-    public function inOriginal();
+	/**
+	 * Draw a rectangled shaped.
+	 *
+	 * @param int $width
+	 * @param int $height
+	 * @return $this
+	 */
+	public function drawRectangle($width, $height);
 
-    /**
-     * Checks if it writes the preview PDF.
-     *
-     * @return mixed
-     */
-    public function inPreview();
+	/**
+	 * Draw a rectangled shaped.
+	 *
+	 * @param int $xFrom
+	 * @param int $xTo
+	 * @param int $yFrom
+	 * @param int $yTo
+	 * @param float $lineWidth
+	 * @param string $unit
+	 * @return $this
+	 */
+	public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null);
+
+	/**
+	 * Set the writer's position.
+	 *
+	 * @param $x
+	 * @param $y
+	 * @param null $unit
+	 * @return $this
+	 * @throws MeasureException
+	 */
+	public function setPosition($x, $y, $unit = null);
+
+	/**
+	 * Set X position of the writer.
+	 *
+	 * @param $measure
+	 * @param string $unit
+	 * @param $ignoreOffset
+	 * @return $this
+	 * @throws MeasureException
+	 */
+	public function setXPosition($measure, $unit = null, $ignoreOffset = false);
+
+	/**
+	 * Get the cursor's X position.
+	 *
+	 * @param string|null $unit
+	 * @return float
+	 * @throws MeasureException
+	 */
+	public function getXPosition($unit = null);
+
+	/**
+	 * Set Y position of the writer.
+	 *
+	 * @param float $measure
+	 * @param string $unit
+	 * @param bool $ignoreOffset
+	 * @return $this
+	 * @throws MeasureException
+	 */
+	public function setYPosition($measure, $unit = null, $ignoreOffset = false);
+
+	/**
+	 * Get the cursor's Y position.
+	 *
+	 * @param string|null $unit
+	 * @return float
+	 * @throws MeasureException
+	 */
+	public function getYPosition($unit = null);
+
+	/**
+	 * Get the position of an existing element.
+	 *
+	 * @param string $infobox
+	 * @param string $corner
+	 * @return $this
+	 */
+	public function getElementPosition($infobox, $corner);
+
+	/**
+	 * Get the size of an existing element.
+	 *
+	 * @param string $infobox
+	 * @param string|null $corner
+	 * @return $this
+	 */
+	public function getElementSize($infobox, $corner);
+
+	/**
+	 * Set X offset for preview.
+	 *
+	 * @param $measure
+	 * @param string $unit
+	 * @return $this
+	 * @throws MeasureException
+	 */
+	public function setXOffset($measure, $unit = null);
+
+	/**
+	 * Set Y offset for preview.
+	 *
+	 * @param $measure
+	 * @param string $unit
+	 * @return $this
+	 * @throws MeasureException
+	 */
+	public function setYOffset($measure, $unit = null);
+
+	/**
+	 * Use the defined offset.
+	 *
+	 * @return $this
+	 */
+	public function enableOffset();
+
+	/**
+	 * Don't use the defined offset.
+	 *
+	 * @return $this
+	 */
+	public function disableOffset();
+
+	/**
+	 * Checks if it writes the original PDF.
+	 *
+	 * @return mixed
+	 */
+	public function inOriginal();
+
+	/**
+	 * Checks if it writes the preview PDF.
+	 *
+	 * @return mixed
+	 */
+	public function inPreview();
 }

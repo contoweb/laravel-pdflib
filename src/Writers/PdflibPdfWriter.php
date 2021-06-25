@@ -6,6 +6,9 @@ use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Exceptions\CoordinateException;
+use Contoweb\Pdflib\Exceptions\TextException;
+use Contoweb\Pdflib\Exceptions\TableException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Exception;
@@ -53,7 +56,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * Loaded fonts.
      * @var array
      */
-    public $fonts = [];
+	protected $fonts = [];
 
     /**
      * Already loaded images.
@@ -85,6 +88,30 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     private $fontSize;
 
+
+	/**
+	 * A table object.
+	 * @var array
+	 */
+	protected $table = [];
+
+	/**
+	 * Columns of a table.
+	 * @var array
+	 */
+	protected $tableColumns = [];
+
+	/**
+	 * Headers of a table.
+	 * @var array
+	 */
+	protected $tableHeaders = [];
+
+	/**
+	 * Items of a table.
+	 * @var array
+	 */
+	protected $tableItems = [];
     /**
      * PdflibPdfWriter constructor.
      *
@@ -156,6 +183,14 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         return $this;
     }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getPageSize($side = 'width')
+	{
+		return $this->get_option('page' . $side, '');
+	}
 
     /**
      * {@inheritdoc}
@@ -314,6 +349,20 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 	/**
 	 * {@inheritdoc}
 	 */
+	public function getTextWidth($text, $font, $fontSize, $unit = null)
+	{
+		$textWidth = MeasureCalculator::calculateToUnit(
+			$this->stringwidth($text, $this->load_font($font, 'unicode', 'embedding'), $fontSize),
+			$unit ?: config('pdf.measurement.unit', 'pt'),
+			'pt'
+		);
+
+		return $textWidth;
+	}
+    
+	/**
+	 * {@inheritdoc}
+	 */
 	public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
 	{
 		$image = $this->preloadImage($imagePath, $loadOptions);
@@ -380,7 +429,28 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         return $this;
     }
 
-    /**
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function drawRectangle($width, $height)
+	{
+		$this->rect($this->xPos, $this->yPos, $width, $height);
+		$this->fill();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null)
+	{
+		$this->setlinewidth($lineWidth);
+		$this->moveto(MeasureCalculator::calculateToPt($xFrom, $unit), MeasureCalculator::calculateToPt($yFrom, $unit));
+		$this->lineto(MeasureCalculator::calculateToPt($xTo, $unit), MeasureCalculator::calculateToPt($yTo, $unit));
+		$this->stroke();
+	}
+
+	/**
      * {@inheritdoc}
      */
     public function setPosition($x, $y, $unit = null)
@@ -446,6 +516,26 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
             'pt'
         );
     }
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getElementPosition($infobox, $corner)
+	{
+		if ($this->info_matchbox($infobox, 1, 'exists') == 1) {
+			return $this->info_matchbox($infobox, 1, $corner);
+		} else {
+			throw new CoordinateException('Error: ' . $this->get_errmsg());
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getElementSize($element, $dimension = 'width')
+	{
+		return $this->info_table($element, $dimension);
+	}
 
     /**
      * {@inheritdoc}
@@ -537,121 +627,163 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 	}
 
 	/**
-	 * Add a cell in a table
-	 * @param $table
-	 * @param $col
-	 * @param $row
-	 * @param $name
-	 * @param string $optings
-	 * @return int
+	 * {@inheritdoc}
 	 */
-	public function addTableCell($table, $col, $row, $name, $optings = '')
+	public function addTable($items)
 	{
-		return $table = $this->add_table_cell($table, $col, $row, $name, $optings);
+		$this->tableItems = $items;
+		$this->table = 0;
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addColumn($columnWidth, $unit = null, $font = null, $fontSize = null, $position = null)
+	{
+		array_push(
+			$this->tableColumns,
+			[
+				'width' => MeasureCalculator::calculateToPt($columnWidth, $unit),
+				'unit' => $unit ?: config('pdf.measurement.unit', 'pt'),
+				'font' => $font ?: 'Arial',
+				'fontsize' => $fontSize ?: 10,
+				'position' => $position ?: 'left bottom',
+			]
+		);
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addTextflow($textflow, $title, $optlist = null)
+	{
+		$textflow = $this->add_textflow($textflow, $title, $optlist);
+
+		if ($textflow == 0) {
+			throw new TextException('Error: ' . $this->get_errmsg());
+		}
+
+		return $textflow;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function withHeader($names, $font = null, $fontSize = null, $position = null)
+	{
+		foreach ($this->tableColumns as $key=>$tableColumn) {
+			array_push(
+				$this->tableHeaders,
+				[
+					'name' => $names,
+					'width' => MeasureCalculator::calculateToPt($tableColumn['width'], $tableColumn['unit']),
+					'unit' => $tableColumn['unit'] ?: config('pdf.measurement.unit', 'pt'),
+					'font' => $font ?: 'Arial',
+					'fontsize' => $fontSize ?: 10,
+					'position' => $position ?: 'left bottom',
+				]
+			);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addTableCell($table, $column, $row, $name, $optlist = null)
+	{
+		$table = $this->add_table_cell($table, $column, $row, $name, $optlist);
 
 		if ($table == 0) {
-			throw new \RuntimeException('Error adding cell: '.$writer->get_errmsg());
+			throw new TableException('Error adding cell: ' . $this->get_errmsg());
 		}
+
+		return $table;
 	}
 
 	/**
-	 * Add e textflow, to place it for e.g. in a table
-	 * @param $textflow
-	 * @param $title
-	 * @param string $optings
-	 * @return int
+	 * {@inheritdoc}
 	 */
-	public function addTextflow($textflow, $title, $optings = '')
+	public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist)
 	{
-		return $textflow = $this->add_textflow($textflow, $title, $optings);
-		
-		if ($textflow == 0) {
-			throw new \RuntimeException('Error: '.$writer->get_errmsg());
-		}
-	}
+		$result = $this->fit_table($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist);
 
-	/**
-	 * Create and place e table with given data and coordiation
-	 * @param $table
-	 * @param $lowerLeftX
-	 * @param $lowerLeftY
-	 * @param $upperRightX
-	 * @param $upperRightY
-	 * @param string $optings
-	 * @return string
-	 */
-	public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optings = 'header=1 footer=1 stroke={ {line=horother linewidth=0.3}}')
-	{
-		return $result = $this->fit_table($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optings);
 		if ($result == '_error') {
-			throw new \RuntimeException("Couldn't place table : ".$writer->get_errmsg());
-		}
-	}
-
-	/**
-	 * Get the position of an existing element
-	 * @param $infobox
-	 * @param $corner
-	 * @return float
-	 */
-	public function getInfoboxPosition($infobox, $corner)
-	{
-		if ($this->info_matchbox($infobox, 1, 'exists') == 1) {
-			return $this->info_matchbox($infobox, 1, $corner);
-		} else {
-			throw new \RuntimeException('Error: '.$this->get_errmsg());
-		}
-	}
-
-	/**
-	 * Draw a rectangled shape with optional color-filled background. 
-	 * @param $width
-	 * @param $height
-	 * @param int $cyan
-	 * @param int $magenta
-	 * @param int $yellow
-	 * @param int $black
-	 */
-	public function drawRectangle($width, $height, $cyan = 0, $magenta = 0, $yellow = 0, $black = 1)
-	{
-		$this->setcolor("fill", "cmyk", $cyan, $magenta, $yellow, $black);
-		$this->rect($this->xPos, $this->yPos, $width, $height);
-		$this->fill();
-	}
-
-	/**
-	 * Draw a line from point to point
-	 * @param $xFrom
-	 * @param $xTo
-	 * @param $yfrom
-	 * @param $yTo
-	 * @param float $lineWidth
-	 * @param int[] $colors
-	 */
-	public function drawLine($xFrom, $xTo, $yfrom, $yTo, $lineWidth = 0.3, $colors = [1,1,1])
-	{
-		if(count($colors) === 3) {
-			$this->setcolor('stroke','rgb', $colors[0], $colors[1], $colors[2], 1);
-		} elseif (count($colors) === 4) {
-			$this->setcolor('stroke','cmyk', $colors[0], $colors[1], $colors[2], $colors[3]);
-		} else {
-			throw new \RuntimeException('Error: No known colorspace defined');
+			throw new TableException("Couldn't place table : " . $this->get_errmsg());
 		}
 
-		$this->setlinewidth($lineWidth);
-		$this->moveto($xFrom, $yfrom);
-		$this->lineto($xTo, $yTo);
-		$this->stroke();
+		return $result;
 	}
 
 	/**
-	 * Get the size of an existing element.
-	 * @param $element
-	 * @param $dimension
-	 * @return float
+	 * {@inheritdoc}
 	 */
-	public function getSize($element, $dimension = 'width')
+	public function draw($optlist = null)
 	{
-		return $this->info_table($element, $dimension);
+		if ($optlist === null) {
+			if (count($this->tableHeaders) > 0) {
+				$headerCount = "1";
+			} else {
+				$headerCount = "0";
+			}
+			$optlist = 'header='.$headerCount.' footer=0 stroke={ {line=horother linewidth=0.3}}';
+		}
+
+		// Start the table with row 1		
+		$row = 1;
+		$col = 1;
+
+		if ($this->tableHeaders) {
+			foreach ($this->tableHeaders as $index => $tableHeader) {
+				$this->table = $this->addTableCell(
+					$this->table,
+					$col ++,
+					$row,
+					isset(array_values($tableHeader['name'])[$index]) ? array_values($tableHeader['name'])[$index] : '',
+					"fittextline={font=" .
+					$this->fonts[$tableHeader['font']] .
+					" fontsize=".$tableHeader['fontsize'] .
+					' position={'.$tableHeader['position'].'}
+							 }' .
+					' colwidth=' . $tableHeader['width']
+				);
+			}
+
+			$row++;
+			$col = 1;
+		}
+
+		for ($itemno = 1; $itemno <= count($this->tableItems); $itemno ++, $row) {
+			foreach ($this->tableColumns as $index => $column) {
+				$this->table = $this->addTableCell(
+					$this->table,
+					$col ++,
+					$row,
+					isset(array_values($this->tableItems[$itemno - 1])[$index]) ? array_values($this->tableItems[$itemno - 1])[$index] : '',
+					"fittextline={font=" .
+					$this->fonts[$column['font']] .
+					" fontsize=" . $column['fontsize'] .
+					' position={' . $column['position'] . '}
+							 }' .
+					' colwidth=' . $column['width']
+				);
+			}
+			$row++;
+			$col = 1;
+		}
+		$this->placeTable($this->table, MeasureCalculator::calculateToPt($this->xPos, 'pt'), 0, $this->getPageSize('width'), MeasureCalculator::calculateToPt($this->yPos, 'pt'), $optlist);
+
+		// reset set table-data for next table
+		$this->tableItems = [];
+		$this->tableColumns = [];
+		$this->tableHeaders = [];
+		$this->table = 0;
+
+		return $this;
 	}
 }
