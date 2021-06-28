@@ -3,12 +3,12 @@
 namespace Contoweb\Pdflib\Writers;
 
 use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\CoordinateException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
-use Contoweb\Pdflib\Exceptions\CoordinateException;
-use Contoweb\Pdflib\Exceptions\TextException;
 use Contoweb\Pdflib\Exceptions\TableException;
+use Contoweb\Pdflib\Exceptions\TextException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Exception;
@@ -56,7 +56,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * Loaded fonts.
      * @var array
      */
-	protected $fonts = [];
+    protected $fonts = [];
 
     /**
      * Already loaded images.
@@ -88,30 +88,30 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     private $fontSize;
 
+    /**
+     * A table object.
+     * @var array
+     */
+    protected $table = [];
 
-	/**
-	 * A table object.
-	 * @var array
-	 */
-	protected $table = [];
+    /**
+     * Columns of a table.
+     * @var array
+     */
+    protected $tableColumns = [];
 
-	/**
-	 * Columns of a table.
-	 * @var array
-	 */
-	protected $tableColumns = [];
+    /**
+     * Headers of a table.
+     * @var array
+     */
+    protected $tableHeaders = [];
 
-	/**
-	 * Headers of a table.
-	 * @var array
-	 */
-	protected $tableHeaders = [];
+    /**
+     * Items of a table.
+     * @var array
+     */
+    protected $tableItems = [];
 
-	/**
-	 * Items of a table.
-	 * @var array
-	 */
-	protected $tableItems = [];
     /**
      * PdflibPdfWriter constructor.
      *
@@ -184,13 +184,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         return $this;
     }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getPageSize($side = 'width')
-	{
-		return $this->get_option('page' . $side, '');
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getPageSize($side = 'width')
+    {
+        return $this->get_option('page' . $side, '');
+    }
 
     /**
      * {@inheritdoc}
@@ -346,45 +346,46 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         return $this;
     }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getTextWidth($text, $font, $fontSize, $unit = null)
-	{
-		$textWidth = MeasureCalculator::calculateToUnit(
-			$this->stringwidth($text, $this->load_font($font, 'unicode', 'embedding'), $fontSize),
-			$unit ?: config('pdf.measurement.unit', 'pt'),
-			'pt'
-		);
+    /**
+     * {@inheritdoc}
+     */
+    public function getTextWidth($text, $font, $fontSize, $unit = null)
+    {
+        $textWidth = MeasureCalculator::calculateToUnit(
+            $this->stringwidth($text, $this->load_font($font, 'unicode', 'embedding'), $fontSize),
+            $unit ?: config('pdf.measurement.unit', 'pt'),
+            'pt'
+        );
 
-		return $textWidth;
-	}
-    
-	/**
-	 * {@inheritdoc}
-	 */
-	public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
-	{
-		$image = $this->preloadImage($imagePath, $loadOptions);
-		if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
-			// vector images
-			$this->fit_graphics(
-				$image,
-				MeasureCalculator::calculateToPt($this->xPos, 'pt'),
-				MeasureCalculator::calculateToPt($this->yPos, 'pt'),
-				$fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
-			);
-		} else {
-			// pixel images
-			$this->fit_image(
-				$image,
-				MeasureCalculator::calculateToPt($this->xPos, 'pt'),
-				MeasureCalculator::calculateToPt($this->yPos, 'pt'),
-				$fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
-			);
-		}
-		return $this;
-	}
+        return $textWidth;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
+    {
+        $image = $this->preloadImage($imagePath, $loadOptions);
+        if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
+            // vector images
+            $this->fit_graphics(
+                $image,
+                MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+                MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+                $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
+            );
+        } else {
+            // pixel images
+            $this->fit_image(
+                $image,
+                MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+                MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+                $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
+            );
+        }
+
+        return $this;
+    }
 
     /**
      * {@inheritdoc}
@@ -429,28 +430,27 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function drawRectangle($width, $height)
+    {
+        $this->rect($this->xPos, $this->yPos, $width, $height);
+        $this->fill();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function drawRectangle($width, $height)
-	{
-		$this->rect($this->xPos, $this->yPos, $width, $height);
-		$this->fill();
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null)
+    {
+        $this->setlinewidth($lineWidth);
+        $this->moveto(MeasureCalculator::calculateToPt($xFrom, $unit), MeasureCalculator::calculateToPt($yFrom, $unit));
+        $this->lineto(MeasureCalculator::calculateToPt($xTo, $unit), MeasureCalculator::calculateToPt($yTo, $unit));
+        $this->stroke();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null)
-	{
-		$this->setlinewidth($lineWidth);
-		$this->moveto(MeasureCalculator::calculateToPt($xFrom, $unit), MeasureCalculator::calculateToPt($yFrom, $unit));
-		$this->lineto(MeasureCalculator::calculateToPt($xTo, $unit), MeasureCalculator::calculateToPt($yTo, $unit));
-		$this->stroke();
-	}
-
-	/**
+    /**
      * {@inheritdoc}
      */
     public function setPosition($x, $y, $unit = null)
@@ -517,25 +517,25 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         );
     }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getElementPosition($infobox, $corner)
-	{
-		if ($this->info_matchbox($infobox, 1, 'exists') == 1) {
-			return $this->info_matchbox($infobox, 1, $corner);
-		} else {
-			throw new CoordinateException('Error: ' . $this->get_errmsg());
-		}
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getElementPosition($infobox, $corner)
+    {
+        if ($this->info_matchbox($infobox, 1, 'exists') == 1) {
+            return $this->info_matchbox($infobox, 1, $corner);
+        } else {
+            throw new CoordinateException('Error: ' . $this->get_errmsg());
+        }
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getElementSize($element, $dimension = 'width')
-	{
-		return $this->info_table($element, $dimension);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getElementSize($element, $dimension = 'width')
+    {
+        return $this->info_table($element, $dimension);
+    }
 
     /**
      * {@inheritdoc}
@@ -603,187 +603,187 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * @return int
      * @throws ImageException
      */
-	protected function preloadImage($imagePath, $loadOptions)
-	{
-		// We're using the PDFLib image index so the same image is only embedded one time in the PDF.
-		if (array_key_exists($imagePath, $this->imageCache)) {
-			$image = $this->imageCache[$imagePath];
-		} else {
-			if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
-				// vector images
-				$image = $this->load_graphics('auto', $imagePath, $loadOptions ?: '');
-			} else {
-				// pixel images
-				$image = $this->load_image('auto', $imagePath, $loadOptions ?: '');
-			}
-			$this->imageCache[$imagePath] = $image;
-		}
+    protected function preloadImage($imagePath, $loadOptions)
+    {
+        // We're using the PDFLib image index so the same image is only embedded one time in the PDF.
+        if (array_key_exists($imagePath, $this->imageCache)) {
+            $image = $this->imageCache[$imagePath];
+        } else {
+            if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
+                // vector images
+                $image = $this->load_graphics('auto', $imagePath, $loadOptions ?: '');
+            } else {
+                // pixel images
+                $image = $this->load_image('auto', $imagePath, $loadOptions ?: '');
+            }
+            $this->imageCache[$imagePath] = $image;
+        }
 
-		if ($image <= 0) {
-			throw new ImageException($this->get_errmsg());
-		}
+        if ($image <= 0) {
+            throw new ImageException($this->get_errmsg());
+        }
 
-		return $image;
-	}
+        return $image;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function addTable($items)
-	{
-		$this->tableItems = $items;
-		$this->table = 0;
+    /**
+     * {@inheritdoc}
+     */
+    public function addTable($items)
+    {
+        $this->tableItems = $items;
+        $this->table      = 0;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function addColumn($columnWidth, $unit = null, $font = null, $fontSize = null, $position = null)
-	{
-		array_push(
-			$this->tableColumns,
-			[
-				'width' => MeasureCalculator::calculateToPt($columnWidth, $unit),
-				'unit' => $unit ?: config('pdf.measurement.unit', 'pt'),
-				'font' => $font ?: 'Arial',
-				'fontsize' => $fontSize ?: 10,
-				'position' => $position ?: 'left bottom',
-			]
-		);
+    /**
+     * {@inheritdoc}
+     */
+    public function addColumn($columnWidth, $unit = null, $font = null, $fontSize = null, $position = null)
+    {
+        array_push(
+            $this->tableColumns,
+            [
+                'width'    => MeasureCalculator::calculateToPt($columnWidth, $unit),
+                'unit'     => $unit ?: config('pdf.measurement.unit', 'pt'),
+                'font'     => $font ?: 'Arial',
+                'fontsize' => $fontSize ?: 10,
+                'position' => $position ?: 'left bottom',
+            ]
+        );
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function addTextflow($textflow, $title, $optlist = null)
-	{
-		$textflow = $this->add_textflow($textflow, $title, $optlist);
+    /**
+     * {@inheritdoc}
+     */
+    public function addTextflow($textflow, $title, $optlist = null)
+    {
+        $textflow = $this->add_textflow($textflow, $title, $optlist);
 
-		if ($textflow == 0) {
-			throw new TextException('Error: ' . $this->get_errmsg());
-		}
+        if ($textflow == 0) {
+            throw new TextException('Error: ' . $this->get_errmsg());
+        }
 
-		return $textflow;
-	}
+        return $textflow;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function withHeader($names, $font = null, $fontSize = null, $position = null)
-	{
-		foreach ($this->tableColumns as $key=>$tableColumn) {
-			array_push(
-				$this->tableHeaders,
-				[
-					'name' => $names,
-					'width' => MeasureCalculator::calculateToPt($tableColumn['width'], $tableColumn['unit']),
-					'unit' => $tableColumn['unit'] ?: config('pdf.measurement.unit', 'pt'),
-					'font' => $font ?: 'Arial',
-					'fontsize' => $fontSize ?: 10,
-					'position' => $position ?: 'left bottom',
-				]
-			);
-		}
+    /**
+     * {@inheritdoc}
+     */
+    public function withHeader($names, $font = null, $fontSize = null, $position = null)
+    {
+        foreach ($this->tableColumns as $key=>$tableColumn) {
+            array_push(
+                $this->tableHeaders,
+                [
+                    'name'     => $names,
+                    'width'    => MeasureCalculator::calculateToPt($tableColumn['width'], $tableColumn['unit']),
+                    'unit'     => $tableColumn['unit'] ?: config('pdf.measurement.unit', 'pt'),
+                    'font'     => $font ?: 'Arial',
+                    'fontsize' => $fontSize ?: 10,
+                    'position' => $position ?: 'left bottom',
+                ]
+            );
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function addTableCell($table, $column, $row, $name, $optlist = null)
-	{
-		$table = $this->add_table_cell($table, $column, $row, $name, $optlist);
+    /**
+     * {@inheritdoc}
+     */
+    public function addTableCell($table, $column, $row, $name, $optlist = null)
+    {
+        $table = $this->add_table_cell($table, $column, $row, $name, $optlist);
 
-		if ($table == 0) {
-			throw new TableException('Error adding cell: ' . $this->get_errmsg());
-		}
+        if ($table == 0) {
+            throw new TableException('Error adding cell: ' . $this->get_errmsg());
+        }
 
-		return $table;
-	}
+        return $table;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist)
-	{
-		$result = $this->fit_table($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist);
+    /**
+     * {@inheritdoc}
+     */
+    public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist)
+    {
+        $result = $this->fit_table($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist);
 
-		if ($result == '_error') {
-			throw new TableException("Couldn't place table : " . $this->get_errmsg());
-		}
+        if ($result == '_error') {
+            throw new TableException("Couldn't place table : " . $this->get_errmsg());
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function draw($optlist = null)
-	{
-		if ($optlist === null) {
-			if (count($this->tableHeaders) > 0) {
-				$headerCount = "1";
-			} else {
-				$headerCount = "0";
-			}
-			$optlist = 'header='.$headerCount.' footer=0 stroke={ {line=horother linewidth=0.3}}';
-		}
+    /**
+     * {@inheritdoc}
+     */
+    public function draw($optlist = null)
+    {
+        if ($optlist === null) {
+            if (count($this->tableHeaders) > 0) {
+                $headerCount = '1';
+            } else {
+                $headerCount = '0';
+            }
+            $optlist = 'header=' . $headerCount . ' footer=0 stroke={ {line=horother linewidth=0.3}}';
+        }
 
-		// Start the table with row 1		
-		$row = 1;
-		$col = 1;
+        // Start the table with row 1
+        $row = 1;
+        $col = 1;
 
-		if ($this->tableHeaders) {
-			foreach ($this->tableHeaders as $index => $tableHeader) {
-				$this->table = $this->addTableCell(
-					$this->table,
-					$col ++,
-					$row,
-					isset(array_values($tableHeader['name'])[$index]) ? array_values($tableHeader['name'])[$index] : '',
-					"fittextline={font=" .
-					$this->fonts[$tableHeader['font']] .
-					" fontsize=".$tableHeader['fontsize'] .
-					' position={'.$tableHeader['position'].'}
+        if ($this->tableHeaders) {
+            foreach ($this->tableHeaders as $index => $tableHeader) {
+                $this->table = $this->addTableCell(
+                    $this->table,
+                    $col++,
+                    $row,
+                    isset(array_values($tableHeader['name'])[$index]) ? array_values($tableHeader['name'])[$index] : '',
+                    'fittextline={font=' .
+                    $this->fonts[$tableHeader['font']] .
+                    ' fontsize=' . $tableHeader['fontsize'] .
+                    ' position={' . $tableHeader['position'] . '}
 							 }' .
-					' colwidth=' . $tableHeader['width']
-				);
-			}
+                    ' colwidth=' . $tableHeader['width']
+                );
+            }
 
-			$row++;
-			$col = 1;
-		}
+            $row++;
+            $col = 1;
+        }
 
-		for ($itemno = 1; $itemno <= count($this->tableItems); $itemno ++, $row) {
-			foreach ($this->tableColumns as $index => $column) {
-				$this->table = $this->addTableCell(
-					$this->table,
-					$col ++,
-					$row,
-					isset(array_values($this->tableItems[$itemno - 1])[$index]) ? array_values($this->tableItems[$itemno - 1])[$index] : '',
-					"fittextline={font=" .
-					$this->fonts[$column['font']] .
-					" fontsize=" . $column['fontsize'] .
-					' position={' . $column['position'] . '}
+        for ($itemno = 1; $itemno <= count($this->tableItems); $itemno++, $row) {
+            foreach ($this->tableColumns as $index => $column) {
+                $this->table = $this->addTableCell(
+                    $this->table,
+                    $col++,
+                    $row,
+                    isset(array_values($this->tableItems[$itemno - 1])[$index]) ? array_values($this->tableItems[$itemno - 1])[$index] : '',
+                    'fittextline={font=' .
+                    $this->fonts[$column['font']] .
+                    ' fontsize=' . $column['fontsize'] .
+                    ' position={' . $column['position'] . '}
 							 }' .
-					' colwidth=' . $column['width']
-				);
-			}
-			$row++;
-			$col = 1;
-		}
-		$this->placeTable($this->table, MeasureCalculator::calculateToPt($this->xPos, 'pt'), 0, $this->getPageSize('width'), MeasureCalculator::calculateToPt($this->yPos, 'pt'), $optlist);
+                    ' colwidth=' . $column['width']
+                );
+            }
+            $row++;
+            $col = 1;
+        }
+        $this->placeTable($this->table, MeasureCalculator::calculateToPt($this->xPos, 'pt'), 0, $this->getPageSize('width'), MeasureCalculator::calculateToPt($this->yPos, 'pt'), $optlist);
 
-		// reset set table-data for next table
-		$this->tableItems = [];
-		$this->tableColumns = [];
-		$this->tableHeaders = [];
-		$this->table = 0;
+        // reset set table-data for next table
+        $this->tableItems   = [];
+        $this->tableColumns = [];
+        $this->tableHeaders = [];
+        $this->table        = 0;
 
-		return $this;
-	}
+        return $this;
+    }
 }
