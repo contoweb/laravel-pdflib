@@ -2,6 +2,7 @@
 
 namespace Contoweb\Pdflib\Writers;
 
+use Contoweb\Pdflib\WriterComponents\Table;
 use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
@@ -43,7 +44,7 @@ interface PdfWriter
      * 'width' or 'height' are available as parameter.
      *
      * @param string $side
-     * @return $this
+     * @return int
      */
     public function getPageSize($side);
 
@@ -92,27 +93,15 @@ interface PdfWriter
     public function useColor($name);
 
     /**
-     * Add a table.
+     * Open a new table.
      *
      * @param array $items
-     * @return $this
+     * @return Table
      */
-    public function addTable($items);
+    public function newTable($items);
 
     /**
-     * Add a column for the given table.
-     *
-     * @param int $columnWidth
-     * @param string|null $unit
-     * @param string|null $font
-     * @param int|null $fontSize
-     * @param int|string $position
-     * @return $this
-     */
-    public function addColumn($columnWidth, $unit = null, $font = null, $fontSize = null, $position = null);
-
-    /**
-     * Add e textflow, to place it for e.g. in a table.
+     * Add a textflow, to place it for e.g. in a table.
      *
      * @param string $textflow
      * @param string $title
@@ -120,50 +109,6 @@ interface PdfWriter
      * @return $this
      */
     public function addTextflow($textflow, $title, $optlist = null);
-
-    /**
-     * Add e header to the given table.
-     *
-     * @param array $names
-     * @param string|null $font
-     * @param int|null $fontSize
-     * @param string|null $position
-     * @return $this
-     */
-    public function withHeader($names, $font = null, $fontSize = null, $position = null);
-
-    /**
-     * Add a cell to the given table.
-     *
-     * @param object $table
-     * @param int|null $column
-     * @param int|null $row
-     * @param string|null $name
-     * @param string|null $optlist
-     * @return $this
-     */
-    public function addTableCell($table, $column, $row, $name, $optlist = null);
-
-    /**
-     * Place the given table.
-     *
-     * @param object $table
-     * @param int $lowerLeftX
-     * @param int $lowerLeftY
-     * @param int $upperRightX
-     * @param int $upperRightY
-     * @param string $optlist
-     * @return $this
-     */
-    public function placeTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist);
-
-    /**
-     * Place the given table.
-     *
-     * @param string|null $optlist
-     * @return $this
-     */
-    public function draw($optlist = null);
 
     /**
      * Load fonts to use it with the writer.
@@ -187,6 +132,13 @@ interface PdfWriter
      * @throws FontException
      */
     public function useFont($name, $size, $color = null);
+
+    /**
+     * Get defined writer fonts.
+     *
+     * @return array
+     */
+    public function getFonts();
 
     /**
      * Write fluent text.
@@ -216,7 +168,10 @@ interface PdfWriter
     /**
      * Get the text width.
      *
-     * @param float $spacing
+     * @param string $text
+     * @param string $font
+     * @param int|float $fontSize
+     * @param null  $unit
      * @return $this
      */
     public function getTextWidth($text, $font, $fontSize, $unit = null);

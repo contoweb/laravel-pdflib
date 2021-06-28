@@ -329,14 +329,16 @@ To write a table you can follow this example:
 			['first_name' => 'John', 'last_name' => 'Doe'],
 			['first_name' => 'Jane','last_name' => 'Doe'],
 		];
-
-		$writer
+		
+		$table = $writer
 			->setPosition(10, 150)
-			->addTable($items)
+			->newTable($items);
+
+		$table
 			->addColumn(50)
 			->addColumn(50)
 			->withHeader(['First name', 'Last name'])
-			->draw("stroke={ {line=horother linewidth=0}}")
+			->place("stroke={ {line=horother linewidth=0}}")
 		;
 ```
 
