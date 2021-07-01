@@ -3,11 +3,14 @@
 namespace Contoweb\Pdflib\Writers;
 
 use Contoweb\Pdflib\Exceptions\ColorException;
+use Contoweb\Pdflib\Exceptions\CoordinateException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
+use Contoweb\Pdflib\Exceptions\TextException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Contoweb\Pdflib\WriterComponents\Table;
 use Exception;
 use PDFlib;
 
@@ -86,6 +89,12 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     private $fontSize;
 
     /**
+     * A table object.
+     * @var Table
+     */
+    protected $table;
+
+    /**
      * PdflibPdfWriter constructor.
      *
      * @param $license
@@ -155,6 +164,14 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
             $optlist ?: '');
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPageSize($side = 'width')
+    {
+        return $this->get_option('page' . $side, '');
     }
 
     /**
@@ -283,6 +300,14 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
+    public function getFonts()
+    {
+        return $this->fonts;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function writeText($text)
     {
         $this->set_text_pos($this->xPos, $this->yPos);
@@ -314,15 +339,37 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
+    public function getTextWidth($text, $font, $fontSize, $unit = null)
+    {
+        $textWidth = MeasureCalculator::calculateToUnit(
+            $this->stringwidth($text, $this->load_font($font, 'unicode', 'embedding'), $fontSize),
+            $unit ?: config('pdf.measurement.unit', 'pt'),
+            'pt'
+        );
+
+        return $textWidth;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
     {
         $image = $this->preloadImage($imagePath, $loadOptions);
-        //$image = $this->load_image("auto", $imagePath, $loadOptions ?: "");
 
-        $this->fit_image($image,
-                        MeasureCalculator::calculateToPt($this->xPos, 'pt'),
-                        MeasureCalculator::calculateToPt($this->yPos, 'pt'),
-                 $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
+        if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
+            // vector images
+            $fitObjectMethod = 'fit_graphics';
+        } else {
+            // pixel images
+            $fitObjectMethod = 'fit_image';
+        }
+
+        $this->{$fitObjectMethod}(
+            $image,
+            MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+            MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+            $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
         );
 
         return $this;
@@ -369,6 +416,26 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->restore();
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function drawRectangle($width, $height)
+    {
+        $this->rect($this->xPos, $this->yPos, $width, $height);
+        $this->fill();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null)
+    {
+        $this->setlinewidth($lineWidth);
+        $this->moveto(MeasureCalculator::calculateToPt($xFrom, $unit), MeasureCalculator::calculateToPt($yFrom, $unit));
+        $this->lineto(MeasureCalculator::calculateToPt($xTo, $unit), MeasureCalculator::calculateToPt($yTo, $unit));
+        $this->stroke();
     }
 
     /**
@@ -436,6 +503,26 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
             $unit ?: config('pdf.measurement.unit', 'pt'),
             'pt'
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getElementPosition($infobox, $corner)
+    {
+        if ($this->info_matchbox($infobox, 1, 'exists') == 1) {
+            return $this->info_matchbox($infobox, 1, $corner);
+        } else {
+            throw new CoordinateException('Error: ' . $this->get_errmsg());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getElementSize($element, $dimension = 'width')
+    {
+        return $this->info_table($element, $dimension);
     }
 
     /**
@@ -510,7 +597,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         if (array_key_exists($imagePath, $this->imageCache)) {
             $image = $this->imageCache[$imagePath];
         } else {
-            $image                        = $this->load_image('auto', $imagePath, $loadOptions ?: '');
+            if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
+                // vector images
+                $image = $this->load_graphics('auto', $imagePath, $loadOptions ?: '');
+            } else {
+                // pixel images
+                $image = $this->load_image('auto', $imagePath, $loadOptions ?: '');
+            }
             $this->imageCache[$imagePath] = $image;
         }
 
@@ -519,5 +612,31 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         }
 
         return $image;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addTextflow($textflow, $title, $optlist = null)
+    {
+        $textflow = $this->add_textflow($textflow, $title, $optlist);
+
+        if ($textflow == 0) {
+            throw new TextException('Error: ' . $this->get_errmsg());
+        }
+
+        return $textflow;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newTable($items)
+    {
+        $table = new Table($this);
+
+        $table->setItems($items);
+
+        return $table;
     }
 }

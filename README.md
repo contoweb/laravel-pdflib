@@ -320,6 +320,31 @@ or as a parameter when using a font:
 $writer->useFont('OpenSans-Regular', 12, 'blue-cmyk');
 ```
 
+### Tables
+
+To write a table you can follow this example:
+
+```php
+		$items = [
+			['first_name' => 'John', 'last_name' => 'Doe'],
+			['first_name' => 'Jane','last_name' => 'Doe'],
+		];
+		
+		$table = $writer
+			->setPosition(10, 150)
+			->newTable($items);
+
+		$table
+			->addColumn(50)
+			->addColumn(50)
+			->withHeader(['First name', 'Last name'])
+			->place("stroke={ {line=horother linewidth=0}}")
+		;
+```
+
+
+```
+
 ### Images
 You can place images with:
 ```php

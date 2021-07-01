@@ -7,6 +7,7 @@ use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
+use Contoweb\Pdflib\WriterComponents\Table;
 
 interface PdfWriter
 {
@@ -37,6 +38,15 @@ interface PdfWriter
      * @throws MeasureException
      */
     public function newPage($width = 0, $height = 0, $optlist = null);
+
+    /**
+     * Get the document size of the choosen side.
+     * 'width' or 'height' are available as parameter.
+     *
+     * @param string $side
+     * @return int
+     */
+    public function getPageSize($side);
 
     /**
      * Load a PDF template.
@@ -83,6 +93,24 @@ interface PdfWriter
     public function useColor($name);
 
     /**
+     * Open a new table.
+     *
+     * @param array $items
+     * @return Table
+     */
+    public function newTable($items);
+
+    /**
+     * Add a textflow, to place it for e.g. in a table.
+     *
+     * @param string $textflow
+     * @param string $title
+     * @param string|null $optlist
+     * @return $this
+     */
+    public function addTextflow($textflow, $title, $optlist = null);
+
+    /**
      * Load fonts to use it with the writer.
      *
      * @param string $name
@@ -104,6 +132,13 @@ interface PdfWriter
      * @throws FontException
      */
     public function useFont($name, $size, $color = null);
+
+    /**
+     * Get defined writer fonts.
+     *
+     * @return array
+     */
+    public function getFonts();
 
     /**
      * Write fluent text.
@@ -131,13 +166,24 @@ interface PdfWriter
     public function nextLine($spacing = 1.0);
 
     /**
+     * Get the text width.
+     *
+     * @param string $text
+     * @param string $font
+     * @param int|float $fontSize
+     * @param null  $unit
+     * @return $this
+     */
+    public function getTextWidth($text, $font, $fontSize, $unit = null);
+
+    /**
      * Draw an image.
      *
-     * @param string $imagePath
-     * @param float $width
-     * @param float $height
-     * @param string|null $loadOptions
-     * @param string|null $fitOptions
+     * @param  string  $imagePath
+     * @param  float  $width
+     * @param  float  $height
+     * @param  string|null  $loadOptions
+     * @param  string|null  $fitOptions
      * @return $this
      * @throws ImageException
      */
@@ -153,6 +199,28 @@ interface PdfWriter
      * @throws ImageException
      */
     public function circleImage($imagePath, $size, $loadOptions = null);
+
+    /**
+     * Draw a rectangle shape.
+     *
+     * @param int $width
+     * @param int $height
+     * @return $this
+     */
+    public function drawRectangle($width, $height);
+
+    /**
+     * Draw a rectangled shaped.
+     *
+     * @param int $xFrom
+     * @param int $xTo
+     * @param int $yFrom
+     * @param int $yTo
+     * @param float $lineWidth
+     * @param string $unit
+     * @return $this
+     */
+    public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null);
 
     /**
      * Set the writer's position.
@@ -204,6 +272,24 @@ interface PdfWriter
      * @throws MeasureException
      */
     public function getYPosition($unit = null);
+
+    /**
+     * Get the position of an existing element.
+     *
+     * @param string $infobox
+     * @param string $corner
+     * @return $this
+     */
+    public function getElementPosition($infobox, $corner);
+
+    /**
+     * Get the size of an existing element.
+     *
+     * @param string $infobox
+     * @param string|null $corner
+     * @return $this
+     */
+    public function getElementSize($infobox, $corner);
 
     /**
      * Set X offset for preview.
