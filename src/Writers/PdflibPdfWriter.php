@@ -356,23 +356,21 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null)
     {
         $image = $this->preloadImage($imagePath, $loadOptions);
+
         if (strpos($imagePath, '.pdf') || strpos($imagePath, '.svg')) {
             // vector images
-            $this->fit_graphics(
-                $image,
-                MeasureCalculator::calculateToPt($this->xPos, 'pt'),
-                MeasureCalculator::calculateToPt($this->yPos, 'pt'),
-                $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
-            );
+            $fitObjectMethod = 'fit_graphics';
         } else {
             // pixel images
-            $this->fit_image(
-                $image,
-                MeasureCalculator::calculateToPt($this->xPos, 'pt'),
-                MeasureCalculator::calculateToPt($this->yPos, 'pt'),
-                $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
-            );
+            $fitObjectMethod = 'fit_image';
         }
+
+        $this->{$fitObjectMethod}(
+            $image,
+            MeasureCalculator::calculateToPt($this->xPos, 'pt'),
+            MeasureCalculator::calculateToPt($this->yPos, 'pt'),
+            $fitOptions ?: 'boxsize {' . MeasureCalculator::calculateToPt($width) . ' ' . MeasureCalculator::calculateToPt($height) . '} position left fitmethod=meet'
+        );
 
         return $this;
     }

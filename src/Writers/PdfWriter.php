@@ -179,12 +179,11 @@ interface PdfWriter
     /**
      * Draw an image.
      *
-     * @param string $imagePath
-     * @param float $width
-     * @param float $height
-     * @param string|null $loadOptions
-     * @param string|null $fitOptions
-     * @param bool|false $isVector
+     * @param  string  $imagePath
+     * @param  float  $width
+     * @param  float  $height
+     * @param  string|null  $loadOptions
+     * @param  string|null  $fitOptions
      * @return $this
      * @throws ImageException
      */
@@ -202,7 +201,7 @@ interface PdfWriter
     public function circleImage($imagePath, $size, $loadOptions = null);
 
     /**
-     * Draw a rectangled shaped.
+     * Draw a rectangle shape.
      *
      * @param int $width
      * @param int $height

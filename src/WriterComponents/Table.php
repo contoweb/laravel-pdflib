@@ -4,6 +4,7 @@ namespace Contoweb\Pdflib\WriterComponents;
 
 use Contoweb\Pdflib\Exceptions\TableException;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Contoweb\Pdflib\Writers\PdfWriter;
 
 class Table implements WriterComponent
@@ -138,8 +139,8 @@ class Table implements WriterComponent
      * Draw the given table.
      *
      * @param  string|null  $optlist
-     * @return $this
-     * @throws \Contoweb\Pdflib\Exceptions\MeasureException
+     * @return PdflibPdfWriter
+     * @throws \Contoweb\Pdflib\Exceptions\MeasureException|TableException
      */
     public function place($optlist = null)
     {
@@ -210,7 +211,7 @@ class Table implements WriterComponent
         $this->headers = [];
         $this->pdflibTable        = 0;
 
-        return $this;
+        return $this->writer;
     }
 
     /**
