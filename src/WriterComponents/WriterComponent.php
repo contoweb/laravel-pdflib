@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Contoweb\Pdflib\WriterComponents;
-
 
 use Contoweb\Pdflib\Writers\PdfWriter;
 

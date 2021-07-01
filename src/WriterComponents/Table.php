@@ -43,7 +43,7 @@ class Table implements WriterComponent
      */
     public function __construct(PdfWriter $writer)
     {
-        $this->writer = $writer;
+        $this->writer      = $writer;
         $this->pdflibTable = 0;
     }
 
@@ -206,9 +206,9 @@ class Table implements WriterComponent
         );
 
         // reset set table-data for next table
-        $this->items   = [];
-        $this->columns = [];
-        $this->headers = [];
+        $this->items              = [];
+        $this->columns            = [];
+        $this->headers            = [];
         $this->pdflibTable        = 0;
 
         return $this->writer;

@@ -2,7 +2,6 @@
 
 namespace Contoweb\Pdflib\Writers;
 
-use Contoweb\Pdflib\WriterComponents\Table;
 use Contoweb\Pdflib\Exceptions\ColorException;
 use Contoweb\Pdflib\Exceptions\CoordinateException;
 use Contoweb\Pdflib\Exceptions\DocumentException;
@@ -11,6 +10,7 @@ use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\TextException;
 use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
+use Contoweb\Pdflib\WriterComponents\Table;
 use Exception;
 use PDFlib;
 
