@@ -13,20 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        php: [
-          {
-            version: 7.2
-            pdflib: php-720
-          },
-          {
-            version: 7.3
-            pdflib: php-730
-          },
-          {
-            version: 7.4
-            pdflib: php-740
-          },
-        ]
+        php: [ {version: 7.2, pdflib: php-720}, {version: 7.3, pdflib: php-730}, {version: 7.4, pdflib: php-740} ]
         laravel: [8, 7, 6, 5.8]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
