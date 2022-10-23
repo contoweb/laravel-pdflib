@@ -3,7 +3,6 @@
 namespace Contoweb\Pdflib;
 
 use Contoweb\Pdflib\Commands\DocumentMakeCommand;
-use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Contoweb\Pdflib\Writers\PdfWriter;
 use Illuminate\Support\ServiceProvider;
@@ -25,8 +24,7 @@ class PdflibServiceProvider extends ServiceProvider
         $this->app->bind(PdfWriter::class, function () {
             return new PdflibPdfWriter(
                 config('pdf.license'),
-                config('pdf.creator', 'Laravel'),
-                FileManager::fontsDirectory()
+                config('pdf.creator', 'Laravel')
             );
         });
 

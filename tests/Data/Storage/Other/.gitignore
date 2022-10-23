@@ -1,2 +1,6 @@
 *
 !.gitignore
+!custom-font
+!custom-font/*
+!custom-template
+!custom-template/*

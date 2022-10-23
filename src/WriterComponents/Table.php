@@ -11,24 +11,28 @@ class Table implements WriterComponent
 {
     /**
      * Columns of a table.
+     *
      * @var array
      */
     protected $columns = [];
 
     /**
      * Headers of a table.
+     *
      * @var array
      */
     protected $headers = [];
 
     /**
      * Items of a table.
+     *
      * @var array
      */
     protected $items = [];
 
     /**
      * PDFlib's table variable.
+     *
      * @var array
      */
     private $pdflibTable;
@@ -65,6 +69,7 @@ class Table implements WriterComponent
      * @param  int|null  $fontSize
      * @param  string|null  $position
      * @return $this
+     *
      * @throws \Contoweb\Pdflib\Exceptions\MeasureException
      */
     public function withHeader($names, $font = null, $fontSize = null, $position = null)
@@ -95,6 +100,7 @@ class Table implements WriterComponent
      * @param  int|null  $fontSize
      * @param  int|string  $position
      * @return $this
+     *
      * @throws \Contoweb\Pdflib\Exceptions\MeasureException
      */
     public function addColumn($columnWidth, $unit = null, $font = null, $fontSize = null, $position = null)
@@ -122,6 +128,7 @@ class Table implements WriterComponent
      * @param  string|null  $name
      * @param  string|null  $optlist
      * @return $this
+     *
      * @throws TableException
      */
     public function addCell($table, $column, $row, $name, $optlist = null)
@@ -140,6 +147,7 @@ class Table implements WriterComponent
      *
      * @param  string|null  $optlist
      * @return PdflibPdfWriter
+     *
      * @throws \Contoweb\Pdflib\Exceptions\MeasureException|TableException
      */
     public function place($optlist = null)
@@ -224,6 +232,7 @@ class Table implements WriterComponent
      * @param  int  $upperRightY
      * @param  string  $optlist
      * @return string
+     *
      * @throws TableException
      */
     private function fitTable($table, $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY, $optlist)

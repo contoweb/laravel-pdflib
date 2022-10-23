@@ -21,8 +21,9 @@ class InvalidTemplatePreviewDocument implements FromTemplate, WithDraw, WithPrev
 
     /**
      * InvalidTemplatePreviewDocument constructor.
-     * @param string $xOffsetKey
-     * @param string $yOffsetKey
+     *
+     * @param  string  $xOffsetKey
+     * @param  string  $yOffsetKey
      */
     public function __construct($xOffsetKey, $yOffsetKey)
     {

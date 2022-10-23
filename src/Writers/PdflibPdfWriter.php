@@ -8,7 +8,6 @@ use Contoweb\Pdflib\Exceptions\DocumentException;
 use Contoweb\Pdflib\Exceptions\FontException;
 use Contoweb\Pdflib\Exceptions\ImageException;
 use Contoweb\Pdflib\Exceptions\TextException;
-use Contoweb\Pdflib\Files\FileManager;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Contoweb\Pdflib\WriterComponents\Table;
 use Exception;
@@ -18,78 +17,91 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 {
     /**
      * X position in pt.
+     *
      * @var float
      */
     public $xPos = 0;
 
     /**
      * Y position in pt.
+     *
      * @var float
      */
     public $yPos = 0;
 
     /**
      * Y offset for preview.
+     *
      * @var float
      */
     protected $xOffset;
 
     /**
      * X offset for preview.
+     *
      * @var float
      */
     protected $yOffset;
 
     /**
      * Use offsets.
+     *
      * @var float
      */
     protected $useOffset = false;
 
     /**
      * Loaded colors.
+     *
      * @var array
      */
     protected $colors = [];
 
     /**
      * Loaded fonts.
+     *
      * @var array
      */
     protected $fonts = [];
 
     /**
      * Already loaded images.
+     *
      * @var array
      */
     protected $imageCache = [];
 
     /**
      * Indicates if a new page is already created and the page should be closed before the next one starts.
+     *
      * @var bool
      */
     protected $siteOpen = false;
 
     /**
      * Path to the template.
+     *
      * @var string
      */
     protected $template;
 
     /**
      * Line offset in pt.
+     *
      * @var float
      */
     protected $lineOffset = 0;
 
     /**
      * Current font size.
+     *
      * @var
      */
     private $fontSize;
 
     /**
      * A table object.
+     *
      * @var Table
      */
     protected $table;
@@ -99,9 +111,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      *
      * @param $license
      * @param $creator
-     * @param $searchPath
      */
-    public function __construct($license, $creator, $searchPath)
+    public function __construct($license, $creator)
     {
         parent::__construct();
 
@@ -113,9 +124,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         $this->set_option('errorpolicy=return');
         $this->set_option('stringformat=utf8');
+    }
 
+    public function defineFontSearchPath($searchPath)
+    {
         $this->set_option('searchpath={' . $searchPath . '}');
-        // $this->writer->set_option("spotcolorlookup=" . $spotcolorlookup);
+
+        return $this;
     }
 
     /**
@@ -177,10 +192,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function loadTemplate($name, $path = null, $optlist = null)
+    public function loadTemplate($absolutPath, $optlist = null)
     {
         $this->template = $this->open_pdi_document(
-            $path ?: FileManager::templatePath($name),
+            $absolutPath,
             $optlist ?: ''
         );
 
@@ -589,6 +604,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      * @param $imagePath
      * @param $loadOptions
      * @return int
+     *
      * @throws ImageException
      */
     protected function preloadImage($imagePath, $loadOptions)

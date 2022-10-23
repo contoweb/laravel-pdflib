@@ -9,7 +9,7 @@ interface WithDraw
     /**
      * Draw the document.
      *
-     * @param PdfWriter $writer
+     * @param  PdfWriter  $writer
      */
     public function draw(PdfWriter $writer);
 

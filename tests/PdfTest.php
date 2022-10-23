@@ -2,10 +2,13 @@
 
 namespace Contoweb\Pdflib\Tests;
 
+use Contoweb\Pdflib\Exceptions\DifferentLocationException;
 use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Facades\Pdf as PdfFacade;
 use Contoweb\Pdflib\Pdf;
 use Contoweb\Pdflib\Tests\Data\Stubs\CustomColoredFontDocument;
+use Contoweb\Pdflib\Tests\Data\Stubs\DifferentLocationsDocument;
+use Contoweb\Pdflib\Tests\Data\Stubs\InvalidDifferentLocationsDocument;
 use Contoweb\Pdflib\Tests\Data\Stubs\InvalidTemplatePreviewDocument;
 use Contoweb\Pdflib\Tests\Data\Stubs\MinimalDocument;
 use Contoweb\Pdflib\Tests\Data\Stubs\TemplatePreviewDocument;
@@ -178,5 +181,36 @@ class PdfTest extends TestCase
 
         $this->assertInstanceOf(Pdf::class, $pdf);
         $this->assertFileExists($filePath);
+    }
+
+    /**
+     * @test
+     */
+    public function can_define_different_locations()
+    {
+        $document = new DifferentLocationsDocument();
+
+        $fileName = 'different-location-export-test.pdf';
+        $filePath = PathHelper::absolutePath($fileName, 'other');
+
+        $pdf = $this->pdf->store($document, $fileName);
+
+        $this->assertInstanceOf(Pdf::class, $pdf);
+        $this->assertFileExists($filePath);
+    }
+
+    /**
+     * @test
+     */
+    public function throws_exception_if_different_location_is_invalid()
+    {
+        // Todo: We only test different template location. Maybe testing different font location as well.
+        $document = new InvalidDifferentLocationsDocument();
+
+        $fileName = 'different-location-export-test.pdf';
+
+        $this->expectException(DifferentLocationException::class);
+
+        $this->pdf->store($document, $fileName);
     }
 }
