@@ -12,11 +12,13 @@ jobs:
 
     strategy:
       matrix:
-        php: [ {version: 7.2, pdflib: php-720}, {version: 7.3, pdflib: php-730}, {version: 7.4, pdflib: php-740} ]
-        laravel: [8, 7, 6, 5.8]
+        php: [ {version: 7.4, pdflib: php-740}, {version: 8.0, pdflib: php-800}, {version: 8.1, pdflib: php-810} ]
+        laravel: [9, 8, 7, 6, 5.8]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         include:
+          - laravel: 9
+            testbench: 7.*
           - laravel: 8
             testbench: 6.*
           - laravel: 7
@@ -25,6 +27,27 @@ jobs:
             testbench: 4.*
           - laravel: 5.8
             testbench: 3.8.*
+          exclude:
+            - laravel: 9
+              php: 7.4
+            - laravel: 9
+              php: 7.3
+            - laravel: 9
+              php: 7.2
+            - laravel: 8
+              php: 7.2
+            - laravel: 7
+              php: 8.0
+            - laravel: 7
+              php: 8.1
+            - laravel: 6
+              php: 8.0
+            - laravel: 6
+              php: 8.1
+            - laravel: 5.8
+              php: 8.0
+            - laravel: 5.8
+              php: 8.1
 
     name: PHP${{ matrix.php.version }} - L${{ matrix.laravel }}
 
@@ -49,14 +72,14 @@ jobs:
       - name: Download PDFlib PHP extension ZIP
         run: >-
           wget -q
-          https://www.pdflib.com/binaries/PDFlib/920/PDFlib-9.2.0-Linux-x86_64-php.tar.gz
+          https://www.pdflib.com/binaries/PDFlib/1001/PDFlib-10.0.1-Linux-x64-php.tar.gz
 
       - name: Unpack downloaded PDFlib PHP extension ZIP
         run: tar zxf PDFlib-9.2.0-Linux-x86_64-php.tar.gz
 
       - name: Copy PDFlib PHP extension to PHP extension directory
         run: >-
-          cp
+          sudo cp
           PDFlib-9.2.0-Linux-x86_64-php/bind/php/${{ matrix.php.pdflib }}/php_pdflib.so
           $(php-config --extension-dir)
 
