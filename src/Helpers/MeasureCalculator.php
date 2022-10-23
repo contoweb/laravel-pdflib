@@ -13,6 +13,7 @@ class MeasureCalculator
      * @param $measure
      * @param $unit
      * @return float
+     *
      * @throws MeasureException
      */
     public static function calculateToPt($measure, $unit = null)
@@ -24,6 +25,7 @@ class MeasureCalculator
      * @param $measure
      * @param $unit
      * @return float
+     *
      * @throws MeasureException
      */
     public static function calculateToMm($measure, $unit = null)
@@ -32,10 +34,11 @@ class MeasureCalculator
     }
 
     /**
-     * @param float $measure
-     * @param string $toUnit
-     * @param string|null $fromUnit
+     * @param  float  $measure
+     * @param  string  $toUnit
+     * @param  string|null  $fromUnit
      * @return float
+     *
      * @throws MeasureException
      */
     public static function calculateToUnit($measure, $toUnit, $fromUnit = null)

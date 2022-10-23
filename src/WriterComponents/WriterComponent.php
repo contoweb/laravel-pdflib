@@ -8,6 +8,7 @@ interface WriterComponent
 {
     /**
      * Component constructor.
+     *
      * @param  PdfWriter  $writer
      */
     public function __construct(PdfWriter $writer);
