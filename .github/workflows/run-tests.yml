@@ -80,7 +80,7 @@ jobs:
       - name: Copy PDFlib PHP extension to PHP extension directory
         run: >-
           sudo cp
-          PDFlib-10.0.1-Linux-x64-php.tar.gz/bind/php/${{ matrix.php.pdflib }}/php_pdflib.so
+          PDFlib-10.0.1-Linux-x64-php/bind/php/${{ matrix.php.pdflib }}/php_pdflib.so
           $(php-config --extension-dir)
 
       - name: Install dependencies
