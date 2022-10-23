@@ -28,11 +28,12 @@ class FileManager
      *
      * @param  string  $fileName
      * @return string
+     *
      * @throws DifferentLocationException
      */
     public function exportPath($fileName)
     {
-        if($this->document instanceof DifferentExportLocation) {
+        if ($this->document instanceof DifferentExportLocation) {
             $location = $this->document->exportLocation();
 
             return $this->absolutPathForDifferentLocation($location, $fileName);
@@ -50,11 +51,12 @@ class FileManager
      *
      * @param  string  $fileName
      * @return string
+     *
      * @throws DifferentLocationException
      */
     public function templatePath($fileName)
     {
-        if($this->document instanceof DifferentTemplateLocation) {
+        if ($this->document instanceof DifferentTemplateLocation) {
             $location = $this->document->templateLocation();
 
             return $this->absolutPathForDifferentLocation($location, $fileName);
@@ -73,13 +75,14 @@ class FileManager
      * @param $name
      * @param  string  $type
      * @return string
+     *
      * @throws DifferentLocationException
      */
     public function fontPath($name, $type = null)
     {
         $fileName = $name . '.' . ($type ?: 'ttf');
 
-        if($this->document instanceof DifferentFontsLocation) {
+        if ($this->document instanceof DifferentFontsLocation) {
             $location = $this->document->fontsLocation();
 
             return $this->absolutPathForDifferentLocation($location, $fileName);
@@ -96,11 +99,12 @@ class FileManager
      * Return the fonts location.
      *
      * @return string
+     *
      * @throws DifferentLocationException
      */
     public function fontsDirectory()
     {
-        if($this->document instanceof DifferentFontsLocation) {
+        if ($this->document instanceof DifferentFontsLocation) {
             $location = $this->document->fontsLocation();
 
             return $this->absolutPathForDifferentLocation($location, null);
@@ -115,14 +119,14 @@ class FileManager
     /**
      * Absolute path to the file.
      *
-     * @param string $disk
-     * @param string $prefix
-     * @param string|null $fileName
+     * @param  string  $disk
+     * @param  string  $prefix
+     * @param  string|null  $fileName
      * @return string
      */
     protected static function absolutePath($disk, $prefix, $fileName = null)
     {
-        if($prefix === null){
+        if ($prefix === null) {
             $prefix = '';
         }
 
@@ -141,13 +145,14 @@ class FileManager
      * @param $location
      * @param $fileName
      * @return string
+     *
      * @throws DifferentLocationException
      */
     protected function absolutPathForDifferentLocation($location, $fileName)
     {
         if (
-            array_key_exists("disk", $location) === false ||
-            array_key_exists("path", $location) === false
+            array_key_exists('disk', $location) === false ||
+            array_key_exists('path', $location) === false
         ) {
             throw new DifferentLocationException('Invalid different location parameters provided.');
         }

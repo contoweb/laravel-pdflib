@@ -35,9 +35,10 @@ class Pdf
     }
 
     /**
-     * @param WithDraw $document
-     * @param string $fileName
+     * @param  WithDraw  $document
+     * @param  string  $fileName
      * @return Pdf
+     *
      * @throws Exception
      */
     public function store(WithDraw $document, $fileName)
@@ -66,8 +67,9 @@ class Pdf
 //    }
 
     /**
-     * @param string|null $fileName
+     * @param  string|null  $fileName
      * @return bool
+     *
      * @throws MeasureException
      */
     public function withPreview($fileName = null)
@@ -108,6 +110,7 @@ class Pdf
      * Creates the pdf document(s).
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function create()

@@ -6,7 +6,6 @@ use Contoweb\Pdflib\Concerns\DifferentExportLocation;
 use Contoweb\Pdflib\Concerns\DifferentFontsLocation;
 use Contoweb\Pdflib\Concerns\DifferentTemplateLocation;
 use Contoweb\Pdflib\Concerns\FromTemplate;
-use Contoweb\Pdflib\Concerns\WithColors;
 use Contoweb\Pdflib\Concerns\WithDraw;
 use Contoweb\Pdflib\Writers\PdfWriter;
 

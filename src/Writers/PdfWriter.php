@@ -22,9 +22,10 @@ interface PdfWriter
     /**
      * Begin a new PDFLib document.
      *
-     * @param string $path
-     * @param string|null $optlist
+     * @param  string  $path
+     * @param  string|null  $optlist
      * @return bool
+     *
      * @throws DocumentException
      */
     public function beginDocument($path, $optlist = null);
@@ -39,10 +40,11 @@ interface PdfWriter
     /**
      * Start a new document page.
      *
-     * @param int $width
-     * @param int $height
-     * @param null $optlist
+     * @param  int  $width
+     * @param  int  $height
+     * @param  null  $optlist
      * @return $this
+     *
      * @throws MeasureException
      */
     public function newPage($width = 0, $height = 0, $optlist = null);
@@ -51,7 +53,7 @@ interface PdfWriter
      * Get the document size of the choosen side.
      * 'width' or 'height' are available as parameter.
      *
-     * @param string $side
+     * @param  string  $side
      * @return int
      */
     public function getPageSize($side);
@@ -59,9 +61,10 @@ interface PdfWriter
     /**
      * Load a PDF template.
      *
-     * @param string $absolutPath
-     * @param null $optlist
+     * @param  string  $absolutPath
+     * @param  null  $optlist
      * @return bool
+     *
      * @throws DocumentException
      */
     public function loadTemplate($absolutPath, $optlist = null);
@@ -84,8 +87,8 @@ interface PdfWriter
     /**
      * Load fonts to use it with the writer.
      *
-     * @param string $name
-     * @param array $color
+     * @param  string  $name
+     * @param  array  $color
      * @return $this
      */
     public function loadColor($name, array $color);
@@ -93,8 +96,9 @@ interface PdfWriter
     /**
      * Use a defined color.
      *
-     * @param string $name
+     * @param  string  $name
      * @return $this
+     *
      * @throws ColorException
      */
     public function useColor($name);
@@ -102,7 +106,7 @@ interface PdfWriter
     /**
      * Open a new table.
      *
-     * @param array $items
+     * @param  array  $items
      * @return Table
      */
     public function newTable($items);
@@ -110,9 +114,9 @@ interface PdfWriter
     /**
      * Add a textflow, to place it for e.g. in a table.
      *
-     * @param string $textflow
-     * @param string $title
-     * @param string|null $optlist
+     * @param  string  $textflow
+     * @param  string  $title
+     * @param  string|null  $optlist
      * @return $this
      */
     public function addTextflow($textflow, $title, $optlist = null);
@@ -120,10 +124,11 @@ interface PdfWriter
     /**
      * Load fonts to use it with the writer.
      *
-     * @param string $name
-     * @param string|null $encoding
-     * @param string|null $optlist
+     * @param  string  $name
+     * @param  string|null  $encoding
+     * @param  string|null  $optlist
      * @return $this
+     *
      * @throws FontException
      */
     public function loadFont($name, $encoding = null, $optlist = null);
@@ -131,10 +136,11 @@ interface PdfWriter
     /**
      * Use a font for writing.
      *
-     * @param string $name
-     * @param float $size in pt
+     * @param  string  $name
+     * @param  float  $size  in pt
      * @param string]null $color
      * @return $this
+     *
      * @throws ColorException
      * @throws FontException
      */
@@ -150,7 +156,7 @@ interface PdfWriter
     /**
      * Write fluent text.
      *
-     * @param string $text
+     * @param  string  $text
      * @return $this
      */
     public function writeText($text);
@@ -159,7 +165,7 @@ interface PdfWriter
      * Write a line of text.
      *
      * @param $text
-     * @param string|null $optlist
+     * @param  string|null  $optlist
      * @return $this
      */
     public function writeTextLine($text, $optlist = null);
@@ -167,7 +173,7 @@ interface PdfWriter
     /**
      * Go to the next line.
      *
-     * @param float $spacing
+     * @param  float  $spacing
      * @return $this
      */
     public function nextLine($spacing = 1.0);
@@ -175,10 +181,10 @@ interface PdfWriter
     /**
      * Get the text width.
      *
-     * @param string $text
-     * @param string $font
-     * @param int|float $fontSize
-     * @param null  $unit
+     * @param  string  $text
+     * @param  string  $font
+     * @param  int|float  $fontSize
+     * @param  null  $unit
      * @return $this
      */
     public function getTextWidth($text, $font, $fontSize, $unit = null);
@@ -192,6 +198,7 @@ interface PdfWriter
      * @param  string|null  $loadOptions
      * @param  string|null  $fitOptions
      * @return $this
+     *
      * @throws ImageException
      */
     public function drawImage($imagePath, $width, $height, $loadOptions = null, $fitOptions = null);
@@ -199,10 +206,11 @@ interface PdfWriter
     /**
      * Draw a round image.
      *
-     * @param string $imagePath
-     * @param float $size
-     * @param string|null $loadOptions
+     * @param  string  $imagePath
+     * @param  float  $size
+     * @param  string|null  $loadOptions
      * @return $this
+     *
      * @throws ImageException
      */
     public function circleImage($imagePath, $size, $loadOptions = null);
@@ -210,8 +218,8 @@ interface PdfWriter
     /**
      * Draw a rectangle shape.
      *
-     * @param int $width
-     * @param int $height
+     * @param  int  $width
+     * @param  int  $height
      * @return $this
      */
     public function drawRectangle($width, $height);
@@ -219,12 +227,12 @@ interface PdfWriter
     /**
      * Draw a rectangled shaped.
      *
-     * @param int $xFrom
-     * @param int $xTo
-     * @param int $yFrom
-     * @param int $yTo
-     * @param float $lineWidth
-     * @param string $unit
+     * @param  int  $xFrom
+     * @param  int  $xTo
+     * @param  int  $yFrom
+     * @param  int  $yTo
+     * @param  float  $lineWidth
+     * @param  string  $unit
      * @return $this
      */
     public function drawLine($xFrom, $xTo, $yFrom, $yTo, $lineWidth = 0.3, $unit = null);
@@ -234,8 +242,9 @@ interface PdfWriter
      *
      * @param $x
      * @param $y
-     * @param null $unit
+     * @param  null  $unit
      * @return $this
+     *
      * @throws MeasureException
      */
     public function setPosition($x, $y, $unit = null);
@@ -244,9 +253,10 @@ interface PdfWriter
      * Set X position of the writer.
      *
      * @param $measure
-     * @param string $unit
+     * @param  string  $unit
      * @param $ignoreOffset
      * @return $this
+     *
      * @throws MeasureException
      */
     public function setXPosition($measure, $unit = null, $ignoreOffset = false);
@@ -254,8 +264,9 @@ interface PdfWriter
     /**
      * Get the cursor's X position.
      *
-     * @param string|null $unit
+     * @param  string|null  $unit
      * @return float
+     *
      * @throws MeasureException
      */
     public function getXPosition($unit = null);
@@ -263,10 +274,11 @@ interface PdfWriter
     /**
      * Set Y position of the writer.
      *
-     * @param float $measure
-     * @param string $unit
-     * @param bool $ignoreOffset
+     * @param  float  $measure
+     * @param  string  $unit
+     * @param  bool  $ignoreOffset
      * @return $this
+     *
      * @throws MeasureException
      */
     public function setYPosition($measure, $unit = null, $ignoreOffset = false);
@@ -274,8 +286,9 @@ interface PdfWriter
     /**
      * Get the cursor's Y position.
      *
-     * @param string|null $unit
+     * @param  string|null  $unit
      * @return float
+     *
      * @throws MeasureException
      */
     public function getYPosition($unit = null);
@@ -283,8 +296,8 @@ interface PdfWriter
     /**
      * Get the position of an existing element.
      *
-     * @param string $infobox
-     * @param string $corner
+     * @param  string  $infobox
+     * @param  string  $corner
      * @return $this
      */
     public function getElementPosition($infobox, $corner);
@@ -292,8 +305,8 @@ interface PdfWriter
     /**
      * Get the size of an existing element.
      *
-     * @param string $infobox
-     * @param string|null $corner
+     * @param  string  $infobox
+     * @param  string|null  $corner
      * @return $this
      */
     public function getElementSize($infobox, $corner);
@@ -302,8 +315,9 @@ interface PdfWriter
      * Set X offset for preview.
      *
      * @param $measure
-     * @param string $unit
+     * @param  string  $unit
      * @return $this
+     *
      * @throws MeasureException
      */
     public function setXOffset($measure, $unit = null);
@@ -312,8 +326,9 @@ interface PdfWriter
      * Set Y offset for preview.
      *
      * @param $measure
-     * @param string $unit
+     * @param  string  $unit
      * @return $this
+     *
      * @throws MeasureException
      */
     public function setYOffset($measure, $unit = null);
