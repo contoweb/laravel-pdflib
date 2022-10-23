@@ -26,6 +26,7 @@ If you want to bring it into production, you need a PDFlib license.
 	    - [Colors](#colors)
 	- [Images](#images)
 	- [PDFlib functions](#pdflib-functions)
+* [Customization](#customization)
 * [License](#license)
 
 ## Requirements
@@ -366,6 +367,42 @@ This package is just a basic beginning of wrapping PDFlib.
 Since PDFlib brings so much more functionality, we have to put the focus on the most used functions in the beginning.
 
 You're welcome to PR your ideas!
+
+## Customization
+If you want to use a filesystem disk / path other than the config in a specific document, 
+you can use the following concerns:
+
+- `Contoweb\Pdflib\Concerns\DifferentExportLocation`: Custom export location
+- `Contoweb\Pdflib\Concerns\DifferentFontsLocation`: Custom location for fonts
+- `Contoweb\Pdflib\Concerns\DifferentTemplateLocation`: Custom template location
+
+The storage and path are defined the same way as in the config file: 
+
+```php
+public function exportLocation(): array
+{
+	return [
+		'disk' => 'other',
+		'path' => null,
+	];
+}
+
+public function fontsLocation(): array
+{
+	return [
+		'disk' => 'other',
+		'path' => 'custom-font-directory',
+	];
+}
+
+public function templateLocation(): array
+{
+	return [
+		'disk' => 'other',
+		'path' => 'custom-template-directory',
+	];
+}
+```
 
 ## License
 
