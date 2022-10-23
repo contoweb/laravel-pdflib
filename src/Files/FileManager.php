@@ -75,6 +75,10 @@ class FileManager
      */
     protected static function absolutePath($disk, $prefix, $fileName = null)
     {
+        if($prefix === null){
+            $prefix = '';
+        }
+
         $path = Storage::disk($disk)->path($prefix);
 
         if ($prefix !== '') {
