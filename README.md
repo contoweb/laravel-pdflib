@@ -1,5 +1,5 @@
 ## Laravel PDFlib
-[![TravisCI](https://travis-ci.org/contoweb/laravel-pdflib.svg?branch=master)](https://travis-ci.org/contoweb/laravel-pdflib.svg?branch=master)
+[![Run tests](https://github.com/contoweb/laravel-pdflib/actions/workflows/run-tests.yml/badge.svg)](https://github.com/contoweb/laravel-pdflib/actions/workflows/run-tests.yml)
 [![StyleCI](https://github.styleci.io/repos/210450435/shield?branch=master)](https://github.styleci.io/repos/210450435)
 [![Latest Stable Version](https://poser.pugx.org/contoweb/laravel-pdflib/v/stable)](https://packagist.org/packages/contoweb/laravel-pdflib)
 [![License](https://poser.pugx.org/contoweb/laravel-pdflib/license)](https://packagist.org/packages/contoweb/laravel-pdflib)

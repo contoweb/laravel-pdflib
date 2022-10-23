@@ -1,0 +1,86 @@
+name: Run tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php: [ {version: 7.4, pdflib: php-740}, {version: 8.0, pdflib: php-800}, {version: 8.1, pdflib: php-810} ]
+        laravel: [9, 8, 7, 6, 5.8]
+        dependency-version: [prefer-stable]
+        os: [ubuntu-latest]
+        include:
+          - laravel: 9
+            testbench: 7.*
+          - laravel: 8
+            testbench: 6.*
+          - laravel: 7
+            testbench: 5.*
+          - laravel: 6
+            testbench: 4.*
+          - laravel: 5.8
+            testbench: 3.8.*
+        exclude:
+          - laravel: 9
+            php: {version: 7.4, pdflib: php-740}
+          - laravel: 7
+            php: {version: 8.0, pdflib: php-800}
+          - laravel: 7
+            php: {version: 8.1, pdflib: php-810}
+          - laravel: 6
+            php: {version: 8.0, pdflib: php-800}
+          - laravel: 6
+            php: {version: 8.1, pdflib: php-810}
+          - laravel: 5.8
+            php: {version: 8.0, pdflib: php-800}
+          - laravel: 5.8
+            php: {version: 8.1, pdflib: php-810}
+
+    name: PHP${{ matrix.php.version }} - L${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependency-cache-laravel-${{ matrix.laravel }}-php-${{ matrix.php.version }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php.version }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, mysql, pdo_mysql, bcmath, intl, gd, exif, iconv
+          ini-values: extension=php_pdflib.so
+          coverage: none
+
+      - name: Download PDFlib PHP extension ZIP
+        run: >-
+          wget -q
+          https://www.pdflib.com/binaries/PDFlib/1001/PDFlib-10.0.1-Linux-x64-php.tar.gz
+
+      - name: Unpack downloaded PDFlib PHP extension ZIP
+        run: tar zxf PDFlib-10.0.1-Linux-x64-php.tar.gz
+
+      - name: Copy PDFlib PHP extension to PHP extension directory
+        run: >-
+          sudo cp
+          PDFlib-10.0.1-Linux-x64-php/bind/php/${{ matrix.php.pdflib }}-nts/php_pdflib.so
+          $(php-config --extension-dir)
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}"  --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --testdox --configuration phpunit.xml.dist
