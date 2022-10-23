@@ -75,12 +75,12 @@ jobs:
           https://www.pdflib.com/binaries/PDFlib/1001/PDFlib-10.0.1-Linux-x64-php.tar.gz
 
       - name: Unpack downloaded PDFlib PHP extension ZIP
-        run: tar zxf PDFlib-9.2.0-Linux-x86_64-php.tar.gz
+        run: tar zxf PDFlib-10.0.1-Linux-x64-php.tar.gz
 
       - name: Copy PDFlib PHP extension to PHP extension directory
         run: >-
           sudo cp
-          PDFlib-9.2.0-Linux-x86_64-php/bind/php/${{ matrix.php.pdflib }}/php_pdflib.so
+          PDFlib-10.0.1-Linux-x64-php.tar.gz/bind/php/${{ matrix.php.pdflib }}/php_pdflib.so
           $(php-config --extension-dir)
 
       - name: Install dependencies
