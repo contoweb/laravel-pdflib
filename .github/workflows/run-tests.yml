@@ -29,25 +29,25 @@ jobs:
             testbench: 3.8.*
         exclude:
           - laravel: 9
-            php: 7.4
+            php.version: 7.4
           - laravel: 9
-            php: 7.3
+            php.version: 7.3
           - laravel: 9
-            php: 7.2
+            php.version: 7.2
           - laravel: 8
-            php: 7.2
+            php.version: 7.2
           - laravel: 7
-            php: 8.0
+            php.version: 8.0
           - laravel: 7
-            php: 8.1
+            php.version: 8.1
           - laravel: 6
-            php: 8.0
+            php.version: 8.0
           - laravel: 6
-            php: 8.1
+            php.version: 8.1
           - laravel: 5.8
-            php: 8.0
+            php.version: 8.0
           - laravel: 5.8
-            php: 8.1
+            php.version: 8.1
 
     name: PHP${{ matrix.php.version }} - L${{ matrix.laravel }}
 
