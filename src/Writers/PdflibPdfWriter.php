@@ -99,9 +99,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      *
      * @param $license
      * @param $creator
-     * @param $searchPath
      */
-    public function __construct($license, $creator, $searchPath)
+    public function __construct($license, $creator)
     {
         parent::__construct();
 
@@ -113,9 +112,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         $this->set_option('errorpolicy=return');
         $this->set_option('stringformat=utf8');
+    }
 
+    public function defineFontSearchPath($searchPath)
+    {
         $this->set_option('searchpath={' . $searchPath . '}');
-        // $this->writer->set_option("spotcolorlookup=" . $spotcolorlookup);
+
+        return $this;
     }
 
     /**
@@ -177,10 +180,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function loadTemplate($name, $path = null, $optlist = null)
+    public function loadTemplate($absolutPath, $optlist = null)
     {
         $this->template = $this->open_pdi_document(
-            $path ?: FileManager::templatePath($name),
+            $absolutPath,
             $optlist ?: ''
         );
 

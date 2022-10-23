@@ -112,7 +112,11 @@ class Pdf
      */
     public function create()
     {
-        $this->writer->beginDocument(FileManager::exportPath($this->fileName));
+        $fileManager = new FileManager($this->document);
+
+        $this->writer->defineFontSearchPath($fileManager->fontsDirectory());
+
+        $this->writer->beginDocument($fileManager->exportPath($this->fileName));
 
         if ($this->document instanceof FromTemplate) {
             $template = null;
@@ -127,14 +131,12 @@ class Pdf
                 }
             }
 
-            $this->writer->loadTemplate($template);
+            $this->writer->loadTemplate($fileManager->templatePath($template));
         }
 
         if ($this->document instanceof WithColors) {
-            if ($this->document instanceof WithColors) {
-                foreach ($this->document->colors() as $name => $color) {
-                    $this->writer->loadColor($name, $color);
-                }
+            foreach ($this->document->colors() as $name => $color) {
+                $this->writer->loadColor($name, $color);
             }
         }
 
