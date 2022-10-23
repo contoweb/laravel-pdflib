@@ -29,25 +29,19 @@ jobs:
             testbench: 3.8.*
         exclude:
           - laravel: 9
-            php.version: 7.4
-          - laravel: 9
-            php.version: 7.3
-          - laravel: 9
-            php.version: 7.2
-          - laravel: 8
-            php.version: 7.2
+            php: {version: 7.4, pdflib: php-740}
           - laravel: 7
-            php.version: 8.0
+            php: {version: 8.0, pdflib: php-800}
           - laravel: 7
-            php.version: 8.1
+            php: {version: 8.1, pdflib: php-810}
           - laravel: 6
-            php.version: 8.0
+            php: {version: 8.0, pdflib: php-800}
           - laravel: 6
-            php.version: 8.1
+            php: {version: 8.1, pdflib: php-810}
           - laravel: 5.8
-            php.version: 8.0
+            php: {version: 8.0, pdflib: php-800}
           - laravel: 5.8
-            php.version: 8.1
+            php: {version: 8.1, pdflib: php-810}
 
     name: PHP${{ matrix.php.version }} - L${{ matrix.laravel }}
 
