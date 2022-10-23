@@ -98,7 +98,9 @@ class PdfWriterTest extends TestCase
      */
     public function able_to_use_template()
     {
-        $this->assertTrue($this->writer->loadTemplate('template.pdf'));
+        $templatePath = PathHelper::absolutePath('template.pdf', 'local', 'templates', false);
+
+        $this->assertTrue($this->writer->loadTemplate($templatePath));
 
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage()->fromTemplatePage(1);
@@ -138,7 +140,7 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
-        $this->writer->loadFont('OpenSans-Regular');
+        $this->loadTestFont();
 
         $this->assertInstanceOf(PdfWriter::class, $this->writer->useFont('OpenSans-Regular', 12));
 
@@ -201,7 +203,7 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
-        $this->writer->loadFont('OpenSans-Regular');
+        $this->loadTestFont();
 
         $this->writer->loadColor('blue', [
             'cmyk',
@@ -291,6 +293,8 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
+        $this->loadTestFont();
+
         $this->writer->loadFont('OpenSans-Regular');
         $this->writer->useFont('OpenSans-Regular', $fontSize);
 
@@ -316,7 +320,8 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
-        $this->writer->loadFont('OpenSans-Regular');
+        $this->loadTestFont();
+
         $this->writer->useFont('OpenSans-Regular', $fontSize);
 
         $this->writer->setYPosition($startPosition);
@@ -370,7 +375,9 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
-        $this->writer->loadFont('OpenSans-Regular')->useFont('OpenSans-Regular', 12);
+        $this->loadTestFont();
+
+        $this->writer->useFont('OpenSans-Regular', 12);
 
         $this->assertInstanceOf(
             PdfWriter::class,
@@ -388,7 +395,9 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($this->fullPath);
         $this->writer->newPage();
 
-        $this->writer->loadFont('OpenSans-Regular')->useFont('OpenSans-Regular', 12);
+        $this->loadTestFont();
+
+        $this->writer->useFont('OpenSans-Regular', 12);
 
         $this->assertInstanceOf(
             PdfWriter::class,
@@ -408,7 +417,16 @@ class PdfWriterTest extends TestCase
 
         $this->assertInstanceOf(
             PdfWriter::class,
-            $this->writer->drawImage(PathHelper::absolutePath('example.jpeg', 'local', 'images', false), 100, 100)
+            $this->writer->drawImage(
+                PathHelper::absolutePath(
+                    'example.jpeg',
+                    'local',
+                    'images',
+                    false
+                ),
+                100,
+                100
+            )
         );
 
         /* Todo: Assert that the image is really placed in the document */
@@ -424,7 +442,15 @@ class PdfWriterTest extends TestCase
 
         $this->assertInstanceOf(
             PdfWriter::class,
-            $this->writer->circleImage(PathHelper::absolutePath('example.jpeg', 'local', 'images', false), 100)
+            $this->writer->circleImage(
+                PathHelper::absolutePath(
+                    'example.jpeg',
+                    'local',
+                    'images',
+                    false
+                ),
+                100
+            )
         );
 
         /* Todo: Assert that the image is really placed in the document */
@@ -484,5 +510,19 @@ class PdfWriterTest extends TestCase
         $size2 = filesize($file2);
 
         $this->assertLessThan(2, $size2 / $size1);
+    }
+
+    /**
+     * Set font search path and load a test font.
+     *
+     * @throws FontException
+     */
+    private function loadTestFont()
+    {
+        $fontPath = PathHelper::absolutePath('', 'local', 'fonts', false);
+
+        $this->writer->defineFontSearchPath($fontPath);
+
+        $this->writer->loadFont('OpenSans-Regular');
     }
 }

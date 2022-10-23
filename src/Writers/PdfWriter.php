@@ -12,6 +12,14 @@ use Contoweb\Pdflib\WriterComponents\Table;
 interface PdfWriter
 {
     /**
+     * Define the search path for fonts.
+     *
+     * @param $searchPath
+     * @return $this
+     */
+    public function defineFontSearchPath($searchPath);
+
+    /**
      * Begin a new PDFLib document.
      *
      * @param string $path
@@ -51,13 +59,12 @@ interface PdfWriter
     /**
      * Load a PDF template.
      *
-     * @param string $name
-     * @param string|null $path
+     * @param string $absolutPath
      * @param null $optlist
      * @return bool
      * @throws DocumentException
      */
-    public function loadTemplate($name, $path = null, $optlist = null);
+    public function loadTemplate($absolutPath, $optlist = null);
 
     /**
      * Copy a template page into the current document.
