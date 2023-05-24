@@ -32,6 +32,8 @@ jobs:
         exclude:
           - laravel: 10
             php: { version: 7.4, pdflib: php-740 }
+          - laravel: 10
+            php: { version: 8.0, pdflib: php-800 }
           - laravel: 9
             php: {version: 7.4, pdflib: php-740}
           - laravel: 7
