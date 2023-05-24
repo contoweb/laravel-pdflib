@@ -37,7 +37,9 @@ If you need further assistance installing PDFlib, check out the [installation gu
 
 You also need:
 * PHP: `^7.0`
-* Laravel: `^6.0`
+* Laravel: `^5.8`
+
+Please note that only supported Laravel versions are covered by test workflow!
 
 ## Installation
 
