@@ -12,11 +12,13 @@ jobs:
 
     strategy:
       matrix:
-        php: [ {version: 7.4, pdflib: php-740}, {version: 8.0, pdflib: php-800}, {version: 8.1, pdflib: php-810} ]
-        laravel: [9, 8, 7, 6, 5.8]
+        php: [ {version: 7.4, pdflib: php-740}, {version: 8.0, pdflib: php-800}, {version: 8.1, pdflib: php-810}, {version: 8.2, pdflib: php-820} ]
+        laravel: [10, 9, 8, 7, 6, 5.8]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         include:
+          - laravel: 10
+            testbench: 8.*
           - laravel: 9
             testbench: 7.*
           - laravel: 8
@@ -28,6 +30,8 @@ jobs:
           - laravel: 5.8
             testbench: 3.8.*
         exclude:
+          - laravel: 10
+            php: { version: 7.4, pdflib: php-740 }
           - laravel: 9
             php: {version: 7.4, pdflib: php-740}
           - laravel: 7
