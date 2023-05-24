@@ -33,7 +33,7 @@ class PdfTest extends TestCase
         $fileName = 'test.pdf';
         $filePath = PathHelper::absolutePath($fileName, 'local');
 
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
 
         $pdf = PdfFacade::store($document, $fileName);
 
@@ -50,7 +50,7 @@ class PdfTest extends TestCase
         $fileName = 'test.pdf';
         $filePath = PathHelper::absolutePath($fileName, 'local', 'subdirectory');
 
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
 
         $this->app['config']->set('pdf.exports.disk', 'local');
         $this->app['config']->set('pdf.exports.path', 'subdirectory');
@@ -70,7 +70,7 @@ class PdfTest extends TestCase
         $fileName = 'test.pdf';
         $filePath = PathHelper::absolutePath($fileName, 'other');
 
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
 
         $this->app['config']->set('pdf.exports.disk', 'other');
         $this->app['config']->set('pdf.exports.path');
@@ -90,7 +90,7 @@ class PdfTest extends TestCase
         $fileName = 'test.pdf';
         $filePath = PathHelper::absolutePath($fileName, 'local', 'subdirectory');
 
-        $this->assertFileNotExists($filePath);
+        $this->assertFileDoesNotExist($filePath);
 
         $this->app['config']->set('pdf.exports.path', 'subdirectory');
 
