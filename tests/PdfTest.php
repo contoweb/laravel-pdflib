@@ -13,6 +13,7 @@ use Contoweb\Pdflib\Tests\Data\Stubs\InvalidTemplatePreviewDocument;
 use Contoweb\Pdflib\Tests\Data\Stubs\MinimalDocument;
 use Contoweb\Pdflib\Tests\Data\Stubs\TemplatePreviewDocument;
 use Contoweb\Pdflib\Tests\Files\PathHelper;
+use PHPUnit\Framework\Attributes\Test;
 
 class PdfTest extends TestCase
 {
@@ -24,9 +25,7 @@ class PdfTest extends TestCase
         $this->pdf = $this->app->make(Pdf::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_store_a_pdf_document_local_with_facade()
     {
         $document = new MinimalDocument();
@@ -41,9 +40,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_store_pdf_in_config_export_local_disk()
     {
         $document = new MinimalDocument();
@@ -61,9 +58,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_store_pdf_in_config_export_other_disk()
     {
         $document = new MinimalDocument();
@@ -81,9 +76,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_store_pdf_in_config_export_disk_with_path()
     {
         $document = new MinimalDocument();
@@ -100,9 +93,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function creates_preview_pdf_when_enabled()
     {
         $document        = new TemplatePreviewDocument();
@@ -117,9 +108,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePathPreview);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_create_preview_pdf_with_own_name()
     {
         $document = new TemplatePreviewDocument();
@@ -135,9 +124,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePathPreview);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_exception_when_preview_x_offset_is_invalid()
     {
         $fileName        = 'test.pdf';
@@ -151,9 +138,7 @@ class PdfTest extends TestCase
         $this->pdf->store($document, $fileName)->withPreview($fileNamePreview);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_exception_when_preview_y_offset_is_invalid()
     {
         $fileName        = 'test.pdf';
@@ -167,9 +152,7 @@ class PdfTest extends TestCase
         $this->pdf->store($document, $fileName)->withPreview($fileNamePreview);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_use_custom_fonts_and_color()
     {
         $document = new CustomColoredFontDocument();
@@ -183,9 +166,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_define_different_locations()
     {
         $document = new DifferentLocationsDocument();
@@ -199,9 +180,7 @@ class PdfTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_exception_if_different_location_is_invalid()
     {
         // Todo: We only test different template location. Maybe testing different font location as well.
