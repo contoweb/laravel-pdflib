@@ -85,7 +85,7 @@ interface PdfWriter
     public function closeTemplate();
 
     /**
-     * Load fonts to use it with the writer.
+     * Load colors to use it with the writer.
      *
      * @param  string  $name
      * @param  array  $color
@@ -346,18 +346,4 @@ interface PdfWriter
      * @return $this
      */
     public function disableOffset();
-
-    /**
-     * Checks if it writes the original PDF.
-     *
-     * @return mixed
-     */
-    public function inOriginal();
-
-    /**
-     * Checks if it writes the preview PDF.
-     *
-     * @return mixed
-     */
-    public function inPreview();
 }

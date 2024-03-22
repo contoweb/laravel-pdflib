@@ -44,11 +44,11 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     protected $yOffset;
 
     /**
-     * Use offsets.
+     * Use offsets in positioning.
      *
      * @var float
      */
-    protected $useOffset = false;
+    private $useOffset = false;
 
     /**
      * Loaded colors.
@@ -95,9 +95,9 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * Current font size.
      *
-     * @var
+     * @var integer
      */
-    private $fontSize;
+    protected $fontSize;
 
     /**
      * A table object.
@@ -128,7 +128,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
     public function defineFontSearchPath($searchPath)
     {
-        $this->set_option('searchpath={' . $searchPath . '}');
+        $this->set_option('searchpath={' . trim($searchPath, DIRECTORY_SEPARATOR) . '}');
 
         return $this;
     }
@@ -297,13 +297,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function useFont($name, $size, $color = null)
     {
-        $this->fontSize = $size;
-
         if (array_key_exists($name, $this->fonts)) {
             $this->setfont($this->fonts[$name], $size);
         } else {
             throw new FontException('Font "' . $name . '" not loaded.');
         }
+
+        $this->fontSize = $size;
 
         if ($color) {
             $this->useColor($color);
@@ -334,7 +334,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function writeTextLine($text, $optlist = null)
+    public function writeTextLine($text, $optlist = '')
     {
         $this->fit_textline($text, $this->xPos, $this->yPos, $optlist);
 
@@ -545,7 +545,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setXOffset($measure, $unit = null)
     {
-        $measure       = MeasureCalculator::calculateToPt($measure, $unit);
+        $measure = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
         $this->xOffset = $measure;
 
         return $this;
@@ -556,7 +556,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setYOffset($measure, $unit = null)
     {
-        $measure       = MeasureCalculator::calculateToPt($measure, $unit);
+        $measure = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
         $this->yOffset = $measure;
 
         return $this;
@@ -580,22 +580,6 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->useOffset = false;
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function inOriginal()
-    {
-        return ! $this->useOffset;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function inPreview()
-    {
-        return $this->useOffset;
     }
 
     /**

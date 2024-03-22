@@ -29,6 +29,11 @@ class Pdf
      */
     private $fileName;
 
+    /**
+     * @var bool
+     */
+    private $previewMode = false;
+
     public function __construct(PdfWriter $writer)
     {
         $this->writer = $writer;
@@ -41,7 +46,7 @@ class Pdf
      *
      * @throws Exception
      */
-    public function store(WithDraw $document, $fileName)
+    public function store(WithDraw $document, string $fileName): Pdf
     {
         $this->document = $document;
         $this->fileName = $fileName;
@@ -68,42 +73,38 @@ class Pdf
 
     /**
      * @param  string|null  $fileName
-     * @return bool
+     * @return true
      *
-     * @throws MeasureException
+     * @throws Exception
      */
-    public function withPreview($fileName = null)
+    public function withPreview(?string $fileName = null): bool
     {
-        if ($fileName && $fileName !== $this->fileName) {
-            $this->fileName = $fileName;
-        } else {
-            // Extend file name before extension
-            $extensionPos   = strrpos($this->fileName, '.');
-            $this->fileName = substr($this->fileName, 0, $extensionPos) . '_preview' . substr($this->fileName, $extensionPos);
-        }
+        $mainMode = $this->previewMode;
 
-        if ($this->document instanceof WithPreview) {
-            // Make offset array key insensitive
-            $offsetArray = array_change_key_case($this->document->offset());
+        $this->previewMode = true;
 
-            if (array_key_exists('x', $offsetArray)) {
-                $this->writer->setXOffset($offsetArray['x'], config('pdf.measurement.unit', 'pt'));
-            } else {
-                throw new MeasureException('No X offset defined.');
-            }
-
-            if (array_key_exists('y', $offsetArray)) {
-                $this->writer->setYOffset($offsetArray['y'], config('pdf.measurement.unit', 'pt'));
-            } else {
-                throw new MeasureException('No Y offset defined.');
-            }
-
-            $this->writer->enableOffset();
-        }
+        $this->previewFileName($fileName);
 
         $this->create();
 
+        // Switch back to the main mode.
+        $this->previewMode = $mainMode;
+
         return true;
+    }
+
+    public function inPreviewMode()
+    {
+        $this->previewMode = true;
+
+        return $this;
+    }
+
+    public function inOriginalMode()
+    {
+        $this->previewMode = false;
+
+        return $this;
     }
 
     /**
@@ -113,7 +114,7 @@ class Pdf
      *
      * @throws Exception
      */
-    public function create()
+    public function create(): bool
     {
         $fileManager = new FileManager($this->document);
 
@@ -122,14 +123,16 @@ class Pdf
         $this->writer->beginDocument($fileManager->exportPath($this->fileName));
 
         if ($this->document instanceof FromTemplate) {
-            $template = null;
-
-            if ($this->writer->inOriginal()) {
-                $template = $this->document->template();
-            }
+            $template = $this->document->template();
 
             if ($this->document instanceof WithPreview) {
-                if ($this->writer->inPreview()) {
+                if ($this->previewMode === false) {
+                    $this->applyOffset();
+                }
+
+                if ($this->previewMode === true) {
+                    $this->writer->disableOffset();
+
                     $template = $this->document->previewTemplate();
                 }
             }
@@ -167,5 +170,46 @@ class Pdf
         $this->writer->finishDocument();
 
         return true;
+    }
+
+    /**
+     * @param $fileName
+     *
+     * @return void
+     */
+    private function previewFileName($fileName = null)
+    {
+        if ($fileName && $fileName !== $this->fileName) {
+            $this->fileName = $fileName;
+        } else {
+            // Extend file name before extension
+            $extensionPos   = strrpos($this->fileName, '.');
+            $this->fileName = substr($this->fileName, 0, $extensionPos) . '_preview' . substr($this->fileName, $extensionPos);
+        }
+
+    }
+
+    /**
+     * Apply the defined document offset.
+     *
+     * @throws MeasureException
+     */
+    private function applyOffset()
+    {
+        $offsetArray = array_change_key_case($this->document->offset());
+
+        if (array_key_exists('x', $offsetArray)) {
+            $this->writer->setXOffset($offsetArray['x'], config('pdf.measurement.unit', 'pt'));
+        } else {
+            throw new MeasureException('No X offset defined.');
+        }
+
+        if (array_key_exists('y', $offsetArray)) {
+            $this->writer->setYOffset($offsetArray['y'], config('pdf.measurement.unit', 'pt'));
+        } else {
+            throw new MeasureException('No Y offset defined.');
+        }
+
+        $this->writer->enableOffset();
     }
 }
