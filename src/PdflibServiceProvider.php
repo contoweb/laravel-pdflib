@@ -14,6 +14,7 @@ class PdflibServiceProvider extends ServiceProvider
      * Register services.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function register()
@@ -31,13 +32,12 @@ class PdflibServiceProvider extends ServiceProvider
                 config('pdf.creator', 'Laravel')
             );
 
-            if($writer instanceof PdfWriter !== true) {
+            if ($writer instanceof PdfWriter !== true) {
                 throw new \Exception('Writer must implement PdfWriter interface');
             }
 
             return $writer;
         });
-
 
         $this->app->bind('pdf', function () {
             return new Pdf(

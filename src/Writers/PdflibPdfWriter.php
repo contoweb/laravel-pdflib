@@ -95,7 +95,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * Current font size.
      *
-     * @var integer
+     * @var int
      */
     protected $fontSize;
 
@@ -109,8 +109,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * PdflibPdfWriter constructor.
      *
-     * @param $license
-     * @param $creator
+     * @param  $license
+     * @param  $creator
      */
     public function __construct($license, $creator)
     {
@@ -545,7 +545,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setXOffset($measure, $unit = null)
     {
-        $measure = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
+        $measure       = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
         $this->xOffset = $measure;
 
         return $this;
@@ -556,7 +556,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setYOffset($measure, $unit = null)
     {
-        $measure = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
+        $measure       = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
         $this->yOffset = $measure;
 
         return $this;
@@ -585,8 +585,8 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * Loads existing or new image.
      *
-     * @param $imagePath
-     * @param $loadOptions
+     * @param  $imagePath
+     * @param  $loadOptions
      * @return int
      *
      * @throws ImageException

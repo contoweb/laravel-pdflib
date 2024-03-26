@@ -14,7 +14,7 @@ interface PdfWriter
     /**
      * Define the search path for fonts.
      *
-     * @param $searchPath
+     * @param  $searchPath
      * @return $this
      */
     public function defineFontSearchPath($searchPath);
@@ -72,7 +72,7 @@ interface PdfWriter
     /**
      * Copy a template page into the current document.
      *
-     * @param $pageNumber
+     * @param  $pageNumber
      * @return $this
      */
     public function fromTemplatePage($pageNumber);
@@ -164,7 +164,7 @@ interface PdfWriter
     /**
      * Write a line of text.
      *
-     * @param $text
+     * @param  $text
      * @param  string|null  $optlist
      * @return $this
      */
@@ -240,8 +240,8 @@ interface PdfWriter
     /**
      * Set the writer's position.
      *
-     * @param $x
-     * @param $y
+     * @param  $x
+     * @param  $y
      * @param  null  $unit
      * @return $this
      *
@@ -252,9 +252,9 @@ interface PdfWriter
     /**
      * Set X position of the writer.
      *
-     * @param $measure
+     * @param  $measure
      * @param  string  $unit
-     * @param $ignoreOffset
+     * @param  $ignoreOffset
      * @return $this
      *
      * @throws MeasureException
@@ -314,7 +314,7 @@ interface PdfWriter
     /**
      * Set X offset for preview.
      *
-     * @param $measure
+     * @param  $measure
      * @param  string  $unit
      * @return $this
      *
@@ -325,7 +325,7 @@ interface PdfWriter
     /**
      * Set Y offset for preview.
      *
-     * @param $measure
+     * @param  $measure
      * @param  string  $unit
      * @return $this
      *

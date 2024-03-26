@@ -77,5 +77,5 @@ return [
     | Define the writer class. It must implement the PdfWriter interface.
     |
     */
-    'writer' => PdflibPdfWriter::class
+    'writer' => PdflibPdfWriter::class,
 ];

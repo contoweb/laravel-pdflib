@@ -173,8 +173,7 @@ class Pdf
     }
 
     /**
-     * @param $fileName
-     *
+     * @param  $fileName
      * @return void
      */
     private function previewFileName($fileName = null)
@@ -186,7 +185,6 @@ class Pdf
             $extensionPos   = strrpos($this->fileName, '.');
             $this->fileName = substr($this->fileName, 0, $extensionPos) . '_preview' . substr($this->fileName, $extensionPos);
         }
-
     }
 
     /**
