@@ -128,7 +128,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
     public function defineFontSearchPath($searchPath)
     {
-        $this->set_option('searchpath={' . trim($searchPath, DIRECTORY_SEPARATOR) . '}');
+        $this->set_option('searchpath={' . rtrim($searchPath, DIRECTORY_SEPARATOR) . '}');
 
         return $this;
     }
