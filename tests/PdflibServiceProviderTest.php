@@ -3,20 +3,17 @@
 namespace Contoweb\Pdflib\Tests;
 
 use Contoweb\Pdflib\Pdf;
+use PHPUnit\Framework\Attributes\Test;
 
 class PdflibServiceProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function is_bound()
     {
         $this->assertTrue($this->app->bound('pdf'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function is_aliased()
     {
         $this->assertTrue($this->app->isAlias(Pdf::class));

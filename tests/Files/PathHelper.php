@@ -7,8 +7,8 @@ class PathHelper
     /**
      * Generate an absolute path and removes old file with this path.
      *
-     * @param $fileName
-     * @param $diskName
+     * @param  $fileName
+     * @param  $diskName
      * @param  null  $path
      * @param  bool  $cleanup
      * @return string

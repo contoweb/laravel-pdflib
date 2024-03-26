@@ -10,8 +10,8 @@ class MeasureCalculator
     const ptToMm = 0.352777778;
 
     /**
-     * @param $measure
-     * @param $unit
+     * @param  $measure
+     * @param  $unit
      * @return float
      *
      * @throws MeasureException
@@ -22,8 +22,8 @@ class MeasureCalculator
     }
 
     /**
-     * @param $measure
-     * @param $unit
+     * @param  $measure
+     * @param  $unit
      * @return float
      *
      * @throws MeasureException

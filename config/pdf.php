@@ -1,5 +1,7 @@
 <?php
 
+use Contoweb\Pdflib\Writers\PdflibPdfWriter;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -66,4 +68,14 @@ return [
         'disk' => 'local',
         'path' => '',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | PDF writer
+    |--------------------------------------------------------------------------
+    |
+    | Define the writer class. It must implement the PdfWriter interface.
+    |
+    */
+    'writer' => PdflibPdfWriter::class,
 ];
