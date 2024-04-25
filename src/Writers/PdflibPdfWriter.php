@@ -20,28 +20,28 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      *
      * @var float
      */
-    public $xPos = 0;
+    private $xPos = 0;
 
     /**
      * Y position in pt.
      *
      * @var float
      */
-    public $yPos = 0;
+    private $yPos = 0;
 
     /**
      * Y offset for preview.
      *
      * @var float
      */
-    protected $xOffset;
+    private $xOffset;
 
     /**
      * X offset for preview.
      *
      * @var float
      */
-    protected $yOffset;
+    private $yOffset;
 
     /**
      * Use offsets in positioning.
@@ -55,49 +55,49 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      *
      * @var array
      */
-    protected $colors = [];
+    private $colors = [];
 
     /**
      * Loaded fonts.
      *
      * @var array
      */
-    protected $fonts = [];
+    private $fonts = [];
 
     /**
      * Already loaded images.
      *
      * @var array
      */
-    protected $imageCache = [];
+    private $imageCache = [];
 
     /**
      * Indicates if a new page is already created and the page should be closed before the next one starts.
      *
      * @var bool
      */
-    protected $siteOpen = false;
+    private $siteOpen = false;
 
     /**
      * Path to the template.
      *
      * @var string
      */
-    protected $template;
+    private $template;
 
     /**
      * Line offset in pt.
      *
      * @var float
      */
-    protected $lineOffset = 0;
+    private $lineOffset = 0;
 
     /**
      * Current font size.
      *
      * @var int
      */
-    protected $fontSize;
+    private $fontSize;
 
     /**
      * A table object.
@@ -126,6 +126,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->set_option('stringformat=utf8');
     }
 
+    /**
+     * @param $searchPath
+     * @return $this
+     */
     public function defineFontSearchPath($searchPath)
     {
         $this->set_option('searchpath={' . rtrim($searchPath, DIRECTORY_SEPARATOR) . '}');
