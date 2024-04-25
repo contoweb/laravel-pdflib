@@ -93,14 +93,20 @@ class Pdf
         return true;
     }
 
-    public function inPreviewMode()
+    /**
+     * @return $this
+     */
+    public function inPreviewMode(): static
     {
         $this->previewMode = true;
 
         return $this;
     }
 
-    public function inOriginalMode()
+    /**
+     * @return $this
+     */
+    public function inOriginalMode(): static
     {
         $this->previewMode = false;
 
