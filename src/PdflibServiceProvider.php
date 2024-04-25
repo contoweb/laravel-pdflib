@@ -3,9 +3,9 @@
 namespace Contoweb\Pdflib;
 
 use Contoweb\Pdflib\Commands\DocumentMakeCommand;
+use Contoweb\Pdflib\Exceptions\PdfWriterException;
 use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Contoweb\Pdflib\Writers\PdfWriter;
-use Exception;
 use Illuminate\Support\ServiceProvider;
 
 class PdflibServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class PdflibServiceProvider extends ServiceProvider
      *
      * @return void
      *
-     * @throws Exception
+     * @throws PdfWriterException
      */
     public function register()
     {
@@ -33,7 +33,7 @@ class PdflibServiceProvider extends ServiceProvider
             );
 
             if ($writer instanceof PdfWriter !== true) {
-                throw new \Exception('Writer must implement PdfWriter interface');
+                throw new PdfWriterException('Writer must implement PdfWriter interface');
             }
 
             return $writer;
