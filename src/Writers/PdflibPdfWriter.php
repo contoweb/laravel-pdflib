@@ -363,7 +363,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * Set the line offset.
      *
-     * @param float $spacing
+     * @param  float $spacing
      * @return $this
      */
     public function setLineSpacing(float $spacing): static

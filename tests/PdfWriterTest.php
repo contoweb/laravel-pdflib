@@ -497,7 +497,7 @@ class PdfWriterTest extends TestCase
         $this->writer->setLineSpacing(2);
         $this->writer->nextLine();
 
-        $this->assertEquals(-20, $this->writer->getYPosition('pt'));;
+        $this->assertEquals(-20, $this->writer->getYPosition('pt'));
 
         $this->writer->finishDocument();
     }
