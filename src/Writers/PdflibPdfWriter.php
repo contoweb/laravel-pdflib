@@ -549,7 +549,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setXOffset($measure, $unit = null)
     {
-        $measure       = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
+        $measure       = MeasureCalculator::calculateToPt($measure, $unit);
         $this->xOffset = $measure;
 
         return $this;
@@ -560,7 +560,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function setYOffset($measure, $unit = null)
     {
-        $measure       = MeasureCalculator::calculateToPt($measure, $unit ?: config('pdf.measurement.unit', 'pt'));
+        $measure       = MeasureCalculator::calculateToPt($measure, $unit);
         $this->yOffset = $measure;
 
         return $this;
