@@ -100,13 +100,6 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     private $fontSize;
 
     /**
-     * A table object.
-     *
-     * @var Table
-     */
-    protected $table;
-
-    /**
      * PdflibPdfWriter constructor.
      *
      * @param  $license
