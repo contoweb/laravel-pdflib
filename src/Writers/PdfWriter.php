@@ -135,7 +135,6 @@ interface PdfWriter
      */
     public function getFonts();
 
-
     /**
      * @return int
      */
