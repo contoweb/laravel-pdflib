@@ -104,24 +104,6 @@ interface PdfWriter
     public function useColor($name);
 
     /**
-     * Open a new table.
-     *
-     * @param  array  $items
-     * @return Table
-     */
-    public function newTable($items);
-
-    /**
-     * Add a textflow, to place it for e.g. in a table.
-     *
-     * @param  string  $textflow
-     * @param  string  $title
-     * @param  string|null  $optlist
-     * @return $this
-     */
-    public function addTextflow($textflow, $title, $optlist = null);
-
-    /**
      * Load fonts to use it with the writer.
      *
      * @param  string  $name
@@ -358,4 +340,22 @@ interface PdfWriter
      * @return $this
      */
     public function disableOffset();
+
+    /**
+     * Add a textflow, to place it for e.g. in a table.
+     *
+     * @param  string  $textflow
+     * @param  string  $title
+     * @param  string|null  $optlist
+     * @return $this
+     */
+    public function addTextflow($textflow, $title, $optlist = null);
+
+    /**
+     * Open a new table.
+     *
+     * @param  array  $items
+     * @return Table
+     */
+    public function newTable($items);
 }
