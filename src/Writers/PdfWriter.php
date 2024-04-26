@@ -153,6 +153,12 @@ interface PdfWriter
      */
     public function getFonts();
 
+
+    /**
+     * @return int
+     */
+    public function getCurrentFont();
+
     /**
      * Write fluent text.
      *
@@ -188,12 +194,12 @@ interface PdfWriter
      * Get the text width.
      *
      * @param  string  $text
-     * @param  string  $font
-     * @param  int|float  $fontSize
+     * @param  string|null  $font
+     * @param  int|float|null  $fontSize
      * @param  null  $unit
      * @return $this
      */
-    public function getTextWidth($text, $font, $fontSize, $unit = null);
+    public function getTextWidth($text, $font = null, $fontSize = null, $unit = null);
 
     /**
      * Draw an image.

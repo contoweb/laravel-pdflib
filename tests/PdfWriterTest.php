@@ -524,6 +524,52 @@ class PdfWriterTest extends TestCase
         $this->writer->finishDocument();
     }
 
+    #[Test]
+    public function get_correct_text_width()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+
+        // 'Test' with font OpenSans-Regular and font size 10pt has a width of 19.44pt
+        $this->assertEquals(19.44, $this->writer->getTextWidth('Test', 'OpenSans-Regular', 10, 'pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function get_correct_text_width_without_parameters()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        // 'Test' with font OpenSans-Regular and font size 10pt has a width of 19.44pt
+        $this->assertEquals(19.44, $this->writer->getTextWidth('Test', null, null, 'pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function get_correct_font()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $font = $this->writer->getFonts()['OpenSans-Regular'];
+
+        $this->assertEquals($font, $this->writer->getCurrentFont());
+
+        $this->writer->finishDocument();
+    }
+
     /**
      * Set font search path and load a test font.
      *

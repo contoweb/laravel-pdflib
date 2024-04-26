@@ -318,6 +318,16 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     }
 
     /**
+     * Get the current font as an integer.
+     *
+     * @return int
+     */
+    public function getCurrentFont()
+    {
+        return (int) $this->get_option('font', '');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function writeText($text)
@@ -366,10 +376,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function getTextWidth($text, $font, $fontSize, $unit = null)
+    public function getTextWidth($text, $font = null, $fontSize = null, $unit = null)
     {
         $textWidth = MeasureCalculator::calculateToUnit(
-            $this->stringwidth($text, $this->load_font($font, 'unicode', 'embedding'), $fontSize),
+            $this->stringwidth($text, $font ? $this->load_font($font, 'unicode', 'embedding') : $this->getCurrentFont(), $fontSize ?? $this->fontSize),
             $unit ?: config('pdf.measurement.unit', 'pt'),
             'pt'
         );
