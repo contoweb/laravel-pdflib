@@ -463,6 +463,67 @@ class PdfWriterTest extends TestCase
         $this->assertLessThan(2, $size2 / $size1);
     }
 
+    #[Test]
+    public function applies_default_line_spacing()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $this->assertEquals(0, $this->writer->getYPosition('pt'));
+
+        // The default value for nextLine is 1, the next line is 10pt below the current position
+        $this->writer->nextLine();
+
+        $this->assertEquals(-10, $this->writer->getYPosition('pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function can_set_line_spacing()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $this->assertEquals(0, $this->writer->getYPosition('pt'));
+
+        // Set the line spacing to 2, the next line is 20pt below the current position
+        $this->writer->setLineSpacing(2);
+        $this->writer->nextLine();
+
+        $this->assertEquals(-20, $this->writer->getYPosition('pt'));;
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function can_overwrite_line_spacing_with_next_line()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $this->assertEquals(0, $this->writer->getYPosition('pt'));
+
+        // Set the line spacing to 2
+        $this->writer->setLineSpacing(2);
+
+        // Overwrite the line spacing with 3, the next line is 30pt below the current position
+        $this->writer->nextLine(3);
+
+        $this->assertEquals(-30, $this->writer->getYPosition('pt'));
+
+        $this->writer->finishDocument();
+    }
+
     /**
      * Set font search path and load a test font.
      *

@@ -176,7 +176,13 @@ interface PdfWriter
      * @param  float  $spacing
      * @return $this
      */
-    public function nextLine($spacing = 1.0);
+    public function nextLine(?float $spacing = null);
+
+    /**
+     * @param  float  $spacing
+     * @return $this
+     */
+    public function setLineSpacing(float $spacing);
 
     /**
      * Get the text width.

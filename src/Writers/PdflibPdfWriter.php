@@ -90,7 +90,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      *
      * @var float
      */
-    private $lineOffset = 0;
+    private $spacing = 1;
 
     /**
      * Current font size.
@@ -348,9 +348,24 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function nextLine($spacing = 1.0)
+    public function nextLine(?float $spacing = null)
     {
+        $spacing = $spacing ?: $this->spacing;
+
         $this->setYPosition($this->yPos - ($this->fontSize * $spacing), 'pt', true);
+
+        return $this;
+    }
+
+    /**
+     * Set the line offset.
+     *
+     * @param float $spacing
+     * @return $this
+     */
+    public function setLineSpacing(float $spacing): static
+    {
+        $this->spacing = $spacing;
 
         return $this;
     }
