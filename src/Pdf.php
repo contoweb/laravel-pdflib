@@ -81,7 +81,7 @@ class Pdf
     {
         $mainMode = $this->previewMode;
 
-        $this->previewMode = true;
+        self::inPreviewMode();
 
         $this->previewFileName($fileName);
 
@@ -116,11 +116,11 @@ class Pdf
     /**
      * Creates the pdf document(s).
      *
-     * @return bool
+     * @return void
      *
      * @throws Exception
      */
-    public function create(): bool
+    public function create(): void
     {
         $fileManager = new FileManager($this->document);
 
@@ -174,17 +174,15 @@ class Pdf
         }
 
         $this->writer->finishDocument();
-
-        return true;
     }
 
     /**
      * @param  $fileName
      * @return void
      */
-    private function previewFileName($fileName = null)
+    private function previewFileName($fileName = null): void
     {
-        if ($fileName && $fileName !== $this->fileName) {
+        if ($fileName) {
             $this->fileName = $fileName;
         } else {
             // Extend file name before extension
@@ -196,9 +194,11 @@ class Pdf
     /**
      * Apply the defined document offset.
      *
+     * @retrun void
+     *
      * @throws MeasureException
      */
-    private function applyOffset()
+    private function applyOffset(): void
     {
         $offsetArray = array_change_key_case($this->document->offset());
 
