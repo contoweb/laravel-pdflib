@@ -36,8 +36,8 @@ You can download the extension file directly from the [PDFlib download](https://
 If you need further assistance installing PDFlib, check out the [installation guide](https://www.pdflib.com/fileadmin/pdflib/pdf/support/PDFlib-in-PHP-HowTo.pdf).
 
 You also need:
-* PHP: `^7.0`
-* Laravel: `^5.8`
+* PHP: `^8.0`
+* Laravel: `^9.0`
 
 Please note that only supported Laravel versions are covered by test workflow!
 
@@ -61,7 +61,8 @@ You can then configure paths, measure unit and so on...
 ### Laravel 5.5+:
 
 Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
-If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php
+If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php. 
+Since Laravel 11, the file for providers has changed to bootstrap/providers.php.
 
 ```php
 Contoweb\Pdflib\PdflibServiceProvider::class,
@@ -82,7 +83,7 @@ php artisan make:document MarketingDocument
 
 The new document file can be found in the `app/Documents` directory.
 
-> Todo: Working on some example cases...
+> app\Documents\MarketingDocument
 
 Ìn a final step, generating a PDF is as easy as:
 
@@ -207,7 +208,12 @@ class MarketingDocument implements FromTemplate, WithDraw, WithPreview
 
 The `offset()` method defines the offset from the print PDF to the preview PDF (see image above).
 
-Now you can generate the print and preview PDF with:
+Now you can generate the preview PDF with:
+```php
+return Pdf::inPreviewMode()->store(new MarketingDocument, 'marketing.pdf');
+```
+
+You can also generate the print and preview PDF in one step:
 ```php
 return Pdf::store(new MarketingDocument, 'marketing.pdf')->withPreview();
 ```
@@ -258,7 +264,11 @@ If you want to go to the next line, instead of reposition your cursor every time
 ```php
 $writer->nextLine();
 ```
-To use a custom line spacing instead of 1.0, just pass it as a parameter.
+To use a custom line spacing instead of 1.0, just pass it as a parameter or set the line spacing with:
+```php
+$writer->setLineSpacing(2.0);
+```
+
 
 #### Fonts
 The boilerplate document loads `Arial` as an example font, but we don't provide a font file in the fonts folder.
