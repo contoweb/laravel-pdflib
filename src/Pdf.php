@@ -81,7 +81,7 @@ class Pdf
     {
         $mainMode = $this->previewMode;
 
-        self::inPreviewMode();
+        $this->inPreviewMode();
 
         $this->previewFileName($fileName);
 
