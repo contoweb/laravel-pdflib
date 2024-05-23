@@ -72,7 +72,7 @@ class FileManager
     /**
      * Return the path of a font.
      *
-     * @param $name
+     * @param  $name
      * @param  string  $type
      * @return string
      *
@@ -142,8 +142,8 @@ class FileManager
     /**
      * Get the absolut path for document's different location.
      *
-     * @param $location
-     * @param $fileName
+     * @param  $location
+     * @param  $fileName
      * @return string
      *
      * @throws DifferentLocationException

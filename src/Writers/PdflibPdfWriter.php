@@ -20,97 +20,90 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      *
      * @var float
      */
-    public $xPos = 0;
+    private $xPos = 0;
 
     /**
      * Y position in pt.
      *
      * @var float
      */
-    public $yPos = 0;
+    private $yPos = 0;
 
     /**
      * Y offset for preview.
      *
      * @var float
      */
-    protected $xOffset;
+    private $xOffset;
 
     /**
      * X offset for preview.
      *
      * @var float
      */
-    protected $yOffset;
+    private $yOffset;
 
     /**
-     * Use offsets.
+     * Use offsets in positioning.
      *
      * @var float
      */
-    protected $useOffset = false;
+    private $useOffset = false;
 
     /**
      * Loaded colors.
      *
      * @var array
      */
-    protected $colors = [];
+    private $colors = [];
 
     /**
      * Loaded fonts.
      *
      * @var array
      */
-    protected $fonts = [];
+    private $fonts = [];
 
     /**
      * Already loaded images.
      *
      * @var array
      */
-    protected $imageCache = [];
+    private $imageCache = [];
 
     /**
      * Indicates if a new page is already created and the page should be closed before the next one starts.
      *
      * @var bool
      */
-    protected $siteOpen = false;
+    private $siteOpen = false;
 
     /**
      * Path to the template.
      *
      * @var string
      */
-    protected $template;
+    private $template;
 
     /**
      * Line offset in pt.
      *
      * @var float
      */
-    protected $lineOffset = 0;
+    private $spacing = 1;
 
     /**
      * Current font size.
      *
-     * @var
+     * @var int
      */
     private $fontSize;
 
     /**
-     * A table object.
-     *
-     * @var Table
-     */
-    protected $table;
-
-    /**
      * PdflibPdfWriter constructor.
      *
-     * @param $license
-     * @param $creator
+     * @param  $license
+     * @param  $creator
      */
     public function __construct($license, $creator)
     {
@@ -126,9 +119,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
         $this->set_option('stringformat=utf8');
     }
 
+    /**
+     * @param  $searchPath
+     * @return $this
+     */
     public function defineFontSearchPath($searchPath)
     {
-        $this->set_option('searchpath={' . $searchPath . '}');
+        $this->set_option('searchpath={' . rtrim($searchPath, DIRECTORY_SEPARATOR) . '}');
 
         return $this;
     }
@@ -297,13 +294,13 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
      */
     public function useFont($name, $size, $color = null)
     {
-        $this->fontSize = $size;
-
         if (array_key_exists($name, $this->fonts)) {
             $this->setfont($this->fonts[$name], $size);
         } else {
             throw new FontException('Font "' . $name . '" not loaded.');
         }
+
+        $this->fontSize = $size;
 
         if ($color) {
             $this->useColor($color);
@@ -321,6 +318,16 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     }
 
     /**
+     * Get the current font as an integer.
+     *
+     * @return int
+     */
+    public function getCurrentFont()
+    {
+        return (int) $this->get_option('font', '');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function writeText($text)
@@ -334,7 +341,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function writeTextLine($text, $optlist = null)
+    public function writeTextLine($text, $optlist = '')
     {
         $this->fit_textline($text, $this->xPos, $this->yPos, $optlist);
 
@@ -344,9 +351,24 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function nextLine($spacing = 1.0)
+    public function nextLine(?float $spacing = null)
     {
+        $spacing = $spacing ?: $this->spacing;
+
         $this->setYPosition($this->yPos - ($this->fontSize * $spacing), 'pt', true);
+
+        return $this;
+    }
+
+    /**
+     * Set the line offset.
+     *
+     * @param  float  $spacing
+     * @return $this
+     */
+    public function setLineSpacing(float $spacing): static
+    {
+        $this->spacing = $spacing;
 
         return $this;
     }
@@ -354,10 +376,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     /**
      * {@inheritdoc}
      */
-    public function getTextWidth($text, $font, $fontSize, $unit = null)
+    public function getTextWidth($text, $font = null, $fontSize = null, $unit = null)
     {
         $textWidth = MeasureCalculator::calculateToUnit(
-            $this->stringwidth($text, $this->load_font($font, 'unicode', 'embedding'), $fontSize),
+            $this->stringwidth($text, $font ? $this->load_font($font, 'unicode', 'embedding') : $this->getCurrentFont(), $fontSize ?? $this->fontSize),
             $unit ?: config('pdf.measurement.unit', 'pt'),
             'pt'
         );
@@ -583,26 +605,10 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function inOriginal()
-    {
-        return ! $this->useOffset;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function inPreview()
-    {
-        return $this->useOffset;
-    }
-
-    /**
      * Loads existing or new image.
      *
-     * @param $imagePath
-     * @param $loadOptions
+     * @param  $imagePath
+     * @param  $loadOptions
      * @return int
      *
      * @throws ImageException

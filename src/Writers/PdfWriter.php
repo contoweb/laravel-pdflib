@@ -14,7 +14,7 @@ interface PdfWriter
     /**
      * Define the search path for fonts.
      *
-     * @param $searchPath
+     * @param  $searchPath
      * @return $this
      */
     public function defineFontSearchPath($searchPath);
@@ -72,7 +72,7 @@ interface PdfWriter
     /**
      * Copy a template page into the current document.
      *
-     * @param $pageNumber
+     * @param  $pageNumber
      * @return $this
      */
     public function fromTemplatePage($pageNumber);
@@ -85,7 +85,7 @@ interface PdfWriter
     public function closeTemplate();
 
     /**
-     * Load fonts to use it with the writer.
+     * Load colors to use it with the writer.
      *
      * @param  string  $name
      * @param  array  $color
@@ -102,24 +102,6 @@ interface PdfWriter
      * @throws ColorException
      */
     public function useColor($name);
-
-    /**
-     * Open a new table.
-     *
-     * @param  array  $items
-     * @return Table
-     */
-    public function newTable($items);
-
-    /**
-     * Add a textflow, to place it for e.g. in a table.
-     *
-     * @param  string  $textflow
-     * @param  string  $title
-     * @param  string|null  $optlist
-     * @return $this
-     */
-    public function addTextflow($textflow, $title, $optlist = null);
 
     /**
      * Load fonts to use it with the writer.
@@ -154,6 +136,11 @@ interface PdfWriter
     public function getFonts();
 
     /**
+     * @return int
+     */
+    public function getCurrentFont();
+
+    /**
      * Write fluent text.
      *
      * @param  string  $text
@@ -164,7 +151,7 @@ interface PdfWriter
     /**
      * Write a line of text.
      *
-     * @param $text
+     * @param  $text
      * @param  string|null  $optlist
      * @return $this
      */
@@ -176,18 +163,24 @@ interface PdfWriter
      * @param  float  $spacing
      * @return $this
      */
-    public function nextLine($spacing = 1.0);
+    public function nextLine(?float $spacing = null);
+
+    /**
+     * @param  float  $spacing
+     * @return $this
+     */
+    public function setLineSpacing(float $spacing);
 
     /**
      * Get the text width.
      *
      * @param  string  $text
-     * @param  string  $font
-     * @param  int|float  $fontSize
+     * @param  string|null  $font
+     * @param  int|float|null  $fontSize
      * @param  null  $unit
      * @return $this
      */
-    public function getTextWidth($text, $font, $fontSize, $unit = null);
+    public function getTextWidth($text, $font = null, $fontSize = null, $unit = null);
 
     /**
      * Draw an image.
@@ -240,8 +233,8 @@ interface PdfWriter
     /**
      * Set the writer's position.
      *
-     * @param $x
-     * @param $y
+     * @param  $x
+     * @param  $y
      * @param  null  $unit
      * @return $this
      *
@@ -252,9 +245,9 @@ interface PdfWriter
     /**
      * Set X position of the writer.
      *
-     * @param $measure
+     * @param  $measure
      * @param  string  $unit
-     * @param $ignoreOffset
+     * @param  $ignoreOffset
      * @return $this
      *
      * @throws MeasureException
@@ -314,7 +307,7 @@ interface PdfWriter
     /**
      * Set X offset for preview.
      *
-     * @param $measure
+     * @param  $measure
      * @param  string  $unit
      * @return $this
      *
@@ -325,7 +318,7 @@ interface PdfWriter
     /**
      * Set Y offset for preview.
      *
-     * @param $measure
+     * @param  $measure
      * @param  string  $unit
      * @return $this
      *
@@ -348,16 +341,20 @@ interface PdfWriter
     public function disableOffset();
 
     /**
-     * Checks if it writes the original PDF.
+     * Add a textflow, to place it for e.g. in a table.
      *
-     * @return mixed
+     * @param  string  $textflow
+     * @param  string  $title
+     * @param  string|null  $optlist
+     * @return $this
      */
-    public function inOriginal();
+    public function addTextflow($textflow, $title, $optlist = null);
 
     /**
-     * Checks if it writes the preview PDF.
+     * Open a new table.
      *
-     * @return mixed
+     * @param  array  $items
+     * @return Table
      */
-    public function inPreview();
+    public function newTable($items);
 }

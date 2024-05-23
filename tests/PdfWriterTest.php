@@ -10,6 +10,7 @@ use Contoweb\Pdflib\Exceptions\MeasureException;
 use Contoweb\Pdflib\Helpers\MeasureCalculator;
 use Contoweb\Pdflib\Tests\Files\PathHelper;
 use Contoweb\Pdflib\Writers\PdfWriter;
+use PHPUnit\Framework\Attributes\Test;
 
 class PdfWriterTest extends TestCase
 {
@@ -31,9 +32,7 @@ class PdfWriterTest extends TestCase
         $this->fullPath = PathHelper::absolutePath('test.pdf', 'local');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_load_a_license()
     {
         $this->app['config']->set('pdf.license', 'invalid-license');
@@ -43,9 +42,7 @@ class PdfWriterTest extends TestCase
         $this->app->make(PdfWriter::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_begin_a_new_document()
     {
         $this->assertTrue($this->writer->beginDocument($this->fullPath));
@@ -53,9 +50,7 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_expection_when_document_cant_be_created()
     {
         $invalidPath = PathHelper::absolutePath('test.pdf', 'local', 'invalid-path');
@@ -65,9 +60,7 @@ class PdfWriterTest extends TestCase
         $this->writer->beginDocument($invalidPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_write_a_document()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -77,9 +70,7 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_create_multiple_pages()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -93,9 +84,7 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function able_to_use_template()
     {
         $templatePath = PathHelper::absolutePath('template.pdf', 'local', 'templates', false);
@@ -111,18 +100,14 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_exception_when_loading_unknown_template()
     {
         $this->expectException(DocumentException::class);
         $this->writer->loadTemplate('unknown.pdf');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_exception_when_load_unknown_fonts()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -132,9 +117,7 @@ class PdfWriterTest extends TestCase
         $this->writer->loadFont('unknown');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_use_font_files()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -151,9 +134,7 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_exception_when_use_unloaded_fonts()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -165,9 +146,7 @@ class PdfWriterTest extends TestCase
         $this->writer->useFont('not loaded', 12);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_use_defined_colors()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -195,9 +174,7 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_use_font_with_color()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -219,9 +196,7 @@ class PdfWriterTest extends TestCase
         $this->assertFileExists($this->fullPath);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_exception_when_use_undefined_color()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -231,9 +206,7 @@ class PdfWriterTest extends TestCase
         $this->writer->useColor('unknown');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_exception_when_use_invalid_loaded_color()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -245,9 +218,7 @@ class PdfWriterTest extends TestCase
         $this->writer->useColor('blue-invalid');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_position_the_cursor_in_units()
     {
         $units = ['mm', 'pt'];
@@ -283,9 +254,7 @@ class PdfWriterTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_go_to_next_line()
     {
         $startPosition = 100;
@@ -308,9 +277,7 @@ class PdfWriterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_go_to_next_line_with_line_spacing()
     {
         $startPosition = 100;
@@ -334,9 +301,7 @@ class PdfWriterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_manually_enable_and_disable_offset()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -358,18 +323,14 @@ class PdfWriterTest extends TestCase
         $this->assertEquals(200, round($this->writer->getYPosition(), 3));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_exception_when_invalid_unit_is_used()
     {
         $this->expectException(MeasureException::class);
         $this->writer->setPosition(10, 10, 'invalid');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_write_text()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -387,9 +348,7 @@ class PdfWriterTest extends TestCase
         /* Todo: Assert that the text is really placed in the document */
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_write_text_line()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -407,9 +366,7 @@ class PdfWriterTest extends TestCase
         /* Todo: Assert that the text is really placed in the document */
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_place_an_image()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -432,9 +389,7 @@ class PdfWriterTest extends TestCase
         /* Todo: Assert that the image is really placed in the document */
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function can_place_a_rounded_image()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -456,9 +411,7 @@ class PdfWriterTest extends TestCase
         /* Todo: Assert that the image is really placed in the document */
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throws_an_exception_when_loading_invalid_image()
     {
         $this->writer->beginDocument($this->fullPath);
@@ -468,9 +421,7 @@ class PdfWriterTest extends TestCase
         $this->writer->drawImage(PathHelper::absolutePath('invalid.jpeg', 'local', 'images', false), 100, 100);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function reuses_already_loaded_image()
     {
         // We create two files:
@@ -510,6 +461,113 @@ class PdfWriterTest extends TestCase
         $size2 = filesize($file2);
 
         $this->assertLessThan(2, $size2 / $size1);
+    }
+
+    #[Test]
+    public function applies_default_line_spacing()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $this->assertEquals(0, $this->writer->getYPosition('pt'));
+
+        // The default value for nextLine is 1, the next line is 10pt below the current position
+        $this->writer->nextLine();
+
+        $this->assertEquals(-10, $this->writer->getYPosition('pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function can_set_line_spacing()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $this->assertEquals(0, $this->writer->getYPosition('pt'));
+
+        // Set the line spacing to 2, the next line is 20pt below the current position
+        $this->writer->setLineSpacing(2);
+        $this->writer->nextLine();
+
+        $this->assertEquals(-20, $this->writer->getYPosition('pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function can_overwrite_line_spacing_with_next_line()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $this->assertEquals(0, $this->writer->getYPosition('pt'));
+
+        // Set the line spacing to 2
+        $this->writer->setLineSpacing(2);
+
+        // Overwrite the line spacing with 3, the next line is 30pt below the current position
+        $this->writer->nextLine(3);
+
+        $this->assertEquals(-30, $this->writer->getYPosition('pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function get_correct_text_width()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+
+        // 'Test' with font OpenSans-Regular and font size 10pt has a width of 19.44pt
+        $this->assertEquals(19.44, $this->writer->getTextWidth('Test', 'OpenSans-Regular', 10, 'pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function get_correct_text_width_without_parameters()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        // 'Test' with font OpenSans-Regular and font size 10pt has a width of 19.44pt
+        $this->assertEquals(19.44, $this->writer->getTextWidth('Test', null, null, 'pt'));
+
+        $this->writer->finishDocument();
+    }
+
+    #[Test]
+    public function get_correct_font()
+    {
+        $this->writer->beginDocument($this->fullPath);
+        $this->writer->newPage();
+
+        $this->loadTestFont();
+
+        $this->writer->useFont('OpenSans-Regular', 10);
+
+        $font = $this->writer->getFonts()['OpenSans-Regular'];
+
+        $this->assertEquals($font, $this->writer->getCurrentFont());
+
+        $this->writer->finishDocument();
     }
 
     /**

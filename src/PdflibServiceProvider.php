@@ -3,6 +3,7 @@
 namespace Contoweb\Pdflib;
 
 use Contoweb\Pdflib\Commands\DocumentMakeCommand;
+use Contoweb\Pdflib\Exceptions\PdfWriterException;
 use Contoweb\Pdflib\Writers\PdflibPdfWriter;
 use Contoweb\Pdflib\Writers\PdfWriter;
 use Illuminate\Support\ServiceProvider;
@@ -13,6 +14,8 @@ class PdflibServiceProvider extends ServiceProvider
      * Register services.
      *
      * @return void
+     *
+     * @throws PdfWriterException
      */
     public function register()
     {
@@ -21,11 +24,19 @@ class PdflibServiceProvider extends ServiceProvider
             'pdf'
         );
 
-        $this->app->bind(PdfWriter::class, function () {
-            return new PdflibPdfWriter(
+        $writerClass = config('pdf.writer') ?? PdflibPdfWriter::class;
+
+        $this->app->bind(PdfWriter::class, function () use ($writerClass) {
+            $writer = new $writerClass(
                 config('pdf.license'),
                 config('pdf.creator', 'Laravel')
             );
+
+            if ($writer instanceof PdfWriter !== true) {
+                throw new PdfWriterException('Writer must implement PdfWriter interface');
+            }
+
+            return $writer;
         });
 
         $this->app->bind('pdf', function () {
