@@ -663,7 +663,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
     }
 
     /**
-     * Check if the writer is currently in preview mode.
+     * Check if the writer is in preview mode.
      *
      * @return bool
      */
