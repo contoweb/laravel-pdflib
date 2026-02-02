@@ -661,4 +661,14 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         return $table;
     }
+
+    /**
+     * Check if the writer is in preview mode.
+     *
+     * @return bool
+     */
+    public function isInPreviewMode(): bool
+    {
+        return ! $this->useOffset;
+    }
 }

@@ -583,4 +583,14 @@ class PdfWriterTest extends TestCase
 
         $this->writer->loadFont('OpenSans-Regular');
     }
+
+    #[Test]
+    public function get_correct_preview_mode()
+    {
+        $this->writer->disableOffset();
+        $this->assertTrue($this->writer->isInPreviewMode(), 'Should be in preview mode');
+
+        $this->writer->enableOffset();
+        $this->assertFalse($this->writer->isInPreviewMode(), 'Should not be in preview mode');
+    }
 }
