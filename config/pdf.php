@@ -1,7 +1,5 @@
 <?php
 
-use Contoweb\Pdflib\Writers\PdflibPdfWriter;
-
 return [
     /*
     |--------------------------------------------------------------------------
