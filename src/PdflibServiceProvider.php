@@ -28,8 +28,8 @@ class PdflibServiceProvider extends ServiceProvider
 
         $this->app->bindIf(PdfWriter::class, function () use ($writerClass) {
             $writer = new $writerClass(
-                config('pdf.license'),
-                config('pdf.creator', 'Laravel')
+                $this->app['config']->get('pdf.license'),
+                $this->app['config']->get('pdf.creator')
             );
 
             if ($writer instanceof PdfWriter !== true) {
