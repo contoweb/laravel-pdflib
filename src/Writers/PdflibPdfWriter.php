@@ -117,6 +117,7 @@ class PdflibPdfWriter extends PDFlib implements PdfWriter
 
         $this->set_option('errorpolicy=return');
         $this->set_option('stringformat=utf8');
+        $this->set_option('usehostfonts=false');
     }
 
     /**
