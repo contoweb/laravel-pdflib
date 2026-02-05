@@ -78,4 +78,14 @@ return [
     |
     */
     'writer' => PdflibPdfWriter::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | PDF creator
+    |--------------------------------------------------------------------------
+    |
+    | Define the creator of the PDF.
+    |
+    */
+    'creator' => env('PDFLIB_CREATOR', 'Laravel'),
 ];
