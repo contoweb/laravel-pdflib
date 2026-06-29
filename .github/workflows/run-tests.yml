@@ -13,14 +13,17 @@ jobs:
     strategy:
       matrix:
         php: [ {version: 8.2, pdflib: php-820}, {version: 8.3, pdflib: php-830}, {version: 8.4, pdflib: php-840} ]
-        laravel: [12, 11]
+        laravel: [13, 12]
         dependency-version: [prefer-stable]
         os: [ubuntu-latest]
         include:
+          - laravel: 13
+          - testbench: 11.*
           - laravel: 12
             testbench: 10.*
-          - laravel: 11
-            testbench: 9.*
+        exclude:
+          - php: { version: 8.2, pdflib: php-820 }
+            laravel: 13.*
 
     name: PHP${{ matrix.php.version }} - L${{ matrix.laravel }}
 
